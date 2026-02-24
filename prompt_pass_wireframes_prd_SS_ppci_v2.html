@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Pass — Wireframes (PP CI)</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --pp-red:   #FE3B1F;
+  --pp-navy:  #2E3CBA;
+  --pp-navyl: #3D4ED4;
+  --pp-navyd: #1E2880;
+  --pp-grey:  #9EACAA;
+  --pp-greym: #C2C7C9;
+  --bg:       #F4F5F9;
+  --white:    #FFFFFF;
+  --sf2:      #EEEEF6;
+  --border:   #DDE0EE;
+  --text:     #12122A;
+  --text2:    #4A4A6A;
+  --textm:    #8888A8;
+  --green:    #22C55E;
+  --yellow:   #F59E0B;
+  --pw: 314px; --ph: 642px;
+}
+body { font-family:'IBM Plex Sans Thai','IBM Plex Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+/* PAGE HEADER */
+.phdr { background:var(--white); border-bottom:1px solid var(--border); padding:0 48px; display:flex; align-items:center; justify-content:space-between; height:62px; }
+.brand { display:flex; align-items:center; gap:12px; }
+.ptitle { font-size:13px; font-weight:600; border-left:1px solid var(--border); padding-left:12px; color:var(--text); }
+.hbadge { background:var(--pp-navy); color:#fff; font-size:11px; padding:4px 12px; border-radius:20px; font-family:'IBM Plex Mono',monospace; }
+
+/* TABS */
+.tabs { background:var(--white); border-bottom:2px solid var(--border); padding:0 48px; display:flex; overflow-x:auto; scrollbar-width:none; }
+.tabs::-webkit-scrollbar { display:none; }
+.tab { padding:14px 18px; border:none; border-bottom:3px solid transparent; background:transparent; color:var(--textm); font-size:12.5px; font-family:'IBM Plex Sans Thai',sans-serif; font-weight:500; cursor:pointer; white-space:nowrap; transition:.15s; margin-bottom:-2px; }
+.tab:hover { color:var(--pp-navy); }
+.tab.active { color:var(--pp-red); border-bottom-color:var(--pp-red); font-weight:600; }
+
+/* PANELS */
+.panel { padding:36px 48px; display:none; gap:38px; flex-wrap:wrap; align-items:flex-start; }
+.panel.active { display:flex; }
+
+/* PHONE */
+.pw { display:flex; flex-direction:column; align-items:center; gap:10px; }
+.plbl { font-size:10.5px; color:var(--textm); font-family:'IBM Plex Mono',monospace; letter-spacing:.6px; }
+.phone { width:var(--pw); height:var(--ph); background:var(--white); border-radius:38px; border:2px solid #CACADE; overflow:hidden; position:relative; flex-shrink:0; box-shadow:0 0 0 7px #E6E6F2,0 20px 56px rgba(46,60,186,.14); }
+.phone::before { content:''; position:absolute; top:13px; left:50%; transform:translateX(-50%); width:64px; height:5px; background:#CACADE; border-radius:3px; z-index:10; }
+.pi { width:100%; height:100%; display:flex; flex-direction:column; padding-top:28px; }
+.sb { display:flex; justify-content:space-between; align-items:center; padding:3px 17px 6px; flex-shrink:0; }
+.sb span { font-size:10.5px; font-weight:600; font-family:'IBM Plex Mono',monospace; }
+.pscr { overflow-y:auto; flex:1; scrollbar-width:none; }
+.pscr::-webkit-scrollbar { display:none; }
+
+/* APP CHROME */
+.apphdr { background:var(--pp-navy); padding:10px 15px 14px; flex-shrink:0; position:relative; overflow:hidden; }
+.apphdr::after { content:''; position:absolute; right:-26px; bottom:-26px; width:84px; height:84px; background:var(--pp-red); border-radius:20px; opacity:.2; transform:rotate(16deg); }
+.ahtop { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.ahico { width:27px; height:27px; background:rgba(255,255,255,.15); border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:13px; cursor:pointer; }
+.ahicos { display:flex; gap:6px; }
+.ahuser { display:flex; align-items:center; gap:9px; }
+.ahav { width:42px; height:42px; border-radius:50%; background:rgba(255,255,255,.2); border:2px solid rgba(255,255,255,.5); display:flex; align-items:center; justify-content:center; font-size:17px; }
+.ahname { font-size:13px; font-weight:700; color:#fff; }
+.ahaddr { font-size:8.5px; color:rgba(255,255,255,.55); font-family:'IBM Plex Mono',monospace; margin-top:2px; }
+
+/* PAGE HDR IN PHONE */
+.phon-hdr { background:var(--pp-navy); padding:11px 15px; display:flex; align-items:center; gap:8px; flex-shrink:0; }
+.phon-back { color:rgba(255,255,255,.65); font-size:17px; cursor:pointer; }
+.phon-ttl { color:#fff; font-size:13px; font-weight:700; }
+
+/* BOTTOM NAV */
+.bnav { display:flex; border-top:1px solid var(--border); background:var(--white); flex-shrink:0; }
+.ni { flex:1; display:flex; flex-direction:column; align-items:center; padding:8px 0 6px; gap:3px; cursor:pointer; }
+.niico { font-size:17px; }
+.nilbl { font-size:8px; font-weight:500; color:var(--textm); }
+.ni.a .nilbl { color:var(--pp-red); }
+
+/* BUTTONS */
+.btn { background:var(--pp-red); color:#fff; border-radius:10px; padding:11px 16px; text-align:center; font-size:12.5px; font-weight:600; cursor:pointer; }
+.btno { border:1.5px solid var(--pp-navy); color:var(--pp-navy); border-radius:10px; padding:11px 16px; text-align:center; font-size:12px; font-weight:500; cursor:pointer; background:transparent; }
+.btng { border:1.5px solid var(--border); color:var(--textm); border-radius:10px; padding:11px 16px; text-align:center; font-size:12px; cursor:pointer; background:transparent; }
+
+/* INPUT */
+.inp { background:var(--sf2); border:1.5px solid var(--border); border-radius:9px; padding:10px 13px; color:var(--text2); font-size:11.5px; font-family:'IBM Plex Sans Thai',sans-serif; }
+.inp.hi { border-color:var(--pp-navy); background:var(--white); }
+.inp.warn { border-color:var(--yellow); background:#FFFBEB; color:#92400E; }
+
+/* CARD ROW */
+.cr { display:flex; align-items:center; gap:10px; background:var(--white); border:1px solid var(--border); border-radius:11px; padding:10px 12px; box-shadow:0 1px 4px rgba(0,0,0,.04); }
+.crico { width:38px; height:38px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+.crt { font-size:12px; font-weight:600; color:var(--text); }
+.crd { font-size:10px; color:var(--textm); margin-top:2px; }
+.crb { font-size:10px; color:var(--pp-navy); font-weight:600; padding:3px 10px; background:#EEF0FF; border-radius:20px; cursor:pointer; flex-shrink:0; margin-left:auto; }
+
+/* SETTING ROW */
+.sr { display:flex; align-items:center; justify-content:space-between; background:var(--white); border:1px solid var(--border); border-radius:9px; padding:10px 13px; }
+.srlbl { font-size:11px; color:var(--text); font-weight:500; }
+.srchev { color:var(--textm); font-size:14px; }
+.ton { width:30px; height:17px; background:var(--green); border-radius:9px; position:relative; flex-shrink:0; }
+.ton::after { content:''; position:absolute; right:2px; top:2px; width:13px; height:13px; background:#fff; border-radius:50%; }
+
+/* SECTION HDR */
+.shdr { font-size:9px; font-weight:700; color:var(--textm); letter-spacing:1.3px; text-transform:uppercase; padding:10px 0 5px; }
+
+/* BADGES */
+.br { background:var(--pp-red); color:#fff; font-size:8.5px; padding:2px 7px; border-radius:20px; font-weight:700; display:inline-block; }
+.bn { background:var(--pp-navy); color:#fff; font-size:8.5px; padding:2px 7px; border-radius:20px; font-weight:700; display:inline-block; }
+.by { background:var(--yellow); color:#fff; font-size:8.5px; padding:2px 7px; border-radius:20px; font-weight:700; display:inline-block; }
+.bg { background:var(--pp-greym); color:#fff; font-size:8.5px; padding:2px 7px; border-radius:20px; font-weight:700; display:inline-block; }
+.bgn{ background:var(--green); color:#fff; font-size:8.5px; padding:2px 7px; border-radius:20px; font-weight:700; display:inline-block; }
+
+/* CRED ROW */
+.cred { display:flex; align-items:center; gap:7px; background:#F0FFF4; border:1px solid #BBF7D0; border-radius:7px; padding:8px 11px; }
+.credd { width:7px; height:7px; background:var(--green); border-radius:50%; flex-shrink:0; }
+.credt { font-size:10.5px; color:var(--text); font-weight:500; }
+
+/* PIN */
+.pindots { display:flex; gap:13px; justify-content:center; }
+.pindot { width:15px; height:15px; border-radius:50%; border:2px solid var(--border); background:transparent; }
+.pindot.f { background:var(--pp-navy); border-color:var(--pp-navy); }
+
+/* KEYPAD */
+.kp { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
+.key { background:var(--sf2); border:1px solid var(--border); border-radius:11px; padding:11px 4px; text-align:center; color:var(--text); font-size:17px; font-weight:600; cursor:pointer; }
+.ksub { font-size:7px; color:var(--textm); letter-spacing:1px; font-weight:400; display:block; }
+
+/* CAMERA VF */
+.vf { background:#080818; border-radius:12px; position:relative; overflow:hidden; border:2px solid var(--pp-navy); }
+.vfc { position:absolute; width:17px; height:17px; }
+.vtl { top:6px;left:6px;border-top:2.5px solid var(--pp-red);border-left:2.5px solid var(--pp-red);border-radius:2px 0 0 0; }
+.vtr { top:6px;right:6px;border-top:2.5px solid var(--pp-red);border-right:2.5px solid var(--pp-red);border-radius:0 2px 0 0; }
+.vbl { bottom:6px;left:6px;border-bottom:2.5px solid var(--pp-red);border-left:2.5px solid var(--pp-red);border-radius:0 0 0 2px; }
+.vbr { bottom:6px;right:6px;border-bottom:2.5px solid var(--pp-red);border-right:2.5px solid var(--pp-red);border-radius:0 0 2px 0; }
+
+/* ID CARD */
+.idc { background:linear-gradient(135deg,var(--pp-navyd) 0%,var(--pp-navy) 55%,var(--pp-navyl) 100%); border-radius:14px; padding:16px; position:relative; overflow:hidden; box-shadow:0 8px 24px rgba(46,60,186,.3); }
+.idc::after { content:''; position:absolute; right:-22px; top:-22px; width:80px; height:80px; background:var(--pp-red); border-radius:20px; opacity:.28; transform:rotate(20deg); }
+
+/* PROGRESS */
+.psr { display:flex; align-items:center; gap:9px; border-radius:10px; padding:9px 12px; border:1px solid var(--border); background:var(--white); }
+.psr.done { border-color:#BBF7D0; background:#F0FFF4; }
+.psr.curr { border-color:var(--pp-navy); background:#EEF0FF; }
+.psr.todo { opacity:.4; }
+.psico { width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; flex-shrink:0; }
+.psico.done { background:var(--green); color:#fff; }
+.psico.curr { background:var(--pp-navy); color:#fff; }
+.psico.todo { background:var(--sf2); border:1px solid var(--border); }
+
+/* SPACERS */
+.s4{height:4px;flex-shrink:0;}.s8{height:8px;flex-shrink:0;}.s12{height:12px;flex-shrink:0;}.s16{height:16px;flex-shrink:0;}
+
+/* ANNOTATIONS */
+.anns { flex:1; min-width:270px; max-width:400px; }
+.annt { font-size:13px; font-weight:700; color:var(--text); margin-bottom:14px; padding-bottom:8px; border-bottom:2px solid var(--pp-red); display:inline-block; }
+.anni { display:flex; gap:10px; margin-bottom:14px; align-items:flex-start; }
+.annn { width:21px; height:21px; background:var(--pp-navy); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9.5px; font-weight:700; flex-shrink:0; color:#fff; }
+.annl { font-size:11.5px; font-weight:600; color:var(--text); margin-bottom:2px; }
+.annd { font-size:10.5px; color:var(--text2); line-height:1.55; }
+.atag { display:inline-block; background:var(--sf2); border:1px solid var(--border); color:var(--textm); font-size:9px; padding:2px 7px; border-radius:4px; font-family:'IBM Plex Mono',monospace; margin-top:3px; }
+.atag.dep { border-color:var(--yellow); color:#92400E; background:#FFFBEB; }
+.atag.crit { border-color:var(--pp-red); color:var(--pp-red); background:#FFF5F3; }
+.atag.ok { border-color:var(--green); color:#166534; background:#F0FFF4; }
+</style>
+</head>
+<body>
+
+<!-- PAGE HEADER -->
+<div class="phdr">
+  <div class="brand">
+    <svg viewBox="0 0 116 46" fill="none" style="height:30px;">
+      <rect x="0" y="3" width="32" height="32" rx="7" fill="#FE3B1F"/>
+      <rect x="3" y="6" width="26" height="26" rx="5" fill="#2E3CBA"/>
+      <rect x="3" y="32" width="26" height="3" rx="1.5" fill="#2E3CBA"/>
+      <text x="9" y="27" font-family="sans-serif" font-weight="700" font-size="18" fill="white">P</text>
+      <text x="41" y="19" font-family="sans-serif" font-weight="700" font-size="13" fill="#2E3CBA">Prompt</text>
+      <text x="41" y="35" font-family="sans-serif" font-weight="700" font-size="13" fill="#FE3B1F">Post</text>
+    </svg>
+    <span class="ptitle">Prompt Pass — Wireframes</span>
+  </div>
+  <span class="hbadge">WF-CI-001 · PRD v1.0 · ShopStack · Feb 2026</span>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="show('pin')">01 · PIN Unlock</button>
+  <button class="tab" onclick="show('ekyc')">02 · eKYC Flow</button>
+  <button class="tab" onclick="show('home')">03 · Home (Vault)</button>
+  <button class="tab" onclick="show('mod')">04 · Me Modules</button>
+  <button class="tab" onclick="show('vp')">05 · Partner VP Flow</button>
+  <button class="tab" onclick="show('settings')">06 · Settings</button>
+  <button class="tab" onclick="show('cardr')">07 · Card Render</button>
+</div>
+
+<!-- ==== 01 PIN UNLOCK ==== -->
+<div id="screen-pin" class="panel active">
+  <div class="pw">
+    <div class="plbl">01-A · Biometric Auth</div>
+    <div class="phone"><div class="pi">
+      <div class="sb"><span>10:58</span><span style="font-size:9px;">●●●● 🔋</span></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:20px 20px 26px;">
+        <svg viewBox="0 0 116 46" fill="none" style="height:28px;margin-top:4px;">
+          <rect x="0" y="3" width="32" height="32" rx="7" fill="#FE3B1F"/>
+          <rect x="3" y="6" width="26" height="26" rx="5" fill="#2E3CBA"/>
+          <rect x="3" y="32" width="26" height="3" rx="1.5" fill="#2E3CBA"/>
+          <text x="9" y="27" font-family="sans-serif" font-weight="700" font-size="18" fill="white">P</text>
+          <text x="41" y="19" font-family="sans-serif" font-weight="700" font-size="13" fill="#2E3CBA">Prompt</text>
+          <text x="41" y="35" font-family="sans-serif" font-weight="700" font-size="13" fill="#FE3B1F">Post</text>
+        </svg>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+          <div style="width:76px;height:76px;border-radius:50%;border:2.5px solid var(--pp-navy);background:#EEF0FF;display:flex;align-items:center;justify-content:center;font-size:34px;">👤</div>
+          <div style="font-size:14.5px;font-weight:700;">ปลดล็อกด้วย Face ID</div>
+          <div style="font-size:11px;color:var(--textm);">Prompt Pass</div>
+        </div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:9px;">
+          <div class="btn">ปลดล็อกด้วย Face ID</div>
+          <div class="btng">Use PIN instead</div>
+          <div style="text-align:center;font-size:10.5px;color:var(--pp-navy);font-weight:500;cursor:pointer;margin-top:3px;">Forgot PIN? Reset by recovery phrase</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="pw">
+    <div class="plbl">01-B · PIN Entry</div>
+    <div class="phone"><div class="pi">
+      <div class="sb"><span>10:58</span><span style="font-size:9px;">●●●● 🔋</span></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:20px 18px 22px;">
+        <svg viewBox="0 0 116 46" fill="none" style="height:26px;">
+          <rect x="0" y="3" width="32" height="32" rx="7" fill="#FE3B1F"/>
+          <rect x="3" y="6" width="26" height="26" rx="5" fill="#2E3CBA"/>
+          <rect x="3" y="32" width="26" height="3" rx="1.5" fill="#2E3CBA"/>
+          <text x="9" y="27" font-family="sans-serif" font-weight="700" font-size="18" fill="white">P</text>
+          <text x="41" y="19" font-family="sans-serif" font-weight="700" font-size="13" fill="#2E3CBA">Prompt</text>
+          <text x="41" y="35" font-family="sans-serif" font-weight="700" font-size="13" fill="#FE3B1F">Post</text>
+        </svg>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:15px;width:100%;">
+          <div style="font-size:14px;font-weight:700;">Please enter your PIN to unlock</div>
+          <div class="pindots">
+            <div class="pindot f"></div><div class="pindot f"></div>
+            <div class="pindot f"></div><div class="pindot"></div>
+            <div class="pindot"></div><div class="pindot"></div>
+          </div>
+          <div style="font-size:10.5px;color:var(--pp-navy);font-weight:500;cursor:pointer;">Forgot PIN? Reset by recovery phrase</div>
+        </div>
+        <div style="width:100%;">
+          <div class="kp">
+            <div class="key">1</div><div class="key">2<span class="ksub">ABC</span></div><div class="key">3<span class="ksub">DEF</span></div>
+            <div class="key">4<span class="ksub">GHI</span></div><div class="key">5<span class="ksub">JKL</span></div><div class="key">6<span class="ksub">MNO</span></div>
+            <div class="key">7<span class="ksub">PQRS</span></div><div class="key">8<span class="ksub">TUV</span></div><div class="key">9<span class="ksub">WXYZ</span></div>
+            <div class="key" style="background:transparent;border-color:transparent;"></div>
+            <div class="key">0</div><div class="key" style="font-size:13px;">⌫</div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="anns">
+    <div class="annt">Screen 01 · Authentication</div>
+    <div class="anni"><div class="annn">1</div><div><div class="annl">Prompt Post Logo</div><div class="annd">Replace ShareRing logo with Prompt Post CI logo asset. TF to deliver before UI sprint.</div><span class="atag ok">CI ALIGNED</span></div></div>
+    <div class="anni"><div class="annn">2</div><div><div class="annl">Biometric Auth (Face ID / Fingerprint)</div><div class="annd">ShopStack triggers SDK biometric auth. ShareRing SDK handles OS-level secure enclave. Callback: success / failure / fallback-to-pin.</div><span class="atag dep">SHARERING-DEP OQ05</span></div></div>
+    <div class="anni"><div class="annn">3</div><div><div class="annl">6-Digit PIN Keypad</div><div class="annd">Standard telephone keypad layout. PIN entry as fallback when biometrics unavailable or failed.</div><span class="atag">REF: ShareRing Me UI</span></div></div>
+    <div class="anni"><div class="annn">4</div><div><div class="annl">Recovery Phrase Reset</div><div class="annd">Link triggers recovery phrase flow. ShareRing SDK must confirm method signature.</div><span class="atag dep">SHARERING-DEP</span></div></div>
+  </div>
+</div>
+
+<!-- ==== 02 eKYC ==== -->
+<div id="screen-ekyc" class="panel">
+  <div class="pw">
+    <div class="plbl">02-A · Profile Review</div>
+    <div class="phone"><div class="pi">
+      <div class="sb"><span>10:58</span><span style="font-size:9px;">●●●● 🔋</span></div>
+      <div class="phon-hdr"><span class="phon-back">←</span><span class="phon-ttl">Confirm Your Profile</span></div>
+      <div class="pscr" style="padding:13px 15px;">
+        <div style="background:#FFF5F3;border:1.5px solid var(--pp-red);border-radius:9px;padding:9px 11px;display:flex;gap:7px;align-items:flex-start;margin-bottom:12px;">
+          <span style="color:var(--pp-red);font-size:13px;flex-shrink:0;">⚠</span>
+          <span style="font-size:10.5px;color:var(--pp-red);font-weight:600;">eKYC is mandatory — cannot be skipped</span>
+        </div>
+        <div style="font-size:10px;color:var(--textm);margin-bottom:9px;">Please verify your information before proceeding with identity verification.</div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <div class="inp hi">First Name: [from PromptPost API]</div>
+          <div class="inp hi">Last Name: [from PromptPost API]</div>
+          <div class="inp hi">PromptPost User ID: [auto-filled]</div>
+          <div class="inp warn">ID Card Number: [from OCR — next step]</div>
+        </div>
+        <div class="s12"></div>
+        <div style="background:var(--sf2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:10px;color:var(--textm);">User Type = eKYC User (system-set)</div>
+        <div class="s12"></div>
+        <div class="btn">Confirm &amp; Start eKYC</div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="pw">
+    <div class="plbl">02-B · OCR ID Scan</div>
+    <div class="phone"><div class="pi">
+      <div class="sb" style="background:#080818;"><span style="color:rgba(255,255,255,.7);">10:58</span><span style="font-size:9px;color:rgba(255,255,255,.5);">●●●● 🔋</span></div>
+      <div style="background:#080818;flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:14px 15px 18px;">
+        <div style="text-align:center;">
+          <div style="font-size:12.5px;font-weight:700;color:#fff;margin-bottom:3px;">Scan Your ID Card</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.5);">Place your Thai National ID card within the frame</div>
+        </div>
+        <div>
+          <div class="vf" style="height:158px;">
+            <div class="vfc vtl"></div><div class="vfc vtr"></div><div class="vfc vbl"></div><div class="vfc vbr"></div>
+            <div style="position:absolute;width:88%;height:1.5px;background:linear-gradient(90deg,transparent,var(--pp-red),transparent);left:6%;top:42%;opacity:.8;"></div>
+            <div style="display:flex;align-items:center;justify-content:center;height:100%;color:rgba(255,255,255,.15);font-size:9px;text-align:center;">CAMERA VIEWFINDER<br><br>[ SDK OCR ENGINE ]</div>
+          </div>
+          <div style="text-align:center;font-size:10px;color:rgba(255,255,255,.4);margin-top:9px;">Align card within frame • Hold steady</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px;text-align:center;font-size:9px;color:rgba(255,255,255,.4);">SDK handles OCR extraction automatically</div>
+          <div class="btng" style="color:rgba(255,255,255,.4);border-color:rgba(255,255,255,.2);">Cancel</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="pw">
+    <div class="plbl">02-C · Face Recognition</div>
+    <div class="phone"><div class="pi">
+      <div class="sb"><span>10:58</span><span style="font-size:9px;">●●●● 🔋</span></div>
+      <div class="phon-hdr"><span class="phon-back">←</span><span class="phon-ttl">Face Verification</span></div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:16px 15px 20px;">
+        <div style="font-size:11px;color:var(--textm);text-align:center;">Look at the camera and follow the instructions</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:11px;">
+          <div style="width:148px;height:148px;border-radius:50%;border:3px solid var(--green);background:#0A1A0A;display:flex;align-items:center;justify-content:center;font-size:38px;position:relative;">😐
+            <div style="position:absolute;bottom:-3px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;font-size:8.5px;padding:2px 10px;border-radius:10px;font-weight:700;white-space:nowrap;">● Detecting face...</div>
+          </div>
+          <div style="background:#F0FFF4;border:1px solid #BBF7D0;border-radius:8px;padding:8px 14px;font-size:10.5px;color:#166534;text-align:center;width:100%;">Face Recognition + Liveness Detection via SDK</div>
+        </div>
+        <div class="btng">Cancel</div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="pw">
+    <div class="plbl">02-D · Biometric Setup</div>
+    <div class="phone"><div class="pi">
+      <div class="sb"><span>10:58</span><span style="font-size:9px;">●●●● 🔋</span></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:22px 18px 24px;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:13px;text-align:center;">
+          <div style="width:62px;height:62px;border-radius:50%;background:#F0FFF4;border:2.5px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:26px;">✓</div>
+          <div style="font-size:15px;font-weight:700;">Identity Verified!</div>
+          <div style="font-size:11px;color:var(--textm);">Set up biometric authentication for fast, secure access</div>
+          <div style="font-size:38px;margin-top:6px;">👤</div>
+          <div style="font-size:11px;color:var(--text2);">Enable Face ID / Fingerprint</div>
+        </div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:9px;">
+          <div class="btn">Enable Biometrics</div>
+          <div class="btng">Use PIN Only</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="anns">
+    <div class="annt">Screen 02 · eKYC Flow</div>
+    <div class="anni"><div class="annn">1</div><div><div class="annl">Force eKYC — Mandatory</div><div class="annd">First-time users MUST complete eKYC. Flow cannot be skipped or dismissed. ShopStack implements UI wrapper only.</div><span class="atag crit">MANDATORY</span></div></div>
+    <div class="anni"><div class="annn">2</div><div><div class="annl">Profile Pre-fill from PromptPost API</div><div class="annd">First Name, Last Name pre-filled via API 01-0203 using Bearer token from Host App. ID Card Number filled after OCR step.</div><span class="atag">API 01-0203</span></div></div>
+    <div class="anni"><div class="annn">3</div><div><div class="annl">OCR + Face Recognition</div><div class="annd">Entirely handled by ShareRing SDK. ShopStack triggers SDK flow and handles success / failure / retry / cancelled callbacks.</div><span class="atag dep">SHARERING-DEP OQ04</span></div></div>
+    <div class="anni"><div class="annn">4</div><div><div class="annl">PDPA Compliance</div><div class="annd">eKYC image retention is ShareRing's responsibility. ShopStack does not handle or store any biometric/eKYC image data.</div><span class="atag">PDPA / ETDA</span></div></div>
+  </div>
+</div>
+
+<!-- ==== 03 HOME (VAULT) ==== -->
+<div id="screen-home" class="panel">
+  <div class="pw">
+    <div class="plbl">03-A · Home / Vault</div>
+    <div class="phone"><div class="pi">
+      <div class="sb" style="background:var(--pp-navy);"><span style="color:rgba(255,255,255,.75);">10:58</span><span style="font-size:9px;color:rgba(255,255,255,.55);">●●●● 🔋</span></div>
+      <div class="apphdr">
+        <div class="ahtop">
+          <svg viewBox="0 0 116 46" fill="none" style="height:20px;">
+            <rect x="0" y="3" width="32" height="32" rx="7" fill="rgba(255,255,255,.9)"/>
+            <text x="9" y="27" font-family="sans-serif" font-weight="700" font-size="18" fill="#2E3CBA">P</text>
+            <text x="41" y="19" font-family="sans-serif" font-weight="700" font-size="13" fill="white">Prompt</text>
+            <text x="41" y="35" font-family="sans-serif" font-weight="700" font-size="13" fill="rgba(255,255,255,.7)">Post</text>
+          </svg>
+          <div class="ahicos"><div class="ahico">🔔</div><div class="ahico">QR</div></div>
+        </div>
+        <div class="ahuser">
+          <div class="ahav">👤</div>
+          <div><div class="ahname">Somchai J.</div><div class="ahaddr">shareledger1...tspvee3s93 ⎘</div></div>
+        </div>
+      </div>
+      <div class="pscr" style="padding:12px 14px 8px;">
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <div class="cr"><div class="crico" style="background:#EEF0FF;">👤</div><div style="flex:1;"><div class="crt" style="color:var(--pp-navy);">Personal Information</div><div class="crd">Phone, website, email, social media</div></div><div class="crb">Open</div></div>
+          <div class="cr"><div class="crico" style="background:#FFF5F3;">📄</div><div style="flex:1;"><div class="crt">My Documents</div><div class="crd">ID, passport, driving license</div></div><div class="crb">Open</div></div>
+          <div class="cr"><div class="crico" style="background:#F0F0F8;">🔧</div><div style="flex:1;"><div class="crt">Other Information</div><div class="crd">Additional shareable information</div></div><div class="crb">Open</div></div>
+          <div class="cr"><div class="crico" style="background:#F0FFF4;">🔑</div><div style="flex:1;"><div class="crt" style="color:#166534;">Password Management</div><div class="crd">Secure vault for passwords</div></div><div class="crb">Open</div></div>
+        </div>
+        <div style="background:var(--sf2);border:1px solid var(--border);border-radius:8px;padding:7px 11px;text-align:center;font-size:9.5px;color:var(--textm);margin-top:10px;">Metadata only — no document content cached locally</div>
+      </div>
+      <div class="bnav">
+        <div class="ni a"><div class="niico">🏠</div><div class="nilbl" style="color:var(--pp-red);">Vault</div></div>
+        <div class="ni"><div class="niico">⊞</div><div class="nilbl">Me Modules</div></div>
+        <div class="ni"><div class="niico">⚙️</div><div class="nilbl">Settings</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="pw">
+    <div class="plbl">03-B · My Documents</div>
+    <div class="phone"><div class="pi">
+      <div class="sb"><span>10:58</span><span style="font-size:9px;">●●●● 🔋</span></div>
+      <div class="phon-hdr"><span class="phon-back">←</span><span class="phon-ttl">My Documents</span></div>
+      <div class="pscr" style="padding:12px 14px;">
+        <div class="idc" style="margin-bottom:10px;">
+          <div style="position:relative;z-index:1;">
+            <div style="font-size:9px;color:rgba(255,255,255,.6);letter-spacing:1.2px;margin-bottom:7px;">THAI NATIONAL ID CARD</div>
+            <div style="font-size:14px;font-weight:700;color:#fff;">Somchai Jaidee</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.6);margin-top:2px;font-family:'IBM Plex Mono',monospace;">x-xxxx-xxxxx-xx-x</div>
+            <div style="margin-top:9px;display:flex;justify-content:space-between;align-items:flex-end;">
+              <div style="font-size:8px;color:rgba(255,255,255,.4);">OCR-verified · JSON stored in Vault</div>
+              <span class="bgn" style="font-size:7px;">✓ Verified</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:10px;">
+          <div class="cr"><div class="crico" style="background:#FFF5F3;">📎</div><div style="flex:1;"><div class="crt" style="font-size:11px;">Passport.pdf</div><div class="crd">Uploaded • 2.1MB</div></div><div class="crb">View</div></div>
+          <div class="cr"><div class="crico" style="background:#FFFBEB;">📎</div><div style="flex:1;"><div class="crt" style="font-size:11px;">DrivingLicense.jpg</div><div class="crd">Uploaded • 0.8MB</div></div><div class="crb">View</div></div>
+        </div>
+        <div class="btno" style="margin-bottom:7px;font-size:11.5px;">+ Upload Document</div>
+        <div class="btng" style="font-size:11.5px;">+ Scan ID Card (OCR)</div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="anns">
+    <div class="annt">Screen 03 · Home / Vault</div>
+    <div class="anni"><div class="annn">1</div><div><div class="annl">Identity Header — PP Navy</div><div class="annd">Profile avatar + ShareRing account address. Header uses PP Navy (#2E3CBA) with Red graphic device. Data from ShareRing Vault + PromptPost API 01-0203.</div><span class="atag dep">SHARERING-DEP OQ06</span></div></div>
+    <div class="anni"><div class="annn">2</div><div><div class="annl">Metadata Only</div><div class="annd">Home Page renders card titles and types only. Full document content fetched on demand from ShareRing Vault — never cached locally.</div><span class="atag crit">SECURITY REQ</span></div></div>
+    <div class="anni"><div class="annn">3</div><div><div class="annl">Document Upload</div><div class="annd">JPG, PNG, PDF supported. ShopStack builds upload UI; ShareRing SDK handles storage. Returns fileId + metadata on success.</div><span class="atag dep">SHARERING-DEP OQ08</span></div></div>
+    <div class="anni"><div class="annn">4</div><div><div class="annl">CI Header Color</div><div class="annd">Header gradient replaced with Prompt Post Navy (#2E3CBA) + Red graphic device per CI doc. ShareRing blue removed.</div><span class="atag ok">CI ALIGNED</span></div></div>
+  </div>
+</div>
+
+<!-- ==== 04 ME MODULES ==== -->
+<div id="screen-mod" class="panel">
+  <div class="pw">
+    <div class="plbl">04-A · Me Modules (List View)</div>
+    <div class="phone"><div class="pi">
+      <div class="sb"><span>10:58</span><span style="font-size:9px;">●●●● 🔋</span></div>
+      <div class="apphdr" style="padding:10px 14px 12px;">
+        <div class="ahtop"><div style="color:#fff;font-size:14px;font-weight:700;">Me Modules</div><div style="display:flex;gap:6px;"><div class="ahico">≡</div><div class="ahico">⊞</div></div></div>
+      </div>
+      <div class="pscr" style="padding:11px 13px;">
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <div class="cr"><div class="crico" style="background:#EEF0FF;border:1.5px solid var(--pp-navy);">P1</div><div style="flex:1;"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;"><div class="crt">Partner A</div><span class="br">New</span></div><div class="crd">Short description of Partner A service</div></div><div class="crb">Open</div></div>
+          <div class="cr"><div class="crico" style="background:#F5F5F7;">P2</div><div style="flex:1;"><div class="crt">Partner B</div><div class="crd">Short description of Partner B service</div></div><div class="crb">Open</div></div>
+          <div class="cr"><div class="crico" style="background:#FFF5F3;border:1.5px solid var(--pp-red);">P3</div><div style="flex:1;"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;"><div class="crt">Partner C</div><span class="by">Featured</span></div><div class="crd">Short description of Partner C service</div></div><div class="crb">Open</div></div>
+          <div class="cr"><div class="crico" style="background:#F5F5F7;">P4</div><div style="flex:1;"><div class="crt">Partner D</div><div class="crd">Short description of Partner D service</div></div><span class="bg">Soon</span></div>
+          <div class="cr" style="opacity:.45;"><div class="crico" style="background:#F5F5F7;">P5</div><div style="flex:1;"><div class="crt">Partner E</div><div class="crd">Maintenance mode</div></div><span style="font-size:11px;color:var(--textm);">⚙</span></div>
+          <div style="text-align:center;font-size:9px;color:var(--textm);padding:8px 0;">Partners loaded dynamically from ShareRing Engine</div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="ni"><div class="niico">🏠</div><div class="nilbl">Vault</div></div>
+        <div class="ni a"><div class="niico">⊞</div><div class="nilbl" style="color:var(--pp-red);">Me Modules</div></div>
+        <div class="ni"><div class="niico">⚙️</div><div class="nilbl">Settings</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="pw">
+    <div class="plbl">04-B · Me Modules (Grid View)</div>
+    <div class="phone"><div class="pi">
+      <div class="sb"><span>10:58</span><span style="font-size:9px;">●●●● 🔋</span></div>
+      <div class="apphdr" style="padding:10px 14px 12px;">
+        <div class="ahtop"><div style="color:#fff;font-size:14px;font-weight:700;">Me Modules</div><div style="display:flex;gap:6px;"><div class="ahico">≡</div><div style="background:var(--pp-red);border-radius:7px;width:27px;height:27px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;">⊞</div></div></div>
+      </div>
+      <div class="pscr" style="padding:11px 13px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">
+          <div style="background:#EEF0FF;border:1.5px solid var(--pp-navy);border-radius:11px;padding:13px 10px;text-align:center;"><div style="font-size:22px;margin-bottom:6px;">P1</div><div style="font-size:11px;font-weight:600;color:var(--pp-navy);">Partner A</div><div style="margin-top:6px;"><span class="br">New</span></div></div>
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:11px;padding:13px 10px;text-align:center;"><div style="font-size:22px;margin-bottom:6px;">P2</div><div style="font-size:11px;font-weight:600;">Partner B</div><div style="font-size:9px;color:var(--textm);margin-top:4px;">Service desc</div></div>
+          <div style="background:#FFF5F3;border:1.5px solid var(--pp-red);border-radius:11px;padding:13px 10px;text-align:center;"><div style="font-size:22px;margin-bottom:6px;">P3</div><div style="font-size:11px;font-weight:600;color:var(--pp-red);">Partner C</div><div style="margin-top:6px;"><span class="by">Featured</span></div></div>
+          <div style="background:var(--white);border:1px dashed var(--border);border-radius:11px;padding:13px 10px;text-align:center;opacity:.55;"><div style="font-size:22px;margin-bottom:6px;">P4</div><div style="font-size:11px;font-weight:600;color:var(--textm);">Partner D</div><div style="font-size:9px;color:var(--textm);margin-top:4px;">Coming Soon</div></div>
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:11px;padding:13px 10px;text-align:center;"><div style="font-size:22px;margin-bottom:6px;">P5</div><div style="font-size:11px;font-weight:600;">Partner E</div><div style="font-size:9px;color:var(--textm);margin-top:4px;">Service desc</div></div>
+          <div style="background:var(--sf2);border:1px dashed var(--border);border-radius:11px;padding:13px 10px;text-align:center;"><div style="font-size:24px;color:var(--textm);margin-bottom:4px;">+</div><div style="font-size:9px;color:var(--textm);">More Partners</div></div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="ni"><div class="niico">🏠</div><div class="nilbl">Vault</div></div>
+        <div class="ni a"><div class="niico">⊞</div><div class="nilbl" style="color:var(--pp-red);">Me Modules</div></div>
+        <div class="ni"><div class="niico">⚙️</div><div class="nilbl">Settings</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="anns">
+    <div class="annt">Screen 04 · Me Modules (Partner Landing Page)</div>
+    <div class="anni"><div class="annn">1</div><div><div class="annl">Dynamic Partner List</div><div class="annd">Partner cards loaded from ShareRing Engine backend. New partners can be added without SDK or app update.</div><span class="atag dep">SHARERING-DEP OQ13</span></div></div>
+    <div class="anni"><div class="annn">2</div><div><div class="annl">List / Grid Toggle</div><div class="annd">Users can switch between list view and grid view. State persists per user preference. Active grid icon = PP Red background.</div><span class="atag ok">CI ALIGNED</span></div></div>
+    <div class="anni"><div class="annn">3</div><div><div class="annl">Partner Status Badges</div><div class="annd">New = PP Red, Featured = Yellow, Soon = Grey — all from PP brand palette. Status states configurable from backend.</div><span class="atag ok">CI ALIGNED</span></div></div>
+    <div class="anni"><div class="annn">4</div><div><div class="annl">Partner Logos / CI</div><div class="annd">Partner logos and CI provided by TF per integration. Shown as placeholder (P1–P5) until assets delivered.</div><span class="atag dep">PENDING TF ASSET</span></div></div>
+  </div>
+</div>
+
+<!-- ==== 05 PARTNER VP FLOW ==== -->
+<div id="screen-vp" class="panel">
+  <div class="pw">
+    <div class="plbl">05-A · Consent Screen</div>
+    <div class="phone"><div class="pi">
+      <div class="sb"><span>10:58</span><span style="font-size:9px;">●●●● 🔋</span></div>
+      <div class="phon-hdr"><span class="phon-back">←</span><span class="phon-ttl">Share Credentials</span></div>
+      <div class="pscr" style="padding:13px 14px;">
+        <div style="display:flex;align-items:center;gap:10px;background:var(--sf2);border:1px solid var(--border);border-radius:11px;padding:10px 12px;margin-bottom:13px;">
+          <div style="width:42px;height:42px;border-radius:9px;background:var(--pp-navy);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;">🏛</div>
+          <div><div style="font-size:12.5px;font-weight:700;">Partner A</div><div style="font-size:10px;color:var(--textm);">Requesting your credentials</div></div>
+        </div>
+        <div style="font-size:10px;font-weight:600;color:var(--text2);margin-bottom:7px;">Credentials to be shared:</div>
+        <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:12px;">
+          <div class="cred"><div class="credd"></div><div class="credt">Name from Identity VC</div></div>
+          <div class="cred"><div class="credd"></div><div class="credt">Age 18+ Proof from Age VC</div></div>
+          <div class="cred"><div class="credd"></div><div class="credt">PromptPost User ID</div></div>
+        </div>
+        <div style="background:var(--sf2);border:1px solid var(--border);border-radius:8px;padding:8px 11px;font-size:10px;color:var(--textm);margin-bottom:13px;">[Purpose statement from Partner A]</div>
+        <div class="btn" style="margin-bottom:8px;">Confirm with Biometrics</div>
+        <div class="btng">Cancel</div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="pw">
+    <div class="plbl">05-B · VP Processing</div>
+    <div class="phone"><div class="pi">
+      <div class="sb"><span>10:58</span><span style="font-size:9px;">●●●● 🔋</span></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:15px;text-align:center;width:100%;">
+          <div style="width:68px;height:68px;border-radius:50%;border:3px solid var(--pp-navy);border-top-color:var(--pp-red);display:flex;align-items:center;justify-content:center;font-size:28px;">🔐</div>
+          <div style="font-size:15px;font-weight:700;">Verifying Identity</div>
+          <div style="font-size:11px;color:var(--textm);">Constructing Verifiable Presentation</div>
+          <div style="display:flex;flex-direction:column;gap:7px;width:100%;margin-top:6px;">
+            <div class="psr done"><div class="psico done">✓</div><div style="font-size:11px;font-weight:600;color:#166534;">Biometrics confirmed</div></div>
+            <div class="psr curr"><div class="psico curr">●</div><div style="font-size:11px;font-weight:600;color:var(--pp-navy);">Signing VP with DID key...</div></div>
+            <div class="psr todo"><div class="psico todo">○</div><div style="font-size:11px;color:var(--textm);">Transmitting to Partner...</div></div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="pw">
+    <div class="plbl">05-C · VP Success</div>
+    <div class="phone"><div class="pi">
+      <div class="sb"><span>10:58</span><span style="font-size:9px;">●●●● 🔋</span></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:26px 18px 24px;">
+        <div></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;">
+          <div style="width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,var(--pp-navyd),var(--pp-navy));display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(46,60,186,.3);">
+            <span style="font-size:32px;color:#fff;">✓</span>
+          </div>
+          <div style="font-size:17px;font-weight:700;">Verified Successfully</div>
+          <div style="font-size:11.5px;color:var(--textm);">Your credentials have been shared with Partner A</div>
+          <div style="background:var(--sf2);border:1px solid var(--border);border-radius:8px;padding:7px 13px;font-size:9.5px;color:var(--textm);">Consent logged • PDPA compliant</div>
+        </div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:9px;">
+          <div class="btn">Open Partner A Service</div>
+          <div class="btng">Back to Me Modules</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="anns">
+    <div class="annt">Screen 05 · Partner VP Flow</div>
+    <div class="anni"><div class="annn">1</div><div><div class="annl">Consent Screen</div><div class="annd">Must show: Partner name/logo, list of credentials being shared (Green rows), purpose statement. No credentials shared without explicit user confirmation.</div><span class="atag crit">PRIVACY REQ</span></div></div>
+    <div class="anni"><div class="annn">2</div><div><div class="annl">Biometric Confirmation</div><div class="annd">User must authenticate via Face ID / Fingerprint / PIN to confirm VP sharing. SDK handles signing with DID private key in secure enclave.</div><span class="atag dep">SHARERING-DEP OQ10</span></div></div>
+    <div class="anni"><div class="annn">3</div><div><div class="annl">W3C VC Standard</div><div class="annd">VP payload must follow W3C Verifiable Credentials Data Model. All transmission via TLS 1.2+.</div><span class="atag">W3C VC DATA MODEL</span></div></div>
+    <div class="anni"><div class="annn">4</div><div><div class="annl">Consent Logging</div><div class="annd">All VP sharing events must be logged and auditable per PDPA. ShareRing is responsible for consent log storage.</div><span class="atag">PDPA AUDIT LOG</span></div></div>
+  </div>
+</div>
+
+<!-- ==== 06 SETTINGS ==== -->
+<div id="screen-settings" class="panel">
+  <div class="pw">
+    <div class="plbl">06-A · Settings</div>
+    <div class="phone"><div class="pi">
+      <div class="sb"><span>10:58</span><span style="font-size:9px;">●●●● 🔋</span></div>
+      <div class="phon-hdr"><span class="phon-ttl">Settings</span></div>
+      <div class="pscr" style="padding:10px 14px;">
+        <div class="shdr">SECURITY &amp; PRIVACY</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <div class="sr"><span class="srlbl">Back Up Vault</span><span class="srchev">↑ ›</span></div>
+          <div class="sr"><span class="srlbl">Import Vault Back Up</span><span class="srchev">↓ ›</span></div>
+          <div class="sr"><span class="srlbl">Cloud Vault Sync ☁</span><div class="ton"></div></div>
+          <div class="sr"><span class="srlbl">Change your PIN</span><span class="srchev">›</span></div>
+          <div class="sr"><span class="srlbl">View Recovery Phrase</span><span style="font-size:13px;color:var(--pp-red);">🔒</span></div>
+          <div class="sr"><span class="srlbl">ShareRing Link Security Code</span><span class="srchev">›</span></div>
+          <div class="sr"><span class="srlbl">Security Settings</span><span class="srchev">›</span></div>
+        </div>
+        <div class="shdr">APP PREFERENCES</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <div class="sr"><span class="srlbl">Change Language (TH / EN)</span><span style="font-size:11px;color:var(--pp-navy);font-weight:600;">ไทย ›</span></div>
+        </div>
+        <div class="shdr">HELP &amp; LEGAL</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <div class="sr"><span class="srlbl">Contact Customer Service</span><span class="srchev">›</span></div>
+          <div class="sr"><span class="srlbl">Terms of Service</span><span class="srchev">›</span></div>
+          <div class="sr"><span class="srlbl">Privacy Policy</span><span class="srchev">›</span></div>
+        </div>
+        <div class="s8"></div>
+        <div style="text-align:center;font-size:9px;color:var(--textm);">Prompt Pass v1.0.0 · Powered by Prompt Post</div>
+      </div>
+      <div class="bnav">
+        <div class="ni"><div class="niico">🏠</div><div class="nilbl">Vault</div></div>
+        <div class="ni"><div class="niico">⊞</div><div class="nilbl">Me Modules</div></div>
+        <div class="ni a"><div class="niico">⚙️</div><div class="nilbl" style="color:var(--pp-red);">Settings</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="anns">
+    <div class="annt">Screen 06 · Settings</div>
+    <div class="anni"><div class="annn">1</div><div><div class="annl">Structure = ShareRing Me</div><div class="annd">Settings layout mirrors ShareRing Me reference. Section groupings: Security &amp; Privacy, App Preferences, Help &amp; Legal.</div><span class="atag">REF: ShareRing Me</span></div></div>
+    <div class="anni"><div class="annn">2</div><div><div class="annl">Language Support</div><div class="annd">Thai / English toggle. Default follows PromptPost app language setting. ShareRing SDK Thai support to be confirmed.</div><span class="atag dep">SHARERING-DEP OQ09</span></div></div>
+    <div class="anni"><div class="annn">3</div><div><div class="annl">Cloud Vault Sync</div><div class="annd">Toggle for ShareRing cloud backup. SDK must confirm sync method and data scope. Toggle ON = Green (#22C55E).</div><span class="atag dep">SHARERING-DEP</span></div></div>
+  </div>
+</div>
+
+<!-- ==== 07 CARD RENDER ==== -->
+<div id="screen-cardr" class="panel">
+  <div class="pw">
+    <div class="plbl">07-A · ID Card Render</div>
+    <div class="phone"><div class="pi">
+      <div class="sb"><span>10:58</span><span style="font-size:9px;">●●●● 🔋</span></div>
+      <div class="phon-hdr"><span class="phon-back">←</span><span class="phon-ttl">Thai National ID Card</span></div>
+      <div class="pscr" style="padding:13px 14px;">
+        <div class="idc" style="margin-bottom:12px;">
+          <div style="position:relative;z-index:1;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+              <div style="font-size:8.5px;color:rgba(255,255,255,.55);letter-spacing:1.2px;">THAI NATIONAL ID CARD<br><span style="font-size:7px;">[CARD TEMPLATE — TF DESIGNED]</span></div>
+              <span class="bgn" style="font-size:7px;">✓ Verified</span>
+            </div>
+            <div style="font-size:15px;font-weight:700;color:#fff;">Name: [OCR extracted]</div>
+            <div style="height:1px;background:linear-gradient(90deg,rgba(255,255,255,.3),transparent);margin:10px 0;"></div>
+            <div style="display:flex;justify-content:space-between;">
+              <div><div style="font-size:7.5px;color:rgba(255,255,255,.45);margin-bottom:2px;">ID NUMBER</div><div style="font-size:10px;color:rgba(255,255,255,.7);font-family:'IBM Plex Mono',monospace;">x-xxxx-xxxxx-xx-x</div></div>
+              <div style="text-align:right;"><div style="font-size:7.5px;color:rgba(255,255,255,.45);margin-bottom:2px;">DOB</div><div style="font-size:10px;color:rgba(255,255,255,.7);">[OCR extracted]</div></div>
+            </div>
+            <div style="margin-top:10px;font-size:7.5px;color:rgba(255,255,255,.4);">Rendered from JSON payload via SDK</div>
+          </div>
+        </div>
+        <div style="font-size:10px;font-weight:600;color:var(--text);margin-bottom:6px;">Raw Data (JSON)</div>
+        <div style="background:#12122A;border-radius:9px;padding:10px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:#7EB8F7;line-height:1.7;margin-bottom:12px;">
+          <div style="color:var(--pp-red);">{"card_type": "thai_id",</div>
+          <div>&nbsp;"name": "...",</div>
+          <div>&nbsp;"id_number": "xxx-xxxx-xxxx",</div>
+          <div>&nbsp;"dob": "...",</div>
+          <div>&nbsp;"status": <span style="color:var(--green);">"verified"</span>}</div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <div class="btn" style="flex:1;padding:9px;">Share (VP)</div>
+          <div class="btng" style="flex:1;padding:9px;font-size:11px;">Re-scan OCR</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="pw">
+    <div class="plbl">07-B · Uploaded Document View</div>
+    <div class="phone"><div class="pi">
+      <div class="sb"><span>10:58</span><span style="font-size:9px;">●●●● 🔋</span></div>
+      <div class="phon-hdr"><span class="phon-back">←</span><span class="phon-ttl">Passport.pdf</span></div>
+      <div class="pscr" style="padding:13px 14px;">
+        <div style="background:var(--sf2);border:1.5px dashed var(--border);border-radius:11px;height:178px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;margin-bottom:12px;">
+          <span style="font-size:38px;">📄</span>
+          <div style="font-size:11px;color:var(--textm);font-weight:500;">PDF PREVIEW</div>
+          <div style="font-size:9.5px;color:var(--textm);text-align:center;">Fetched on demand from ShareRing Vault<br>Not cached locally</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:12px;">
+          <div class="sr"><span style="font-size:10.5px;color:var(--textm);">File name</span><span style="font-size:10.5px;color:var(--text);">Passport.pdf</span></div>
+          <div class="sr"><span style="font-size:10.5px;color:var(--textm);">Size</span><span style="font-size:10.5px;color:var(--text);">2.1 MB</span></div>
+          <div class="sr"><span style="font-size:10.5px;color:var(--textm);">Status</span><span style="font-size:10.5px;color:var(--green);font-weight:600;">✓ Verified</span></div>
+        </div>
+        <div class="btn">Share as Document VC</div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="anns">
+    <div class="annt">Screen 07 · Card Render</div>
+    <div class="anni"><div class="annn">1</div><div><div class="annl">JSON-Based Card Templates</div><div class="annd">Card data stored as JSON in ShareRing Vault. Card UI rendered dynamically using TF-designed templates. ShareRing SDK handles render engine.</div><span class="atag dep">SHARERING-DEP OQ07</span></div></div>
+    <div class="anni"><div class="annn">2</div><div><div class="annl">Card Template — PP CI</div><div class="annd">Visual card layout uses PP Navy gradient + Red graphic device per CI doc. Typography: IBM Plex Mono for ID numbers. New card types added without SDK changes.</div><span class="atag ok">CI ALIGNED</span></div></div>
+    <div class="anni"><div class="annn">3</div><div><div class="annl">Document Preview</div><div class="annd">Uploaded JPG/PNG/PDF previewed within Mini App. Content fetched from ShareRing Vault on demand — never stored locally.</div><span class="atag crit">NO LOCAL CACHE</span></div></div>
+    <div class="anni"><div class="annn">4</div><div><div class="annl">Share via VP Flow</div><div class="annd">From card detail view, user can initiate VP flow to share credential with a Partner. Triggers Consent Screen (Screen 05).</div></div></div>
+  </div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
