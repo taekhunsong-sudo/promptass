@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Pass — Wireframes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --card: #21242f;
+    --border: #2e3242;
+    --accent: #4f6ef7;
+    --accent2: #7c3aed;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --wire: #2a3050;
+    --wire-fill: #1e2235;
+    --wire-stroke: #4a5580;
+    --green: #22c55e;
+    --yellow: #f59e0b;
+    --phone-w: 320px;
+    --phone-h: 640px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 32px 48px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-left h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+  .header-left p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-family: 'DM Mono', monospace;
+  }
+  .badge {
+    background: var(--wire);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── NAV TABS ── */
+  .nav {
+    display: flex;
+    gap: 4px;
+    padding: 16px 48px;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex-wrap: wrap;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    padding: 7px 16px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .nav-btn:hover { color: var(--text); border-color: var(--border); }
+  .nav-btn.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .main {
+    display: flex;
+    gap: 0;
+    min-height: calc(100vh - 130px);
+  }
+  .screen-panel {
+    display: none;
+    width: 100%;
+    padding: 40px 48px;
+    gap: 48px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .screen-panel.active { display: flex; }
+
+  /* ── PHONE FRAME ── */
+  .phone-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .phone-label {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .phone {
+    width: var(--phone-w);
+    height: var(--phone-h);
+    background: var(--wire-fill);
+    border-radius: 36px;
+    border: 2px solid var(--wire-stroke);
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 6px #161923, 0 24px 64px rgba(0,0,0,0.5);
+  }
+  .phone::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 6px;
+    background: var(--wire-stroke);
+    border-radius: 3px;
+    z-index: 10;
+  }
+  .phone-inner {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding-top: 28px;
+  }
+
+  /* ── STATUS BAR ── */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 16px 8px;
+    flex-shrink: 0;
+  }
+  .status-bar span {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .sig-bars { display: flex; gap: 2px; align-items: flex-end; }
+  .sig-bar { width: 3px; background: var(--muted); border-radius: 1px; }
+
+  /* ── WIREFRAME ELEMENTS ── */
+  .w-screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0 16px;
+    gap: 0;
+  }
+
+  /* Placeholder blocks */
+  .wf-block {
+    background: var(--wire);
+    border: 1px solid var(--wire-stroke);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .wf-text {
+    color: var(--muted);
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    text-align: center;
+  }
+  .wf-title {
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .wf-subtitle {
+    color: var(--muted);
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    text-align: center;
+  }
+  .wf-btn {
+    background: var(--accent);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .wf-btn-outline {
+    border: 1px solid var(--wire-stroke);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 11px;
+  }
+  .wf-input {
+    background: var(--wire);
+    border: 1px solid var(--wire-stroke);
+    border-radius: 6px;
+    padding: 9px 12px;
+    color: var(--muted);
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+  }
+  .wf-divider {
+    height: 1px;
+    background: var(--wire-stroke);
+  }
+  .wf-avatar {
+    width: 56px;
+    height: 56px;
+    background: var(--wire);
+    border: 1.5px solid var(--wire-stroke);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+  }
+  .wf-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--wire);
+    border: 1px solid var(--wire-stroke);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 9px;
+    flex-shrink: 0;
+  }
+  .wf-badge {
+    background: var(--accent);
+    color: #fff;
+    font-size: 8px;
+    padding: 2px 6px;
+    border-radius: 20px;
+    font-family: 'DM Mono', monospace;
+  }
+  .wf-badge-yellow {
+    background: var(--yellow);
+    color: #000;
+    font-size: 8px;
+    padding: 2px 6px;
+    border-radius: 20px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* PIN dots */
+  .pin-dots {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  .pin-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1.5px solid var(--wire-stroke);
+    background: transparent;
+  }
+  .pin-dot.filled { background: var(--accent); border-color: var(--accent); }
+
+  /* Keypad */
+  .keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    padding: 0 4px;
+  }
+  .key {
+    background: var(--wire);
+    border: 1px solid var(--wire-stroke);
+    border-radius: 8px;
+    padding: 10px 4px;
+    text-align: center;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .key-sub {
+    font-size: 7px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 1px;
+  }
+
+  /* Bottom nav */
+  .bottom-nav {
+    display: flex;
+    border-top: 1px solid var(--wire-stroke);
+    background: var(--wire-fill);
+    flex-shrink: 0;
+    margin: 0 -16px;
+    padding: 0 8px;
+  }
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 0;
+    gap: 3px;
+  }
+  .nav-item-icon {
+    width: 20px;
+    height: 20px;
+    background: var(--wire);
+    border: 1px solid var(--wire-stroke);
+    border-radius: 4px;
+  }
+  .nav-item-label {
+    font-size: 8px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+  .nav-item.active .nav-item-icon { background: var(--accent); border-color: var(--accent); }
+  .nav-item.active .nav-item-label { color: var(--accent); }
+
+  /* Card row */
+  .wf-card-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--wire);
+    border: 1px solid var(--wire-stroke);
+    border-radius: 8px;
+    padding: 10px;
+  }
+  .wf-card-row-content { flex: 1; }
+  .wf-card-row-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+  .wf-card-row-desc {
+    font-size: 9px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    line-height: 1.4;
+  }
+  .wf-open-btn {
+    background: var(--wire-fill);
+    border: 1px solid var(--wire-stroke);
+    border-radius: 12px;
+    padding: 4px 10px;
+    font-size: 9px;
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    flex-shrink: 0;
+  }
+
+  /* Settings row */
+  .wf-setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--wire);
+    border: 1px solid var(--wire-stroke);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .wf-toggle {
+    width: 28px;
+    height: 14px;
+    background: var(--green);
+    border-radius: 7px;
+    position: relative;
+  }
+  .wf-lock {
+    width: 14px;
+    height: 14px;
+    background: var(--wire-fill);
+    border: 1px solid var(--wire-stroke);
+    border-radius: 2px;
+    font-size: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+  }
+
+  /* Annotations panel */
+  .annotations {
+    flex: 1;
+    min-width: 280px;
+    max-width: 420px;
+  }
+  .ann-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .ann-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+  .ann-num {
+    width: 20px;
+    height: 20px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+    color: #fff;
+  }
+  .ann-content {}
+  .ann-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .ann-desc {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .ann-tag {
+    display: inline-block;
+    background: var(--wire);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    margin-top: 4px;
+  }
+  .ann-tag.critical { border-color: #ef4444; color: #ef4444; }
+  .ann-tag.dep { border-color: var(--yellow); color: var(--yellow); }
+
+  /* Section group */
+  .section-group {
+    font-size: 9px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 10px 0 4px;
+  }
+
+  /* Header bar in phone */
+  .wf-header-bar {
+    background: var(--accent);
+    margin: 0 -16px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .sp { height: 4px; flex-shrink: 0; }
+  .sp8 { height: 8px; flex-shrink: 0; }
+  .sp12 { height: 12px; flex-shrink: 0; }
+
+  /* Annotation callouts on phone */
+  .ann-dot {
+    width: 16px;
+    height: 16px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: 700;
+    color: #fff;
+    position: absolute;
+    z-index: 20;
+    cursor: pointer;
+  }
+
+  /* Flow diagram */
+  .flow-panel {
+    padding: 40px 48px;
+    display: none;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .flow-panel.active { display: flex; }
+  .flow-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .flow-subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .flow-grid {
+    display: flex;
+    gap: 0;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  .flow-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-width: 120px;
+  }
+  .flow-box {
+    width: 120px;
+    min-height: 60px;
+    background: var(--wire-fill);
+    border: 1.5px solid var(--wire-stroke);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 11px;
+    color: var(--text);
+    font-weight: 500;
+    padding: 10px;
+    line-height: 1.4;
+  }
+  .flow-box.accent { border-color: var(--accent); background: rgba(79,110,247,0.1); }
+  .flow-box.green { border-color: var(--green); background: rgba(34,197,94,0.1); }
+  .flow-box.yellow { border-color: var(--yellow); background: rgba(245,158,11,0.1); }
+  .flow-box.sharering { border-color: var(--accent2); background: rgba(124,58,237,0.1); font-size: 10px; }
+  .flow-arrow {
+    color: var(--muted);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+  }
+  .flow-label {
+    font-size: 9px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    text-align: center;
+  }
+  .flow-tag {
+    font-size: 8px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+  }
+  .flow-tag.sdk { background: rgba(124,58,237,0.2); color: #a78bfa; border: 1px solid #7c3aed; }
+  .flow-tag.shopstack { background: rgba(79,110,247,0.2); color: #93c5fd; border: 1px solid #4f6ef7; }
+
+  /* Scrollable inner */
+  .phone-scroll { overflow-y: auto; flex: 1; scrollbar-width: none; }
+  .phone-scroll::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>Prompt Pass — Wireframes</h1>
+    <p>PRD v1.0 · ShopStack Implementation · Feb 2026</p>
+  </div>
+  <span class="badge">WF-DRAFT-001</span>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="show('pin')">01 · PIN Unlock</button>
+  <button class="nav-btn" onclick="show('ekycflow')">02 · eKYC Flow</button>
+  <button class="nav-btn" onclick="show('home')">03 · Home (Vault)</button>
+  <button class="nav-btn" onclick="show('modules')">04 · Me Modules</button>
+  <button class="nav-btn" onclick="show('partner')">05 · Partner VP Flow</button>
+  <button class="nav-btn" onclick="show('settings')">06 · Settings</button>
+  <button class="nav-btn" onclick="show('cardrender')">07 · Card Render</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- 01 · PIN UNLOCK -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="screen-pin" class="screen-panel active">
+
+  <!-- Biometric Auth -->
+  <div class="phone-wrap">
+    <div class="phone-label">01-A · Biometric Auth</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar">
+          <span>10:58</span>
+          <div class="status-icons">
+            <div class="sig-bars">
+              <div class="sig-bar" style="height:4px"></div>
+              <div class="sig-bar" style="height:6px"></div>
+              <div class="sig-bar" style="height:8px"></div>
+              <div class="sig-bar" style="height:10px"></div>
+            </div>
+          </div>
+        </div>
+        <div class="w-screen" style="justify-content: space-between; padding-bottom: 16px;">
+          <div></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:16px;">
+            <div class="wf-block" style="width:80px; height:24px; border-radius:4px;">LOGO</div>
+            <div class="sp8"></div>
+            <div class="wf-block" style="width:64px; height:64px; border-radius:50%;">FACE ID</div>
+            <div class="wf-title" style="font-size:13px;">Unlock with Face ID</div>
+            <div class="wf-subtitle">or enter PIN</div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
+            <div class="wf-btn">Use PIN instead</div>
+            <div class="wf-text" style="font-size:9px;">Forgot PIN? Reset by recovery phrase</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIN Entry -->
+  <div class="phone-wrap">
+    <div class="phone-label">01-B · PIN Entry</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar">
+          <span>10:58</span>
+          <div class="status-icons"><div class="sig-bars"><div class="sig-bar" style="height:4px"></div><div class="sig-bar" style="height:6px"></div><div class="sig-bar" style="height:8px"></div><div class="sig-bar" style="height:10px"></div></div></div>
+        </div>
+        <div class="w-screen" style="justify-content:space-between; padding-bottom:16px;">
+          <div></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:16px;">
+            <div class="wf-block" style="width:80px;height:24px;border-radius:4px;">LOGO</div>
+            <div class="sp8"></div>
+            <div class="wf-title" style="font-size:13px;">Please enter your PIN to unlock</div>
+            <div class="sp"></div>
+            <div class="pin-dots">
+              <div class="pin-dot filled"></div>
+              <div class="pin-dot filled"></div>
+              <div class="pin-dot filled"></div>
+              <div class="pin-dot"></div>
+              <div class="pin-dot"></div>
+              <div class="pin-dot"></div>
+            </div>
+            <div class="wf-text" style="font-size:9px; color: #4f6ef7;">Forgot PIN? Reset by recovery phrase</div>
+          </div>
+          <div style="width:100%;">
+            <div class="keypad">
+              <div class="key">1</div>
+              <div class="key">2<div class="key-sub">ABC</div></div>
+              <div class="key">3<div class="key-sub">DEF</div></div>
+              <div class="key">4<div class="key-sub">GHI</div></div>
+              <div class="key">5<div class="key-sub">JKL</div></div>
+              <div class="key">6<div class="key-sub">MNO</div></div>
+              <div class="key">7<div class="key-sub">PQRS</div></div>
+              <div class="key">8<div class="key-sub">TUV</div></div>
+              <div class="key">9<div class="key-sub">WXYZ</div></div>
+              <div class="key" style="background:transparent;border-color:transparent;"></div>
+              <div class="key">0</div>
+              <div class="key" style="font-size:10px;">⌫</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Annotations -->
+  <div class="annotations">
+    <div class="ann-title">Screen 01 · Authentication</div>
+    <div class="ann-item">
+      <div class="ann-num">1</div>
+      <div class="ann-content">
+        <div class="ann-label">Prompt Post Logo</div>
+        <div class="ann-desc">Replace ShareRing logo with Prompt Post CI logo asset. TF to deliver before UI sprint.</div>
+        <span class="ann-tag dep">PENDING TF ASSET</span>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">2</div>
+      <div class="ann-content">
+        <div class="ann-label">Biometric Auth (Face ID / Fingerprint)</div>
+        <div class="ann-desc">ShopStack triggers SDK biometric auth. ShareRing SDK handles OS-level secure enclave. Callback: success / failure / fallback-to-pin.</div>
+        <span class="ann-tag dep">SHARERING-DEP OQ05</span>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">3</div>
+      <div class="ann-content">
+        <div class="ann-label">6-Digit PIN Keypad</div>
+        <div class="ann-desc">Standard telephone keypad layout. PIN entry as fallback when biometrics unavailable or failed.</div>
+        <span class="ann-tag">REF: ShareRing Me UI</span>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">4</div>
+      <div class="ann-content">
+        <div class="ann-label">Recovery Phrase Reset</div>
+        <div class="ann-desc">Link triggers recovery phrase flow. ShareRing SDK must confirm method signature.</div>
+        <span class="ann-tag dep">SHARERING-DEP</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- 02 · eKYC FLOW -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="screen-ekycflow" class="screen-panel">
+
+  <!-- Step 1: Profile Confirm -->
+  <div class="phone-wrap">
+    <div class="phone-label">02-A · Profile Review</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span></div>
+        <div class="w-screen" style="padding-bottom:16px;">
+          <div class="sp8"></div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="wf-block" style="width:16px;height:16px;border-radius:50%;">&lt;</div>
+            <div class="wf-title" style="font-size:13px; text-align:left;">Confirm Your Profile</div>
+          </div>
+          <div class="sp12"></div>
+          <div class="wf-subtitle" style="text-align:left;">Please verify your information before proceeding with identity verification.</div>
+          <div class="sp12"></div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="wf-input">First Name: [from PromptPost API]</div>
+            <div class="wf-input">Last Name: [from PromptPost API]</div>
+            <div class="wf-input">PromptPost User ID: [auto-filled]</div>
+            <div class="wf-input" style="border-color:#f59e0b; color:#f59e0b;">ID Card Number: [from OCR — next step]</div>
+          </div>
+          <div class="sp12"></div>
+          <div class="wf-block" style="height:32px; font-size:9px;">User Type = eKYC User (system-set)</div>
+          <div class="sp12"></div>
+          <div class="wf-btn">Confirm & Start eKYC</div>
+          <div class="sp8"></div>
+          <div class="wf-block" style="height:24px; background:rgba(239,68,68,0.1); border-color:#ef4444; font-size:9px; color:#ef4444;">⚠ eKYC is mandatory — cannot be skipped</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: OCR Scan -->
+  <div class="phone-wrap">
+    <div class="phone-label">02-B · OCR ID Scan</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span></div>
+        <div class="w-screen" style="padding-bottom:16px; justify-content:space-between;">
+          <div>
+            <div class="sp8"></div>
+            <div class="wf-title" style="font-size:13px;">Scan Your ID Card</div>
+            <div class="sp"></div>
+            <div class="wf-subtitle">Place your Thai National ID card within the frame</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+            <div class="wf-block" style="width:100%;height:160px;border-color:#4f6ef7;border-style:dashed;">
+              CAMERA VIEWFINDER
+              <br>[ SDK OCR ENGINE ]
+            </div>
+            <div class="wf-text" style="font-size:9px;">Align card within frame • Hold steady</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="wf-block" style="height:28px;font-size:9px;">SDK handles OCR extraction automatically</div>
+            <div class="wf-btn-outline" style="font-size:10px;">Cancel</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Face Recognition -->
+  <div class="phone-wrap">
+    <div class="phone-label">02-C · Face Recognition</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span></div>
+        <div class="w-screen" style="padding-bottom:16px; justify-content:space-between;">
+          <div>
+            <div class="sp8"></div>
+            <div class="wf-title" style="font-size:13px;">Face Verification</div>
+            <div class="sp"></div>
+            <div class="wf-subtitle">Look at the camera and follow the instructions</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+            <div class="wf-block" style="width:160px;height:160px;border-radius:50%;border-color:#22c55e;border-style:dashed;">
+              CAMERA
+              <br>[ LIVENESS ]
+            </div>
+            <div class="wf-block" style="width:100%;height:24px;font-size:9px;background:rgba(34,197,94,0.1);border-color:#22c55e;color:#22c55e;">
+              ● Detecting face...
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="wf-block" style="height:28px;font-size:9px;">Face Recognition + Liveness Detection via SDK</div>
+            <div class="wf-btn-outline" style="font-size:10px;">Cancel</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4: Biometric Setup -->
+  <div class="phone-wrap">
+    <div class="phone-label">02-D · Biometric Setup</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span></div>
+        <div class="w-screen" style="padding-bottom:16px; justify-content:space-between;">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:16px; margin-top:24px;">
+            <div class="wf-block" style="width:56px;height:56px;border-radius:50%;border-color:#22c55e;">✓</div>
+            <div class="wf-title" style="font-size:13px;">Identity Verified!</div>
+            <div class="wf-subtitle">Set up biometric authentication for fast, secure access</div>
+            <div class="sp8"></div>
+            <div class="wf-block" style="width:64px;height:64px;border-radius:50%;">FACE ID</div>
+            <div class="wf-text">Enable Face ID / Fingerprint</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;width:100%;">
+            <div class="wf-btn">Enable Biometrics</div>
+            <div class="wf-btn-outline">Use PIN Only</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations">
+    <div class="ann-title">Screen 02 · eKYC Flow</div>
+    <div class="ann-item">
+      <div class="ann-num">1</div>
+      <div class="ann-content">
+        <div class="ann-label">Force eKYC — Mandatory</div>
+        <div class="ann-desc">First-time users MUST complete eKYC. Flow cannot be skipped or dismissed. ShopStack implements UI wrapper only.</div>
+        <span class="ann-tag critical">MANDATORY</span>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">2</div>
+      <div class="ann-content">
+        <div class="ann-label">Profile Pre-fill from PromptPost API</div>
+        <div class="ann-desc">First Name, Last Name pre-filled via API 01-0203 using Bearer token from Host App. ID Card Number filled after OCR step.</div>
+        <span class="ann-tag">API 01-0203</span>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">3</div>
+      <div class="ann-content">
+        <div class="ann-label">OCR + Face Recognition</div>
+        <div class="ann-desc">Entirely handled by ShareRing SDK. ShopStack triggers SDK flow and handles success / failure / retry / cancelled callbacks.</div>
+        <span class="ann-tag dep">SHARERING-DEP OQ04</span>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">4</div>
+      <div class="ann-content">
+        <div class="ann-label">PDPA Compliance</div>
+        <div class="ann-desc">eKYC image retention is ShareRing's responsibility. ShopStack does not handle or store any biometric/eKYC image data.</div>
+        <span class="ann-tag">PDPA / ETDA</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- 03 · HOME (VAULT) -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="screen-home" class="screen-panel">
+
+  <div class="phone-wrap">
+    <div class="phone-label">03-A · Home / Vault</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span></div>
+        <!-- Header gradient area -->
+        <div class="wf-header-bar" style="padding:16px;">
+          <div style="display:flex;justify-content:flex-end;width:100%;gap:8px;">
+            <div class="wf-icon" style="width:24px;height:24px;">🔔</div>
+            <div class="wf-icon" style="width:24px;height:24px;">QR</div>
+          </div>
+          <div class="wf-avatar" style="width:64px;height:64px;border-color:#fff;">S</div>
+          <div class="wf-text" style="color:#cce;font-size:9px;">Account address</div>
+          <div class="wf-block" style="width:100%;height:20px;font-size:8px;background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2);">shareledger1...tspvee3s93 ⎘</div>
+        </div>
+
+        <div class="phone-scroll" style="padding:0 16px 8px;">
+          <div class="sp12"></div>
+          <!-- Vault Cards -->
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="wf-card-row">
+              <div class="wf-icon" style="background:rgba(79,110,247,0.3);border-color:#4f6ef7;">👤</div>
+              <div class="wf-card-row-content">
+                <div class="wf-card-row-title" style="color:#4f6ef7;">Personal Information</div>
+                <div class="wf-card-row-desc">Phone, website, email, social media</div>
+              </div>
+            </div>
+            <div class="wf-card-row">
+              <div class="wf-icon" style="background:rgba(30,40,80,0.5);">📄</div>
+              <div class="wf-card-row-content">
+                <div class="wf-card-row-title">My Documents</div>
+                <div class="wf-card-row-desc">ID, passport, driving license — stored securely</div>
+              </div>
+            </div>
+            <div class="wf-card-row">
+              <div class="wf-icon" style="background:rgba(124,58,237,0.3);border-color:#7c3aed;">🔧</div>
+              <div class="wf-card-row-content">
+                <div class="wf-card-row-title" style="color:#a78bfa;">Other Information</div>
+                <div class="wf-card-row-desc">Additional shareable information</div>
+              </div>
+            </div>
+            <div class="wf-card-row">
+              <div class="wf-icon" style="background:rgba(34,197,94,0.2);border-color:#22c55e;">🔑</div>
+              <div class="wf-card-row-content">
+                <div class="wf-card-row-title" style="color:#22c55e;">Password Management</div>
+                <div class="wf-card-row-desc">Secure vault for passwords</div>
+              </div>
+            </div>
+          </div>
+          <div class="sp12"></div>
+          <div class="wf-block" style="height:24px;font-size:8px;">Metadata only — no document content cached locally</div>
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item active">
+            <div class="nav-item-icon"></div>
+            <div class="nav-item-label">Vault</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-item-icon"></div>
+            <div class="nav-item-label">Me Modules</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-item-icon"></div>
+            <div class="nav-item-label">Settings</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- My Documents -->
+  <div class="phone-wrap">
+    <div class="phone-label">03-B · My Documents</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span></div>
+        <div class="w-screen" style="padding-bottom:0;">
+          <div class="sp8"></div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="wf-block" style="width:16px;height:16px;border-radius:50%;">&lt;</div>
+            <div class="wf-title" style="font-size:13px; text-align:left;">My Documents</div>
+          </div>
+          <div class="sp12"></div>
+          <div class="phone-scroll">
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <!-- Thai ID card -->
+              <div class="wf-block" style="height:80px;flex-direction:column;gap:4px;border-color:#4f6ef7;">
+                <span style="font-size:9px;">THAI NATIONAL ID CARD</span>
+                <span style="font-size:8px;color:#888;">OCR-verified • JSON stored in Vault</span>
+              </div>
+              <!-- Upload doc -->
+              <div class="wf-card-row">
+                <div class="wf-icon">📎</div>
+                <div class="wf-card-row-content">
+                  <div class="wf-card-row-title" style="font-size:10px;">Passport.pdf</div>
+                  <div class="wf-card-row-desc">Uploaded • 2.1MB</div>
+                </div>
+                <div class="wf-open-btn">View</div>
+              </div>
+              <div class="wf-card-row">
+                <div class="wf-icon">📎</div>
+                <div class="wf-card-row-content">
+                  <div class="wf-card-row-title" style="font-size:10px;">DrivingLicense.jpg</div>
+                  <div class="wf-card-row-desc">Uploaded • 0.8MB</div>
+                </div>
+                <div class="wf-open-btn">View</div>
+              </div>
+              <!-- Upload button -->
+              <div class="sp8"></div>
+              <div class="wf-btn-outline" style="display:flex;align-items:center;justify-content:center;gap:6px;">
+                <span>+ Upload Document</span>
+              </div>
+              <div class="wf-btn-outline" style="display:flex;align-items:center;justify-content:center;gap:6px;">
+                <span>+ Scan ID Card (OCR)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations">
+    <div class="ann-title">Screen 03 · Home / Vault</div>
+    <div class="ann-item">
+      <div class="ann-num">1</div>
+      <div class="ann-content">
+        <div class="ann-label">Identity Header</div>
+        <div class="ann-desc">Profile avatar + ShareRing account address. Data from ShareRing Vault + PromptPost API 01-0203.</div>
+        <span class="ann-tag dep">SHARERING-DEP OQ06</span>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">2</div>
+      <div class="ann-content">
+        <div class="ann-label">Metadata Only</div>
+        <div class="ann-desc">Home Page renders card titles and types only. Full document content fetched on demand from ShareRing Vault — never cached locally.</div>
+        <span class="ann-tag critical">SECURITY REQ</span>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">3</div>
+      <div class="ann-content">
+        <div class="ann-label">Document Upload</div>
+        <div class="ann-desc">JPG, PNG, PDF supported. ShopStack builds upload UI; ShareRing SDK handles storage. Returns fileId + metadata on success.</div>
+        <span class="ann-tag dep">SHARERING-DEP OQ08</span>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">4</div>
+      <div class="ann-content">
+        <div class="ann-label">CI Header Color</div>
+        <div class="ann-desc">Header gradient / color to be replaced with Prompt Post CI primary color. ShareRing blue shown as placeholder.</div>
+        <span class="ann-tag dep">PENDING TF ASSET</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- 04 · ME MODULES (PARTNER LANDING PAGE) -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="screen-modules" class="screen-panel">
+
+  <div class="phone-wrap">
+    <div class="phone-label">04-A · Me Modules (List View)</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span></div>
+        <div class="w-screen" style="padding-bottom:0;">
+          <div class="sp8"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div class="wf-title" style="text-align:left;font-size:13px;">Me Modules</div>
+            <div style="display:flex;gap:6px;">
+              <div class="wf-block" style="width:28px;height:24px;font-size:8px;">≡</div>
+              <div class="wf-block" style="width:28px;height:24px;font-size:8px;">⊞</div>
+            </div>
+          </div>
+          <div class="sp12"></div>
+          <div class="phone-scroll">
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <!-- Partner 1 -->
+              <div class="wf-card-row">
+                <div class="wf-icon" style="background:rgba(79,110,247,0.2);border-color:#4f6ef7;">P1</div>
+                <div class="wf-card-row-content">
+                  <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+                    <div class="wf-card-row-title" style="font-size:11px;">Partner A</div>
+                    <div class="wf-badge">New</div>
+                  </div>
+                  <div class="wf-card-row-desc">Short description of Partner A service</div>
+                </div>
+                <div class="wf-open-btn">Open</div>
+              </div>
+              <!-- Partner 2 -->
+              <div class="wf-card-row">
+                <div class="wf-icon">P2</div>
+                <div class="wf-card-row-content">
+                  <div class="wf-card-row-title" style="font-size:11px;">Partner B</div>
+                  <div class="wf-card-row-desc">Short description of Partner B service</div>
+                </div>
+                <div class="wf-open-btn">Open</div>
+              </div>
+              <!-- Partner 3 -->
+              <div class="wf-card-row">
+                <div class="wf-icon" style="background:rgba(124,58,237,0.2);border-color:#7c3aed;">P3</div>
+                <div class="wf-card-row-content">
+                  <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+                    <div class="wf-card-row-title" style="font-size:11px;">Partner C</div>
+                    <div class="wf-badge-yellow">Featured</div>
+                  </div>
+                  <div class="wf-card-row-desc">Short description of Partner C service</div>
+                </div>
+                <div class="wf-open-btn">Open</div>
+              </div>
+              <!-- Partner 4 -->
+              <div class="wf-card-row">
+                <div class="wf-icon">P4</div>
+                <div class="wf-card-row-content">
+                  <div class="wf-card-row-title" style="font-size:11px;">Partner D</div>
+                  <div class="wf-card-row-desc">Short description of Partner D service</div>
+                </div>
+                <div class="wf-block" style="width:50px;height:24px;font-size:8px;border-color:#555;color:#555;">Soon</div>
+              </div>
+              <!-- Partner 5 -->
+              <div class="wf-card-row" style="opacity:0.5;">
+                <div class="wf-icon">P5</div>
+                <div class="wf-card-row-content">
+                  <div class="wf-card-row-title" style="font-size:11px;">Partner E</div>
+                  <div class="wf-card-row-desc">Maintenance mode</div>
+                </div>
+                <div class="wf-block" style="width:50px;height:24px;font-size:8px;">⚙</div>
+              </div>
+              <div class="sp8"></div>
+              <div class="wf-block" style="height:24px;font-size:8px;">Partners loaded dynamically from ShareRing Engine</div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><div class="nav-item-icon"></div><div class="nav-item-label">Vault</div></div>
+          <div class="nav-item active"><div class="nav-item-icon"></div><div class="nav-item-label">Me Modules</div></div>
+          <div class="nav-item"><div class="nav-item-icon"></div><div class="nav-item-label">Settings</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid View -->
+  <div class="phone-wrap">
+    <div class="phone-label">04-B · Me Modules (Grid View)</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span></div>
+        <div class="w-screen" style="padding-bottom:0;">
+          <div class="sp8"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div class="wf-title" style="text-align:left;font-size:13px;">Me Modules</div>
+            <div style="display:flex;gap:6px;">
+              <div class="wf-block" style="width:28px;height:24px;font-size:8px;">≡</div>
+              <div class="wf-block" style="width:28px;height:24px;font-size:8px;background:var(--accent);border-color:var(--accent);">⊞</div>
+            </div>
+          </div>
+          <div class="sp12"></div>
+          <div class="phone-scroll">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div class="wf-block" style="height:80px;flex-direction:column;gap:4px;border-color:#4f6ef7;">
+                <div style="font-size:8px;color:#4f6ef7;">Partner A</div>
+                <div style="font-size:7px;">Service desc</div>
+              </div>
+              <div class="wf-block" style="height:80px;flex-direction:column;gap:4px;">
+                <div style="font-size:8px;">Partner B</div>
+                <div style="font-size:7px;">Service desc</div>
+              </div>
+              <div class="wf-block" style="height:80px;flex-direction:column;gap:4px;border-color:#7c3aed;">
+                <div style="font-size:8px;color:#a78bfa;">Partner C</div>
+                <div class="wf-badge-yellow" style="font-size:7px;">Featured</div>
+              </div>
+              <div class="wf-block" style="height:80px;flex-direction:column;gap:4px;">
+                <div style="font-size:8px;">Partner D</div>
+                <div style="font-size:7px;color:#555;">Coming Soon</div>
+              </div>
+              <div class="wf-block" style="height:80px;flex-direction:column;gap:4px;">
+                <div style="font-size:8px;">Partner E</div>
+                <div style="font-size:7px;">Service desc</div>
+              </div>
+              <div class="wf-block" style="height:80px;flex-direction:column;gap:4px;border-style:dashed;">
+                <div style="font-size:16px;color:#555;">+</div>
+                <div style="font-size:7px;color:#555;">More Partners</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><div class="nav-item-icon"></div><div class="nav-item-label">Vault</div></div>
+          <div class="nav-item active"><div class="nav-item-icon"></div><div class="nav-item-label">Me Modules</div></div>
+          <div class="nav-item"><div class="nav-item-icon"></div><div class="nav-item-label">Settings</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations">
+    <div class="ann-title">Screen 04 · Me Modules (Partner Landing Page)</div>
+    <div class="ann-item">
+      <div class="ann-num">1</div>
+      <div class="ann-content">
+        <div class="ann-label">Dynamic Partner List</div>
+        <div class="ann-desc">Partner cards loaded from ShareRing Engine backend. New partners can be added without SDK or app update.</div>
+        <span class="ann-tag dep">SHARERING-DEP OQ13</span>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">2</div>
+      <div class="ann-content">
+        <div class="ann-label">List / Grid Toggle</div>
+        <div class="ann-desc">Users can switch between list view and grid view. State persists per user preference.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">3</div>
+      <div class="ann-content">
+        <div class="ann-label">Partner Status States</div>
+        <div class="ann-desc">Active (Open button), Coming Soon (disabled), Maintenance (icon). All configurable from backend.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">4</div>
+      <div class="ann-content">
+        <div class="ann-label">Partner Logos & CI</div>
+        <div class="ann-desc">Each Partner card uses custom logo/icon provided by TF per partner integration. Card template configured by TF.</div>
+        <span class="ann-tag dep">TF CI PER PARTNER</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- 05 · PARTNER VP FLOW -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="screen-partner" class="screen-panel">
+
+  <!-- Consent Screen -->
+  <div class="phone-wrap">
+    <div class="phone-label">05-A · Consent Screen</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span></div>
+        <div class="w-screen" style="padding-bottom:16px; justify-content:space-between;">
+          <div>
+            <div class="sp8"></div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div class="wf-block" style="width:16px;height:16px;border-radius:50%;">&lt;</div>
+              <div class="wf-title" style="font-size:13px;text-align:left;">Share Credentials</div>
+            </div>
+            <div class="sp12"></div>
+            <div style="display:flex;align-items:center;gap:10px;background:var(--wire);border:1px solid var(--wire-stroke);border-radius:8px;padding:10px;">
+              <div class="wf-icon" style="width:40px;height:40px;">P1</div>
+              <div>
+                <div style="font-size:11px;font-weight:600;color:var(--text);">Partner A</div>
+                <div style="font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;">Requesting your credentials</div>
+              </div>
+            </div>
+            <div class="sp12"></div>
+            <div class="wf-text" style="text-align:left;font-size:10px;margin-bottom:8px;">The following credentials will be shared:</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="display:flex;align-items:center;gap:8px;background:rgba(34,197,94,0.1);border:1px solid #22c55e;border-radius:6px;padding:8px;">
+                <div style="width:8px;height:8px;background:#22c55e;border-radius:50%;flex-shrink:0;"></div>
+                <div style="font-size:10px;">Name (from Identity VC)</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;background:rgba(34,197,94,0.1);border:1px solid #22c55e;border-radius:6px;padding:8px;">
+                <div style="width:8px;height:8px;background:#22c55e;border-radius:50%;flex-shrink:0;"></div>
+                <div style="font-size:10px;">Age 18+ Proof (Age VC)</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;background:rgba(34,197,94,0.1);border:1px solid #22c55e;border-radius:6px;padding:8px;">
+                <div style="width:8px;height:8px;background:#22c55e;border-radius:50%;flex-shrink:0;"></div>
+                <div style="font-size:10px;">PromptPost User ID</div>
+              </div>
+            </div>
+            <div class="sp8"></div>
+            <div class="wf-block" style="height:28px;font-size:8px;">Purpose: [Partner-defined purpose statement]</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;width:100%;">
+            <div class="wf-btn">Confirm with Biometrics</div>
+            <div class="wf-btn-outline">Cancel</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VP Signing -->
+  <div class="phone-wrap">
+    <div class="phone-label">05-B · VP Processing</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span></div>
+        <div class="w-screen" style="justify-content:center;align-items:center;padding-bottom:16px;">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;">
+            <div class="wf-block" style="width:64px;height:64px;border-radius:50%;border-color:#4f6ef7;animation-name:spin;">⟳</div>
+            <div class="wf-title" style="font-size:13px;">Verifying Identity</div>
+            <div class="wf-subtitle">Constructing Verifiable Presentation</div>
+            <div class="sp8"></div>
+            <div style="display:flex;flex-direction:column;gap:6px;width:100%;">
+              <div class="wf-block" style="height:24px;font-size:8px;border-color:#22c55e;color:#22c55e;">✓ Biometrics confirmed</div>
+              <div class="wf-block" style="height:24px;font-size:8px;border-color:#4f6ef7;color:#4f6ef7;">● Signing VP with DID key...</div>
+              <div class="wf-block" style="height:24px;font-size:8px;opacity:0.4;">○ Transmitting to Partner...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success -->
+  <div class="phone-wrap">
+    <div class="phone-label">05-C · VP Success</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span></div>
+        <div class="w-screen" style="justify-content:space-between;padding-bottom:16px;">
+          <div></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;">
+            <div style="width:64px;height:64px;border-radius:50%;background:rgba(34,197,94,0.2);border:2px solid #22c55e;display:flex;align-items:center;justify-content:center;font-size:24px;color:#22c55e;">✓</div>
+            <div class="wf-title" style="font-size:13px;">Verified Successfully</div>
+            <div class="wf-subtitle">Your credentials have been shared with Partner A</div>
+            <div class="wf-block" style="width:100%;height:24px;font-size:8px;">Consent logged • PDPA compliant</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;width:100%;">
+            <div class="wf-btn">Open Partner A Service</div>
+            <div class="wf-btn-outline">Back to Me Modules</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations">
+    <div class="ann-title">Screen 05 · VP/VC Flow</div>
+    <div class="ann-item">
+      <div class="ann-num">1</div>
+      <div class="ann-content">
+        <div class="ann-label">Consent Screen</div>
+        <div class="ann-desc">Must show: Partner name/logo, list of credentials being shared, purpose statement. No credentials shared without explicit user confirmation.</div>
+        <span class="ann-tag critical">PRIVACY REQ</span>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">2</div>
+      <div class="ann-content">
+        <div class="ann-label">Biometric Confirmation</div>
+        <div class="ann-desc">User must authenticate via Face ID / Fingerprint / PIN to confirm VP sharing. SDK handles signing with DID private key in secure enclave.</div>
+        <span class="ann-tag dep">SHARERING-DEP OQ10</span>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">3</div>
+      <div class="ann-content">
+        <div class="ann-label">W3C VC Standard</div>
+        <div class="ann-desc">VP payload must follow W3C Verifiable Credentials Data Model. All transmission via TLS 1.2+.</div>
+        <span class="ann-tag">W3C VC DATA MODEL</span>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">4</div>
+      <div class="ann-content">
+        <div class="ann-label">Consent Logging</div>
+        <div class="ann-desc">All VP sharing events must be logged and auditable per PDPA. ShareRing is responsible for consent log storage.</div>
+        <span class="ann-tag">PDPA AUDIT LOG</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- 06 · SETTINGS -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="screen-settings" class="screen-panel">
+
+  <div class="phone-wrap">
+    <div class="phone-label">06-A · Settings</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span></div>
+        <div class="w-screen" style="padding-bottom:0;">
+          <div class="sp8"></div>
+          <div class="wf-title">Settings</div>
+          <div class="sp12"></div>
+          <div class="phone-scroll">
+            <div class="section-group">SECURITY & PRIVACY</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div class="wf-setting-row">
+                <div style="font-size:10px;">Back Up Vault</div>
+                <div class="wf-lock">↑</div>
+              </div>
+              <div class="wf-setting-row">
+                <div style="font-size:10px;">Import Vault Back Up</div>
+                <div class="wf-lock">↓</div>
+              </div>
+              <div class="wf-setting-row">
+                <div style="font-size:10px;display:flex;align-items:center;gap:6px;">Cloud Vault Sync ☁</div>
+                <div class="wf-toggle"></div>
+              </div>
+              <div class="wf-setting-row">
+                <div style="font-size:10px;">Change your PIN</div>
+                <div class="wf-lock">✏</div>
+              </div>
+              <div class="wf-setting-row">
+                <div style="font-size:10px;">View Recovery Phrase</div>
+                <div class="wf-lock">🔒</div>
+              </div>
+              <div class="wf-setting-row">
+                <div style="font-size:10px;">ShareRing Link Security Code</div>
+                <div class="wf-lock">🔒</div>
+              </div>
+              <div class="wf-setting-row">
+                <div style="font-size:10px;">Security Settings</div>
+                <div class="wf-lock">🔒</div>
+              </div>
+            </div>
+            <div class="sp8"></div>
+            <div class="section-group">APP PREFERENCES</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div class="wf-setting-row">
+                <div style="font-size:10px;">Change Language (TH / EN)</div>
+                <div class="wf-lock">🌐</div>
+              </div>
+            </div>
+            <div class="sp8"></div>
+            <div class="section-group">HELP & LEGAL</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div class="wf-setting-row">
+                <div style="font-size:10px;">Contact Customer Service</div>
+                <div class="wf-lock">🎧</div>
+              </div>
+              <div class="wf-setting-row">
+                <div style="font-size:10px;">Terms of Service</div>
+                <div class="wf-lock">›</div>
+              </div>
+              <div class="wf-setting-row">
+                <div style="font-size:10px;">Privacy Policy</div>
+                <div class="wf-lock">›</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><div class="nav-item-icon"></div><div class="nav-item-label">Vault</div></div>
+          <div class="nav-item"><div class="nav-item-icon"></div><div class="nav-item-label">Me Modules</div></div>
+          <div class="nav-item active"><div class="nav-item-icon"></div><div class="nav-item-label">Settings</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations">
+    <div class="ann-title">Screen 06 · Settings</div>
+    <div class="ann-item">
+      <div class="ann-num">1</div>
+      <div class="ann-content">
+        <div class="ann-label">Structure = ShareRing Me</div>
+        <div class="ann-desc">Settings layout mirrors ShareRing Me reference. Section groupings: Security & Privacy, App Preferences, Help & Legal.</div>
+        <span class="ann-tag">REF: ShareRing Me</span>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">2</div>
+      <div class="ann-content">
+        <div class="ann-label">Language Support</div>
+        <div class="ann-desc">Thai / English toggle. Default follows PromptPost app language setting. ShareRing SDK Thai support to be confirmed.</div>
+        <span class="ann-tag dep">SHARERING-DEP OQ09</span>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">3</div>
+      <div class="ann-content">
+        <div class="ann-label">Cloud Vault Sync</div>
+        <div class="ann-desc">Toggle for ShareRing cloud backup. SDK must confirm sync method and data scope.</div>
+        <span class="ann-tag dep">SHARERING-DEP</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- 07 · CARD RENDER -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="screen-cardrender" class="screen-panel">
+
+  <div class="phone-wrap">
+    <div class="phone-label">07-A · ID Card Render</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span></div>
+        <div class="w-screen" style="padding-bottom:16px;">
+          <div class="sp8"></div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="wf-block" style="width:16px;height:16px;border-radius:50%;">&lt;</div>
+            <div class="wf-title" style="font-size:13px;text-align:left;">Thai National ID Card</div>
+          </div>
+          <div class="sp12"></div>
+          <!-- Card render -->
+          <div class="wf-block" style="height:140px;flex-direction:column;gap:6px;border-color:#4f6ef7;background:rgba(15,20,40,0.8);">
+            <div style="font-size:8px;color:#4f6ef7;letter-spacing:1px;">[ CARD TEMPLATE — TF DESIGNED ]</div>
+            <div style="font-size:9px;color:#888;">Name: [OCR extracted]</div>
+            <div style="font-size:9px;color:#888;">ID: [masked]</div>
+            <div style="font-size:9px;color:#888;">DOB: [OCR extracted]</div>
+            <div style="font-size:8px;color:#4f6ef7;">Rendered from JSON payload via SDK</div>
+          </div>
+          <div class="sp12"></div>
+          <div class="wf-text" style="text-align:left;font-size:10px;margin-bottom:8px;color:var(--text);">Raw Data (JSON)</div>
+          <div class="wf-block" style="height:80px;font-family:'DM Mono',monospace;font-size:8px;flex-direction:column;gap:2px;align-items:flex-start;padding:8px;">
+            <span>{"card_type": "thai_id",</span>
+            <span>&nbsp;"name": "...",</span>
+            <span>&nbsp;"id_number": "xxx-xxxx-xxxx",</span>
+            <span>&nbsp;"dob": "...",</span>
+            <span>&nbsp;"status": "verified"}</span>
+          </div>
+          <div class="sp12"></div>
+          <div style="display:flex;gap:8px;">
+            <div class="wf-btn" style="flex:1;padding:8px;">Share (VP)</div>
+            <div class="wf-btn-outline" style="flex:1;padding:8px;">Re-scan OCR</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Uploaded Doc -->
+  <div class="phone-wrap">
+    <div class="phone-label">07-B · Uploaded Document View</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span></div>
+        <div class="w-screen" style="padding-bottom:16px;">
+          <div class="sp8"></div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="wf-block" style="width:16px;height:16px;border-radius:50%;">&lt;</div>
+            <div class="wf-title" style="font-size:13px;text-align:left;">Passport.pdf</div>
+          </div>
+          <div class="sp12"></div>
+          <div class="wf-block" style="height:180px;flex-direction:column;gap:4px;border-style:dashed;">
+            📄 PDF PREVIEW
+            <div style="font-size:8px;color:#888;">Fetched on demand from ShareRing Vault</div>
+            <div style="font-size:8px;color:#888;">Not cached locally</div>
+          </div>
+          <div class="sp12"></div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div class="wf-setting-row">
+              <div style="font-size:10px;">File name</div>
+              <div style="font-size:9px;color:var(--muted);">Passport.pdf</div>
+            </div>
+            <div class="wf-setting-row">
+              <div style="font-size:10px;">Size</div>
+              <div style="font-size:9px;color:var(--muted);">2.1 MB</div>
+            </div>
+            <div class="wf-setting-row">
+              <div style="font-size:10px;">Status</div>
+              <div style="font-size:9px;color:#22c55e;">✓ Verified</div>
+            </div>
+          </div>
+          <div class="sp12"></div>
+          <div class="wf-btn">Share as Document VC</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations">
+    <div class="ann-title">Screen 07 · Card Render</div>
+    <div class="ann-item">
+      <div class="ann-num">1</div>
+      <div class="ann-content">
+        <div class="ann-label">JSON-Based Card Templates</div>
+        <div class="ann-desc">Card data stored as JSON in ShareRing Vault. Card UI rendered dynamically using TF-designed templates. ShareRing SDK handles render engine.</div>
+        <span class="ann-tag dep">SHARERING-DEP OQ07</span>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">2</div>
+      <div class="ann-content">
+        <div class="ann-label">Card Template Design</div>
+        <div class="ann-desc">Visual card layout (colors, typography, logo placement) designed by TF under Prompt Post CI. New card types added without SDK changes.</div>
+        <span class="ann-tag dep">TF CI PER CARD TYPE</span>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">3</div>
+      <div class="ann-content">
+        <div class="ann-label">Document Preview</div>
+        <div class="ann-desc">Uploaded JPG/PNG/PDF previewed within Mini App. Content fetched from ShareRing Vault on demand — never stored locally.</div>
+        <span class="ann-tag critical">NO LOCAL CACHE</span>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-num">4</div>
+      <div class="ann-content">
+        <div class="ann-label">Share via VP Flow</div>
+        <div class="ann-desc">From card detail view, user can initiate VP flow to share credential with a Partner. Triggers Consent Screen (Screen 05).</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function show(id) {
+    document.querySelectorAll('.screen-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('screen-' + id).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+</body>
+</html>
