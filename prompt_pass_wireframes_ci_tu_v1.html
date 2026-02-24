@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Pass — TU Partner Wireframe (CI)</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --pp-red: #FE3B1F;
+  --pp-navy: #2E3CBA;
+  --pp-navy-light: #3D4ED4;
+  --pp-navy-dark: #1E2880;
+  --pp-grey: #9EACAA;
+  --pp-grey-light: #EAEAEB;
+  --pp-grey-mid: #C2C7C9;
+  --bg: #F5F5F7;
+  --white: #FFFFFF;
+  --text-primary: #1A1A2E;
+  --text-secondary: #5A5A72;
+  --text-muted: #9090A8;
+  --border: #E0E0EC;
+  --surface: #FFFFFF;
+  --surface-2: #F0F0F8;
+  --green: #22C55E;
+  --yellow: #F59E0B;
+  /* TU Colors */
+  --tu-gold: #C9A84C;
+  --tu-gold-light: #E8C97A;
+  --tu-dark: #1A1A1A;
+  --tu-red: #CC0000;
+  --phone-w: 310px;
+  --phone-h: 640px;
+}
+body { font-family: 'IBM Plex Sans Thai', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; }
+
+/* ── HEADER ── */
+.header { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+.header-brand { display: flex; align-items: center; gap: 12px; }
+.header-title { font-size: 13px; font-weight: 600; color: var(--text-primary); border-left: 1px solid var(--border); padding-left: 12px; }
+.header-badge { background: var(--tu-red); color: #fff; font-size: 11px; padding: 4px 10px; border-radius: 20px; font-family: 'IBM Plex Mono', monospace; }
+
+/* ── NAV ── */
+.nav { background: var(--white); border-bottom: 2px solid var(--border); padding: 0 40px; display: flex; overflow-x: auto; scrollbar-width: none; }
+.nav::-webkit-scrollbar { display: none; }
+.nav-btn { padding: 13px 16px; border: none; border-bottom: 3px solid transparent; background: transparent; color: var(--text-muted); font-size: 12px; font-family: 'IBM Plex Sans Thai', sans-serif; font-weight: 500; cursor: pointer; white-space: nowrap; transition: all 0.15s; margin-bottom: -2px; }
+.nav-btn:hover { color: var(--pp-navy); }
+.nav-btn.active { color: var(--pp-red); border-bottom-color: var(--pp-red); }
+
+/* ── STEP INDICATOR (top of page) ── */
+.step-bar { background: var(--white); border-bottom: 1px solid var(--border); padding: 10px 40px; display: flex; align-items: center; gap: 8px; }
+.step-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+.step-dot.done { background: var(--pp-navy); color: #fff; }
+.step-dot.active-s { background: var(--pp-red); color: #fff; }
+.step-dot.todo { background: var(--surface-2); color: var(--text-muted); border: 1px solid var(--border); }
+.step-line { flex: 1; height: 1px; background: var(--border); max-width: 30px; }
+.step-label { font-size: 10px; color: var(--text-muted); margin-left: 2px; }
+.step-group { display: flex; align-items: center; gap: 6px; }
+
+/* ── MAIN ── */
+.main { padding: 32px 40px; display: none; gap: 32px; flex-wrap: wrap; align-items: flex-start; }
+.main.active { display: flex; }
+
+/* ── PHONE ── */
+.phone-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.phone-label { font-size: 11px; color: var(--text-muted); font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.5px; }
+.phone { width: var(--phone-w); height: var(--phone-h); background: var(--white); border-radius: 38px; border: 2px solid #D0D0DC; overflow: hidden; position: relative; flex-shrink: 0; box-shadow: 0 0 0 7px #E8E8F0, 0 20px 56px rgba(46,60,186,0.12); }
+.phone::before { content: ''; position: absolute; top: 13px; left: 50%; transform: translateX(-50%); width: 64px; height: 4px; background: #D0D0DC; border-radius: 3px; z-index: 10; }
+.phone-inner { width: 100%; height: 100%; display: flex; flex-direction: column; padding-top: 28px; }
+.status-bar { display: flex; justify-content: space-between; align-items: center; padding: 3px 16px 5px; flex-shrink: 0; }
+.status-bar span { font-size: 10px; font-weight: 600; font-family: 'IBM Plex Mono', monospace; }
+.status-icons { display: flex; gap: 3px; align-items: center; font-size: 9px; }
+.phone-scroll { overflow-y: auto; flex: 1; scrollbar-width: none; }
+.phone-scroll::-webkit-scrollbar { display: none; }
+
+/* ── APP CHROME ── */
+.app-header { background: var(--pp-navy); padding: 10px 14px 14px; flex-shrink: 0; position: relative; overflow: hidden; }
+.app-header::after { content: ''; position: absolute; right: -28px; bottom: -28px; width: 90px; height: 90px; background: var(--pp-red); border-radius: 22px; opacity: 0.22; transform: rotate(15deg); }
+.app-header-row { display: flex; justify-content: space-between; align-items: center; }
+.app-icon { width: 26px; height: 26px; background: rgba(255,255,255,0.15); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; cursor: pointer; }
+.bottom-nav { display: flex; border-top: 1px solid var(--border); background: var(--white); flex-shrink: 0; }
+.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 8px 0 6px; gap: 2px; cursor: pointer; }
+.nav-item-icon { font-size: 17px; }
+.nav-item-label { font-size: 8px; font-weight: 500; color: var(--text-muted); }
+.nav-item.active .nav-item-label { color: var(--pp-red); }
+
+/* ── COMPONENTS ── */
+.btn-primary { background: var(--pp-red); color: #fff; border-radius: 10px; padding: 11px 16px; text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; }
+.btn-secondary { background: transparent; color: var(--pp-navy); border: 1.5px solid var(--pp-navy); border-radius: 10px; padding: 11px 16px; text-align: center; font-size: 12px; font-weight: 500; cursor: pointer; }
+.btn-ghost { background: transparent; color: var(--text-muted); border: 1.5px solid var(--border); border-radius: 10px; padding: 11px 16px; text-align: center; font-size: 12px; cursor: pointer; }
+.card-row { display: flex; align-items: center; gap: 10px; background: var(--white); border: 1px solid var(--border); border-radius: 11px; padding: 10px 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+.card-row-icon { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+.card-row-title { font-size: 12px; font-weight: 600; color: var(--text-primary); }
+.card-row-desc { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+.card-row-action { font-size: 10px; color: var(--pp-navy); font-weight: 600; padding: 3px 9px; background: #EEF0FF; border-radius: 20px; cursor: pointer; flex-shrink: 0; }
+.setting-row { display: flex; align-items: center; justify-content: space-between; background: var(--white); border: 1px solid var(--border); border-radius: 9px; padding: 10px 12px; }
+.section-hdr { font-size: 9px; font-weight: 600; color: var(--text-muted); letter-spacing: 1.2px; text-transform: uppercase; padding: 10px 0 5px; }
+.cred-row { display: flex; align-items: center; gap: 7px; background: #F0FFF4; border: 1px solid #BBF7D0; border-radius: 7px; padding: 8px 10px; }
+.cred-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; flex-shrink: 0; }
+.cred-text { font-size: 10px; color: var(--text-primary); font-weight: 500; }
+.badge-red { background: var(--pp-red); color: #fff; font-size: 8px; padding: 2px 6px; border-radius: 20px; font-weight: 600; }
+.badge-navy { background: var(--pp-navy); color: #fff; font-size: 8px; padding: 2px 6px; border-radius: 20px; font-weight: 600; }
+.badge-gold { background: var(--tu-gold); color: #fff; font-size: 8px; padding: 2px 6px; border-radius: 20px; font-weight: 600; }
+.sp4{height:4px;flex-shrink:0;} .sp8{height:8px;flex-shrink:0;} .sp12{height:12px;flex-shrink:0;} .sp16{height:16px;flex-shrink:0;}
+.divider { height: 1px; background: var(--border); margin: 6px 0; }
+
+/* ── ANNOTATIONS ── */
+.annotations { flex: 1; min-width: 260px; max-width: 380px; }
+.ann-title { font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--pp-red); display: inline-block; }
+.ann-item { display: flex; gap: 10px; margin-bottom: 13px; align-items: flex-start; }
+.ann-num { width: 20px; height: 20px; background: var(--pp-navy); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; flex-shrink: 0; color: #fff; }
+.ann-label { font-size: 11px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
+.ann-desc { font-size: 10px; color: var(--text-secondary); line-height: 1.5; }
+.ann-tag { display: inline-block; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-muted); font-size: 9px; padding: 2px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; margin-top: 3px; }
+.ann-tag.dep { border-color: var(--yellow); color: #92400E; background: #FFFBEB; }
+.ann-tag.critical { border-color: var(--pp-red); color: var(--pp-red); background: #FFF5F3; }
+.ann-tag.ok { border-color: var(--green); color: #166534; background: #F0FFF4; }
+.ann-tag.tu { border-color: var(--tu-gold); color: #7A5C00; background: #FFFBEB; }
+
+/* ── FLOW DIVIDER ── */
+.flow-arrow { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--pp-red); font-size: 22px; padding-top: 40px; opacity: 0.6; flex-shrink: 0; }
+
+/* ── PP LOGO MINI ── */
+.pp-logo { display: flex; align-items: center; gap: 0; }
+
+/* ── INLINE STEP INDICATOR ── */
+.inline-steps { display: flex; align-items: center; gap: 0; padding: 0 14px 12px; flex-shrink: 0; }
+.istep { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.istep-dot { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; }
+.istep-dot.done { background: var(--pp-navy); color: #fff; }
+.istep-dot.curr { background: var(--pp-red); color: #fff; }
+.istep-dot.todo { background: var(--surface-2); color: var(--text-muted); border: 1px solid var(--border); }
+.istep-label { font-size: 7px; color: var(--text-muted); text-align: center; width: 36px; line-height: 1.2; }
+.istep-label.curr-l { color: var(--pp-red); font-weight: 600; }
+.iline { flex: 1; height: 1px; background: var(--border); margin: 0 2px; margin-bottom: 10px; }
+
+/* ── OCR VIEWFINDER ── */
+.viewfinder { background: #0A0A1A; border-radius: 12px; height: 150px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--pp-navy); position: relative; overflow: hidden; }
+.vf-corner { position: absolute; width: 18px; height: 18px; }
+.vf-tl { top: 7px; left: 7px; border-top: 2.5px solid var(--pp-red); border-left: 2.5px solid var(--pp-red); border-radius: 2px; }
+.vf-tr { top: 7px; right: 7px; border-top: 2.5px solid var(--pp-red); border-right: 2.5px solid var(--pp-red); border-radius: 2px; }
+.vf-bl { bottom: 7px; left: 7px; border-bottom: 2.5px solid var(--pp-red); border-left: 2.5px solid var(--pp-red); border-radius: 2px; }
+.vf-br { bottom: 7px; right: 7px; border-bottom: 2.5px solid var(--pp-red); border-right: 2.5px solid var(--pp-red); border-radius: 2px; }
+.scan-line { position: absolute; width: 90%; height: 1.5px; background: linear-gradient(90deg, transparent, var(--pp-red), transparent); top: 40%; opacity: 0.7; }
+
+/* ── TU CARD TEMPLATE ── */
+.tu-card {
+  background: linear-gradient(145deg, #1A1A1A 0%, #2C2C2C 50%, #1A1A1A 100%);
+  border-radius: 14px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.4);
+}
+.tu-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--tu-gold), var(--tu-gold-light), var(--tu-gold));
+}
+.tu-card-bg-pattern {
+  position: absolute;
+  right: -20px; top: -20px;
+  width: 110px; height: 110px;
+  border-radius: 50%;
+  border: 18px solid rgba(201,168,76,0.1);
+}
+.tu-card-bg-pattern2 {
+  position: absolute;
+  right: 30px; top: 10px;
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  border: 12px solid rgba(201,168,76,0.06);
+}
+
+/* ── PROGRESS STEP ── */
+.progress-step { display: flex; align-items: center; gap: 10px; background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+.progress-step.done-s { border-color: #BBF7D0; background: #F0FFF4; }
+.progress-step.active-ps { border-color: var(--pp-navy); background: #EEF0FF; }
+.progress-step.todo-ps { opacity: 0.45; }
+.progress-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+.progress-icon.done-i { background: var(--green); }
+.progress-icon.active-i { background: var(--pp-navy); }
+.progress-icon.todo-i { background: var(--surface-2); border: 1px solid var(--border); }
+.progress-label { font-size: 11px; font-weight: 600; }
+.progress-label.done-l { color: #166534; }
+.progress-label.active-l { color: var(--pp-navy); }
+.progress-label.todo-l { color: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-brand">
+    <svg viewBox="0 0 110 44" fill="none" style="height:28px;">
+      <rect x="0" y="3" width="30" height="30" rx="6" fill="#FE3B1F"/>
+      <rect x="3" y="6" width="24" height="24" rx="5" fill="#2E3CBA"/>
+      <rect x="3" y="30" width="24" height="3" rx="1.5" fill="#2E3CBA"/>
+      <text x="8" y="26" font-family="sans-serif" font-weight="700" font-size="17" fill="white">P</text>
+      <text x="38" y="17" font-family="sans-serif" font-weight="700" font-size="12" fill="#2E3CBA">Prompt</text>
+      <text x="38" y="32" font-family="sans-serif" font-weight="700" font-size="12" fill="#FE3B1F">Post</text>
+    </svg>
+    <span class="header-title">Prompt Pass — TU Partner Flow</span>
+  </div>
+  <span class="header-badge">TU-WF-001</span>
+</div>
+
+<!-- NAV TABS -->
+<div class="nav">
+  <button class="nav-btn active" onclick="show('entry')">TU-01 · Me Modules Entry</button>
+  <button class="nav-btn" onclick="show('consent')">TU-02 · Consent</button>
+  <button class="nav-btn" onclick="show('ocr')">TU-03 · OCR สแกนบัตร</button>
+  <button class="nav-btn" onclick="show('processing')">TU-04 · Processing</button>
+  <button class="nav-btn" onclick="show('card')">TU-05 · TU Associate Club Card</button>
+  <button class="nav-btn" onclick="show('vault')">TU-06 · Vault View</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- TU-01 · ME MODULES — User tap TU Partner              -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="screen-entry" class="main active">
+
+  <div class="phone-wrap">
+    <div class="phone-label">TU-01 · Me Modules (เลือก TU)</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span><div class="status-icons">●●●● 🔋</div></div>
+        <div class="app-header">
+          <div class="app-header-row" style="margin-bottom:10px;">
+            <svg viewBox="0 0 110 44" fill="none" style="height:20px;">
+              <rect x="0" y="3" width="30" height="30" rx="6" fill="rgba(255,255,255,0.9)"/>
+              <text x="8" y="26" font-family="sans-serif" font-weight="700" font-size="17" fill="#2E3CBA">P</text>
+              <text x="38" y="17" font-family="sans-serif" font-weight="700" font-size="12" fill="white">Prompt</text>
+              <text x="38" y="32" font-family="sans-serif" font-weight="700" font-size="12" fill="rgba(255,255,255,0.7)">Post</text>
+            </svg>
+            <div style="display:flex;gap:5px;">
+              <div class="app-icon">≡</div>
+              <div class="app-icon">⊞</div>
+            </div>
+          </div>
+          <div style="color:#fff;font-size:15px;font-weight:700;">Me Modules</div>
+        </div>
+        <div class="phone-scroll" style="padding:12px 13px;">
+          <!-- Other partners dim -->
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <div class="card-row" style="opacity:0.35;">
+              <div class="card-row-icon" style="background:#F5F5F7;">🏦</div>
+              <div>
+                <div class="card-row-title">Partner B</div>
+                <div class="card-row-desc">บริการการเงิน</div>
+              </div>
+              <div class="card-row-action" style="margin-left:auto;">เปิด</div>
+            </div>
+
+            <!-- TU PARTNER — HIGHLIGHTED -->
+            <div style="background:#FFFBEB;border:2px solid var(--tu-gold);border-radius:12px;padding:10px 12px;position:relative;cursor:pointer;">
+              <div style="position:absolute;top:8px;right:10px;"><span class="badge-gold">แนะนำ</span></div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <!-- TU logo placeholder -->
+                <div style="width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,#8B0000,#CC0000);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏛</div>
+                <div style="flex:1;">
+                  <div style="font-size:13px;font-weight:700;color:var(--text-primary);">Thammasat University</div>
+                  <div style="font-size:10px;color:var(--text-muted);margin-top:2px;">รับบัตร TU Associate Club Card</div>
+                </div>
+              </div>
+              <div style="margin-top:10px;">
+                <div class="btn-primary" style="font-size:12px;padding:9px;">เปิดใช้งาน ›</div>
+              </div>
+            </div>
+
+            <div class="card-row" style="opacity:0.35;">
+              <div class="card-row-icon" style="background:#F5F5F7;">🏥</div>
+              <div>
+                <div class="card-row-title">Partner D</div>
+                <div class="card-row-desc">บริการสุขภาพ</div>
+              </div>
+              <div class="card-row-action" style="margin-left:auto;">เปิด</div>
+            </div>
+          </div>
+          <div style="text-align:center;font-size:10px;color:var(--text-muted);padding:12px 0 4px;">Partner list จาก ShareRing Engine</div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><div class="nav-item-icon">🏠</div><div class="nav-item-label">Vault</div></div>
+          <div class="nav-item active"><div class="nav-item-icon">⊞</div><div class="nav-item-label" style="color:var(--pp-red);">Me Modules</div></div>
+          <div class="nav-item"><div class="nav-item-icon">⚙️</div><div class="nav-item-label">Settings</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations">
+    <div class="ann-title">TU-01 · Entry Point</div>
+    <div class="ann-item"><div class="ann-num">1</div><div>
+      <div class="ann-label">TU Card ใน Me Modules</div>
+      <div class="ann-desc">TU Partner card ถูก highlight ด้วย Gold border (#C9A84C) และ badge "แนะนำ" — แยกจาก Partner ทั่วไปที่ใช้ Navy border</div>
+      <span class="ann-tag tu">TU CI ACCENT</span>
+    </div></div>
+    <div class="ann-item"><div class="ann-num">2</div><div>
+      <div class="ann-label">CTA = "เปิดใช้งาน"</div>
+      <div class="ann-desc">ปุ่มหลักยังคงเป็น PP Red (#FE3B1F) ตาม brand — เข้า TU flow ทันทีเมื่อกด</div>
+      <span class="ann-tag ok">PP CI ALIGNED</span>
+    </div></div>
+    <div class="ann-item"><div class="ann-num">3</div><div>
+      <div class="ann-label">Partner Logo = TU Asset</div>
+      <div class="ann-desc">ต้องใช้ Logo มธ. อย่างเป็นทางการ (Thammasat provide) — placeholder ตอนนี้เป็น placeholder เท่านั้น</div>
+      <span class="ann-tag dep">PENDING TU ASSET</span>
+    </div></div>
+    <div class="ann-item"><div class="ann-num">4</div><div>
+      <div class="ann-label">Partner Data = ShareRing Engine</div>
+      <div class="ann-desc">Partner card content โหลดจาก ShareRing Engine backend ไม่ต้อง hardcode ใน App</div>
+      <span class="ann-tag dep">SHARERING-DEP OQ13</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- TU-02 · CONSENT                                       -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="screen-consent" class="main">
+
+  <div class="phone-wrap">
+    <div class="phone-label">TU-02 · Consent Screen</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span><div class="status-icons">●●●● 🔋</div></div>
+        <div style="background:var(--pp-navy);padding:10px 13px;display:flex;align-items:center;gap:8px;flex-shrink:0;">
+          <span style="color:rgba(255,255,255,0.7);font-size:16px;cursor:pointer;">←</span>
+          <span style="color:#fff;font-size:13px;font-weight:700;">ยินยอมแชร์ข้อมูล</span>
+        </div>
+        <!-- Inline step indicator -->
+        <div class="inline-steps">
+          <div class="istep"><div class="istep-dot curr">1</div><div class="istep-label curr-l">ยินยอม</div></div>
+          <div class="iline"></div>
+          <div class="istep"><div class="istep-dot todo">2</div><div class="istep-label">สแกนบัตร</div></div>
+          <div class="iline"></div>
+          <div class="istep"><div class="istep-dot todo">3</div><div class="istep-label">ประมวลผล</div></div>
+          <div class="iline"></div>
+          <div class="istep"><div class="istep-dot todo">4</div><div class="istep-label">รับบัตร</div></div>
+        </div>
+        <div class="phone-scroll" style="padding:0 13px 14px;">
+          <!-- Partner info -->
+          <div style="display:flex;align-items:center;gap:10px;background:#FFFBEB;border:1.5px solid var(--tu-gold);border-radius:11px;padding:10px;margin-bottom:12px;">
+            <div style="width:40px;height:40px;border-radius:9px;background:linear-gradient(135deg,#8B0000,#CC0000);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🏛</div>
+            <div>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary);">Thammasat University</div>
+              <div style="font-size:10px;color:var(--text-muted);">ขอข้อมูลเพื่อออกบัตร TU Associate Club Card</div>
+            </div>
+          </div>
+          <div style="font-size:10px;font-weight:600;color:var(--text-secondary);margin-bottom:7px;">ข้อมูลที่จะแชร์จาก Vault ของคุณ:</div>
+          <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:12px;">
+            <div class="cred-row"><div class="cred-dot"></div><div class="cred-text">ชื่อ-นามสกุล (Identity VC)</div></div>
+            <div class="cred-row"><div class="cred-dot"></div><div class="cred-text">PromptPost User ID</div></div>
+          </div>
+          <div style="font-size:10px;font-weight:600;color:var(--text-secondary);margin-bottom:7px;">ข้อมูลที่จะสแกนและเพิ่มใหม่:</div>
+          <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:12px;">
+            <div style="display:flex;align-items:center;gap:7px;background:#EEF0FF;border:1px solid #C7D0FF;border-radius:7px;padding:8px 10px;">
+              <div style="width:7px;height:7px;background:var(--pp-navy);border-radius:50%;flex-shrink:0;"></div>
+              <div style="font-size:10px;color:var(--pp-navy);font-weight:500;">บัตรนักศึกษา TU (สแกน OCR ขั้นตอนถัดไป)</div>
+            </div>
+          </div>
+          <!-- Purpose -->
+          <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:10px;color:var(--text-muted);margin-bottom:14px;">
+            วัตถุประสงค์: เพื่อยืนยันสถานะนักศึกษามหาวิทยาลัยธรรมศาสตร์และออกบัตร TU Associate Club Card
+          </div>
+          <div class="btn-primary" style="margin-bottom:7px;">ยืนยันด้วย Biometrics</div>
+          <div class="btn-ghost">ยกเลิก</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations">
+    <div class="ann-title">TU-02 · Consent</div>
+    <div class="ann-item"><div class="ann-num">1</div><div>
+      <div class="ann-label">2 กลุ่ม Credential</div>
+      <div class="ann-desc">แบ่ง consent เป็นสองส่วนชัดเจน: (1) Green = ข้อมูลจาก Vault ที่มีอยู่แล้ว, (2) Navy = ข้อมูลใหม่จากการสแกน OCR</div>
+      <span class="ann-tag ok">UX PATTERN</span>
+    </div></div>
+    <div class="ann-item"><div class="ann-num">2</div><div>
+      <div class="ann-label">TU Partner Banner = Gold</div>
+      <div class="ann-desc">Partner identity box ใช้ Gold border (#C9A84C) แทน Navy เพื่อสื่อ TU brand ให้ user รู้ว่ากำลังทำกับ TU</div>
+      <span class="ann-tag tu">TU CI ACCENT</span>
+    </div></div>
+    <div class="ann-item"><div class="ann-num">3</div><div>
+      <div class="ann-label">Step Indicator = 4 ขั้น</div>
+      <div class="ann-desc">แสดง progress: ยินยอม → สแกนบัตร → ประมวลผล → รับบัตร Active step = PP Red, Completed = PP Navy</div>
+      <span class="ann-tag ok">PP CI ALIGNED</span>
+    </div></div>
+    <div class="ann-item"><div class="ann-num">4</div><div>
+      <div class="ann-label">Biometric Confirm = Required</div>
+      <div class="ann-desc">ต้องยืนยัน Biometrics ก่อน proceed ทุกครั้ง — ไม่ share โดยไม่มีการยืนยัน</div>
+      <span class="ann-tag critical">SECURITY REQ</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- TU-03 · OCR SCAN                                     -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="screen-ocr" class="main">
+
+  <!-- Front scan -->
+  <div class="phone-wrap">
+    <div class="phone-label">TU-03-A · สแกนด้านหน้าบัตร</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar" style="background:#0A0A1A;"><span style="color:rgba(255,255,255,0.7);">10:58</span><div class="status-icons" style="color:rgba(255,255,255,0.7);">●●●● 🔋</div></div>
+        <!-- Dark camera UI -->
+        <div style="background:#0A0A1A;flex:1;display:flex;flex-direction:column;padding:14px;">
+          <!-- steps -->
+          <div class="inline-steps" style="padding:0 0 12px;">
+            <div class="istep"><div class="istep-dot done">1</div><div class="istep-label">ยินยอม</div></div>
+            <div class="iline" style="background:var(--pp-navy);"></div>
+            <div class="istep"><div class="istep-dot curr">2</div><div class="istep-label curr-l">สแกนบัตร</div></div>
+            <div class="iline"></div>
+            <div class="istep"><div class="istep-dot todo">3</div><div class="istep-label">ประมวลผล</div></div>
+            <div class="iline"></div>
+            <div class="istep"><div class="istep-dot todo">4</div><div class="istep-label">รับบัตร</div></div>
+          </div>
+          <div style="color:rgba(255,255,255,0.8);font-size:12px;font-weight:600;text-align:center;margin-bottom:8px;">วางบัตรนักศึกษา TU ในกรอบ</div>
+          <div style="color:rgba(255,255,255,0.4);font-size:10px;text-align:center;margin-bottom:12px;">ด้านหน้า (1/2)</div>
+
+          <!-- Viewfinder -->
+          <div class="viewfinder" style="height:160px;">
+            <div class="vf-corner vf-tl"></div>
+            <div class="vf-corner vf-tr"></div>
+            <div class="vf-corner vf-bl"></div>
+            <div class="vf-corner vf-br"></div>
+            <div class="scan-line"></div>
+            <!-- TU card silhouette -->
+            <div style="text-align:center;color:rgba(255,255,255,0.15);font-size:10px;">
+              <div style="font-size:9px;letter-spacing:2px;color:rgba(201,168,76,0.4);margin-bottom:4px;">THAMMASAT UNIVERSITY</div>
+              <div style="width:80px;height:50px;border:1px solid rgba(201,168,76,0.2);border-radius:4px;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:18px;">🎓</div>
+            </div>
+          </div>
+
+          <!-- Hint -->
+          <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 10px;margin-top:12px;font-size:10px;color:rgba(255,255,255,0.6);text-align:center;">
+            📌 วางให้ตรงกรอบ • ถือให้นิ่ง • แสงสว่างเพียงพอ
+          </div>
+          <div style="margin-top:10px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 12px;font-size:10px;color:rgba(255,255,255,0.4);text-align:center;">
+            POWERED BY SHARERING SDK
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OCR Confirm -->
+  <div class="phone-wrap">
+    <div class="phone-label">TU-03-B · ยืนยัน OCR Data</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span><div class="status-icons">●●●● 🔋</div></div>
+        <div style="background:var(--pp-navy);padding:10px 13px;display:flex;align-items:center;gap:8px;flex-shrink:0;">
+          <span style="color:rgba(255,255,255,0.7);font-size:16px;">←</span>
+          <span style="color:#fff;font-size:13px;font-weight:700;">ยืนยันข้อมูลจากบัตร</span>
+        </div>
+        <div class="phone-scroll" style="padding:12px 13px;">
+          <!-- Scanned preview mini -->
+          <div style="background:#F5F0E8;border:1.5px solid var(--tu-gold);border-radius:10px;padding:10px;margin-bottom:12px;text-align:center;">
+            <div style="font-size:9px;color:var(--tu-gold);font-weight:700;letter-spacing:1px;margin-bottom:6px;">OCR สำเร็จ ✓</div>
+            <div style="background:#1A1A1A;border-radius:7px;padding:8px;color:rgba(255,255,255,0.7);font-size:9px;letter-spacing:0.5px;">THAMMASAT UNIVERSITY STUDENT ID</div>
+          </div>
+          <div style="font-size:10px;color:var(--text-muted);margin-bottom:8px;">ตรวจสอบข้อมูลที่สแกนได้:</div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;">
+            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;">
+              <div style="font-size:9px;color:var(--text-muted);margin-bottom:2px;">ชื่อ-นามสกุล</div>
+              <div style="font-size:12px;font-weight:600;color:var(--text-primary);">สมชาย ใจดี</div>
+            </div>
+            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;">
+              <div style="font-size:9px;color:var(--text-muted);margin-bottom:2px;">รหัสนักศึกษา</div>
+              <div style="font-size:12px;font-weight:600;color:var(--text-primary);">6XXXXXXXXXXX</div>
+            </div>
+            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;">
+              <div style="font-size:9px;color:var(--text-muted);margin-bottom:2px;">คณะ / Faculty</div>
+              <div style="font-size:12px;font-weight:600;color:var(--text-primary);">[จาก OCR]</div>
+            </div>
+            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;">
+              <div style="font-size:9px;color:var(--text-muted);margin-bottom:2px;">ปีการศึกษา</div>
+              <div style="font-size:12px;font-weight:600;color:var(--text-primary);">[จาก OCR]</div>
+            </div>
+          </div>
+          <div style="background:#FFFBEB;border:1px solid var(--yellow);border-radius:8px;padding:8px 10px;font-size:10px;color:#92400E;margin-bottom:12px;">
+            ⚠ ข้อมูลบางส่วนอาจต้องแก้ไขหากสแกนไม่ชัด
+          </div>
+          <div class="btn-primary" style="margin-bottom:7px;">ข้อมูลถูกต้อง — ดำเนินการต่อ</div>
+          <div class="btn-ghost">สแกนใหม่</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations">
+    <div class="ann-title">TU-03 · OCR สแกนบัตรนักศึกษา</div>
+    <div class="ann-item"><div class="ann-num">1</div><div>
+      <div class="ann-label">Camera UI = Dark + PP Red corners</div>
+      <div class="ann-desc">Camera overlay ใช้ dark background (#0A0A1A) เหมือน eKYC screen — Red corners (#FE3B1F) คง PP CI</div>
+      <span class="ann-tag ok">PP CI ALIGNED</span>
+    </div></div>
+    <div class="ann-item"><div class="ann-num">2</div><div>
+      <div class="ann-label">TU Silhouette hint ใน viewfinder</div>
+      <div class="ann-desc">แสดง TU card shape ให้ user รู้ว่าต้องวางบัตรอย่างไร — ใช้สี Gold จาง (#C9A84C 20%) เพื่อไม่รบกวน OCR</div>
+      <span class="ann-tag tu">TU UX HINT</span>
+    </div></div>
+    <div class="ann-item"><div class="ann-num">3</div><div>
+      <div class="ann-label">OCR Fields จาก ShareRing SDK</div>
+      <div class="ann-desc">Data fields ที่ extract: ชื่อ, รหัสนักศึกษา, คณะ, ปีการศึกษา — ทั้งหมด handle โดย SDK, App รับ callback JSON</div>
+      <span class="ann-tag dep">SHARERING-DEP OQ04</span>
+    </div></div>
+    <div class="ann-item"><div class="ann-num">4</div><div>
+      <div class="ann-label">User Confirm ก่อน Submit</div>
+      <div class="ann-desc">แสดง OCR result ให้ User ยืนยันก่อนเสมอ — ป้องกัน OCR error ที่บัตรสกปรก/เบลอ</div>
+      <span class="ann-tag critical">DATA ACCURACY</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- TU-04 · PROCESSING                                    -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="screen-processing" class="main">
+
+  <div class="phone-wrap">
+    <div class="phone-label">TU-04 · Processing & ออกบัตร</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span><div class="status-icons">●●●● 🔋</div></div>
+        <div style="background:var(--pp-navy);padding:10px 13px;flex-shrink:0;">
+          <span style="color:#fff;font-size:13px;font-weight:700;">กำลังออกบัตร...</span>
+        </div>
+        <div class="inline-steps" style="padding:12px 13px 10px;">
+          <div class="istep"><div class="istep-dot done">1</div><div class="istep-label">ยินยอม</div></div>
+          <div class="iline" style="background:var(--pp-navy);"></div>
+          <div class="istep"><div class="istep-dot done">2</div><div class="istep-label">สแกนบัตร</div></div>
+          <div class="iline" style="background:var(--pp-navy);"></div>
+          <div class="istep"><div class="istep-dot curr">3</div><div class="istep-label curr-l">ประมวลผล</div></div>
+          <div class="iline"></div>
+          <div class="istep"><div class="istep-dot todo">4</div><div class="istep-label">รับบัตร</div></div>
+        </div>
+        <div class="phone-scroll" style="padding:10px 13px 14px;">
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="progress-step done-s">
+              <div class="progress-icon done-i"><span style="color:#fff;font-size:11px;">✓</span></div>
+              <div>
+                <div class="progress-label done-l">Biometrics ยืนยันแล้ว</div>
+                <div style="font-size:9px;color:var(--text-muted);">ยืนยันตัวตนสำเร็จ</div>
+              </div>
+            </div>
+            <div class="progress-step done-s">
+              <div class="progress-icon done-i"><span style="color:#fff;font-size:11px;">✓</span></div>
+              <div>
+                <div class="progress-label done-l">OCR Data ยืนยันแล้ว</div>
+                <div style="font-size:9px;color:var(--text-muted);">ข้อมูลนักศึกษา TU พร้อม</div>
+              </div>
+            </div>
+            <div class="progress-step active-ps">
+              <div class="progress-icon active-i"><span style="color:#fff;font-size:11px;">●</span></div>
+              <div>
+                <div class="progress-label active-l">กำลัง Sign VC ด้วย DID key</div>
+                <div style="font-size:9px;color:var(--text-muted);">สร้าง TU Associate Club Card VC</div>
+              </div>
+            </div>
+            <div class="progress-step todo-ps">
+              <div class="progress-icon todo-i"><span style="font-size:11px;color:var(--text-muted);">○</span></div>
+              <div>
+                <div class="progress-label todo-l">บันทึก Card ใน Vault</div>
+                <div style="font-size:9px;color:var(--text-muted);">เก็บใน ShareRing Vault</div>
+              </div>
+            </div>
+            <div class="progress-step todo-ps">
+              <div class="progress-icon todo-i"><span style="font-size:11px;color:var(--text-muted);">○</span></div>
+              <div>
+                <div class="progress-label todo-l">แจ้ง TU ออกสิทธิ์</div>
+                <div style="font-size:9px;color:var(--text-muted);">ส่ง VP ไปยัง TU Partner</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:16px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">กำลังสร้างบัตรของคุณ...</div>
+            <!-- Card preview blur/loading -->
+            <div style="filter:blur(4px);opacity:0.4;pointer-events:none;">
+              <div class="tu-card" style="padding:12px;">
+                <div class="tu-card-bg-pattern"></div>
+                <div style="font-size:8px;color:var(--tu-gold);letter-spacing:1.5px;">THAMMASAT UNIVERSITY</div>
+                <div style="font-size:9px;color:rgba(255,255,255,0.5);">TU ASSOCIATE CLUB CARD</div>
+              </div>
+            </div>
+            <div style="font-size:10px;color:var(--text-muted);margin-top:8px;">รอสักครู่...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations">
+    <div class="ann-title">TU-04 · Processing</div>
+    <div class="ann-item"><div class="ann-num">1</div><div>
+      <div class="ann-label">Progress Steps = PP CI Color</div>
+      <div class="ann-desc">✓ Done = Green, ● Active = Navy, ○ Todo = Grey — ใช้ PP palette ตลอด, Gold เป็นเพียง TU accent บนบัตร</div>
+      <span class="ann-tag ok">PP CI ALIGNED</span>
+    </div></div>
+    <div class="ann-item"><div class="ann-num">2</div><div>
+      <div class="ann-label">Card Preview = Blur ระหว่าง Process</div>
+      <div class="ann-desc">แสดง Card preview จางๆ ระหว่าง processing เพื่อ set expectation ว่าบัตรกำลังถูกสร้าง — UX delight moment</div>
+      <span class="ann-tag ok">UX PATTERN</span>
+    </div></div>
+    <div class="ann-item"><div class="ann-num">3</div><div>
+      <div class="ann-label">VC Signing ใน Secure Enclave</div>
+      <div class="ann-desc">DID private key sign TU Associate VC ทั้งหมดอยู่ใน ShareRing SDK secure enclave — Prompt Pass ไม่เห็น key</div>
+      <span class="ann-tag dep">SHARERING-DEP OQ10</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- TU-05 · TU ASSOCIATE CLUB CARD                       -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="screen-card" class="main">
+
+  <!-- Success + Card reveal -->
+  <div class="phone-wrap">
+    <div class="phone-label">TU-05-A · รับบัตรสำเร็จ</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span><div class="status-icons">●●●● 🔋</div></div>
+        <div style="background:var(--pp-navy);padding:10px 13px;flex-shrink:0;">
+          <span style="color:#fff;font-size:13px;font-weight:700;">ออกบัตรสำเร็จ!</span>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;padding:14px 13px;overflow-y:auto;scrollbar-width:none;">
+          <!-- Success badge -->
+          <div style="display:flex;align-items:center;gap:8px;background:#F0FFF4;border:1px solid #BBF7D0;border-radius:8px;padding:8px 12px;margin-bottom:14px;width:100%;">
+            <span style="color:var(--green);font-size:14px;">✓</span>
+            <span style="font-size:11px;color:#166534;font-weight:600;">TU Associate Club Card ออกสำเร็จ!</span>
+          </div>
+
+          <!-- TU CARD TEMPLATE -->
+          <div class="tu-card" style="width:100%;margin-bottom:14px;">
+            <div class="tu-card-bg-pattern"></div>
+            <div class="tu-card-bg-pattern2"></div>
+            <!-- Top bar -->
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;position:relative;z-index:1;">
+              <div>
+                <div style="font-size:8px;color:var(--tu-gold);letter-spacing:1.5px;font-weight:600;">THAMMASAT UNIVERSITY</div>
+                <div style="font-size:7px;color:rgba(255,255,255,0.5);letter-spacing:1px;">TU ASSOCIATE CLUB CARD</div>
+              </div>
+              <!-- TU emblem placeholder -->
+              <div style="width:32px;height:32px;border-radius:50%;background:radial-gradient(circle,var(--tu-gold),#8B6914);display:flex;align-items:center;justify-content:center;font-size:14px;">🎓</div>
+            </div>
+            <!-- Gold separator -->
+            <div style="height:1px;background:linear-gradient(90deg,var(--tu-gold),transparent);margin-bottom:10px;"></div>
+            <!-- User info -->
+            <div style="position:relative;z-index:1;">
+              <div style="font-size:13px;font-weight:700;color:#fff;letter-spacing:0.5px;margin-bottom:2px;">สมชาย ใจดี</div>
+              <div style="font-size:9px;color:var(--tu-gold-light);">SOMCHAI JAIDEE</div>
+              <div style="font-size:8px;color:rgba(255,255,255,0.5);margin-top:1px;">ASSOCIATE MEMBER</div>
+            </div>
+            <!-- Bottom row -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:12px;position:relative;z-index:1;">
+              <div>
+                <div style="font-size:7px;color:rgba(255,255,255,0.4);margin-bottom:2px;">MEMBER ID</div>
+                <div style="font-size:10px;color:rgba(255,255,255,0.7);font-family:'IBM Plex Mono',monospace;letter-spacing:0.5px;">TU-XXXX-XXXX</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="background:var(--pp-red);padding:2px 7px;border-radius:6px;font-size:7px;font-weight:700;color:#fff;">● ACTIVE</div>
+                <div style="font-size:7px;color:rgba(255,255,255,0.3);margin-top:3px;">Powered by Prompt Post</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div style="width:100%;display:flex;gap:8px;margin-bottom:8px;">
+            <div class="btn-primary" style="flex:1;padding:9px;font-size:11px;">แชร์บัตร (VP)</div>
+            <div class="btn-secondary" style="flex:1;padding:9px;font-size:11px;">ดูรายละเอียด</div>
+          </div>
+          <div class="btn-ghost" style="width:100%;font-size:11px;padding:9px;">กลับ Me Modules</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card detail view -->
+  <div class="phone-wrap">
+    <div class="phone-label">TU-05-B · รายละเอียดบัตร</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar"><span>10:58</span><div class="status-icons">●●●● 🔋</div></div>
+        <div style="background:var(--pp-navy);padding:10px 13px;display:flex;align-items:center;gap:8px;flex-shrink:0;">
+          <span style="color:rgba(255,255,255,0.7);font-size:16px;">←</span>
+          <span style="color:#fff;font-size:13px;font-weight:700;">TU Associate Club Card</span>
+        </div>
+        <div class="phone-scroll" style="padding:12px 13px;">
+          <!-- Mini card -->
+          <div class="tu-card" style="margin-bottom:14px;padding:12px;">
+            <div class="tu-card-bg-pattern"></div>
+            <div style="font-size:8px;color:var(--tu-gold);letter-spacing:1.5px;margin-bottom:6px;position:relative;z-index:1;">THAMMASAT UNIVERSITY · TU ASSOCIATE CLUB</div>
+            <div style="font-size:14px;font-weight:700;color:#fff;position:relative;z-index:1;">สมชาย ใจดี</div>
+            <div style="font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px;position:relative;z-index:1;">TU-XXXX-XXXX · ASSOCIATE MEMBER</div>
+          </div>
+
+          <!-- Data fields from OCR -->
+          <div class="section-hdr">ข้อมูลจากบัตรนักศึกษา (OCR)</div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px;">
+            <div class="setting-row"><span style="font-size:10px;color:var(--text-muted);">ชื่อ-นามสกุล</span><span style="font-size:11px;color:var(--text-primary);font-weight:500;">สมชาย ใจดี</span></div>
+            <div class="setting-row"><span style="font-size:10px;color:var(--text-muted);">รหัสนักศึกษา</span><span style="font-size:11px;color:var(--text-primary);font-weight:500;">6XXXXXXXXXXX</span></div>
+            <div class="setting-row"><span style="font-size:10px;color:var(--text-muted);">คณะ</span><span style="font-size:11px;color:var(--text-primary);font-weight:500;">[จาก OCR]</span></div>
+            <div class="setting-row"><span style="font-size:10px;color:var(--text-muted);">ปีการศึกษา</span><span style="font-size:11px;color:var(--text-primary);font-weight:500;">[จาก OCR]</span></div>
+          </div>
+
+          <div class="section-hdr">ข้อมูล VC</div>
+          <div style="background:#1A1A2E;border-radius:9px;padding:10px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:#7EB8F7;line-height:1.8;margin-bottom:12px;">
+            <div style="color:var(--pp-red);">{"type": "TUAssociateClubCard",</div>
+            <div>&nbsp;"category": <span style="color:var(--tu-gold);">"TU Associate Club Card"</span>,</div>
+            <div>&nbsp;"issuer": "Thammasat Univ.",</div>
+            <div>&nbsp;"status": <span style="color:var(--green);">"active"</span>,</div>
+            <div>&nbsp;"stored": "ShareRing Vault"}</div>
+          </div>
+          <div class="btn-primary" style="font-size:12px;">แชร์เป็น VP</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations">
+    <div class="ann-title">TU-05 · TU Associate Club Card</div>
+    <div class="ann-item"><div class="ann-num">1</div><div>
+      <div class="ann-label">Card Template = Dark + Gold CI</div>
+      <div class="ann-desc">Dark card (#1A1A1A) + Gold accent (#C9A84C) + PP Red "ACTIVE" badge — Gold เป็น TU identity, Red เป็น PP platform mark</div>
+      <span class="ann-tag tu">TU CI + PP CI</span>
+    </div></div>
+    <div class="ann-item"><div class="ann-num">2</div><div>
+      <div class="ann-label">Category ชื่อ = "TU Associate Club Card"</div>
+      <div class="ann-desc">ชื่อ Category บัตรใน Vault และ VC type ใช้ "TU Associate Club Card" ตามที่กำหนด</div>
+      <span class="ann-tag ok">CONFIRMED NAME</span>
+    </div></div>
+    <div class="ann-item"><div class="ann-num">3</div><div>
+      <div class="ann-label">PP Red Badge บนบัตร</div>
+      <div class="ann-desc">PP Red "● ACTIVE" badge + "Powered by Prompt Post" text ด้านล่างขวา — Brand mark ของ PP platform บน TU card</div>
+      <span class="ann-tag ok">PP CI ALIGNED</span>
+    </div></div>
+    <div class="ann-item"><div class="ann-num">4</div><div>
+      <div class="ann-label">Template ออกแบบโดย TF</div>
+      <div class="ann-desc">Card visual นี้เป็น direction — TF ออกแบบ template จริงตาม TU CI ก่อน ShareRing SDK render engine นำไปใช้</div>
+      <span class="ann-tag dep">PENDING TF + TU ASSET</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- TU-06 · VAULT VIEW                                    -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="screen-vault" class="main">
+
+  <div class="phone-wrap">
+    <div class="phone-label">TU-06 · Vault — Category บัตร</div>
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="status-bar" style="background:var(--pp-navy);"><span style="color:rgba(255,255,255,0.8);">10:58</span><div class="status-icons" style="color:rgba(255,255,255,0.8);">●●●● 🔋</div></div>
+        <div class="app-header">
+          <div class="app-header-row" style="margin-bottom:10px;">
+            <svg viewBox="0 0 110 44" fill="none" style="height:20px;">
+              <rect x="0" y="3" width="30" height="30" rx="6" fill="rgba(255,255,255,0.9)"/>
+              <text x="8" y="26" font-family="sans-serif" font-weight="700" font-size="17" fill="#2E3CBA">P</text>
+              <text x="38" y="17" font-family="sans-serif" font-weight="700" font-size="12" fill="white">Prompt</text>
+              <text x="38" y="32" font-family="sans-serif" font-weight="700" font-size="12" fill="rgba(255,255,255,0.7)">Post</text>
+            </svg>
+            <div class="app-icon">🔔</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:40px;height:40px;border-radius:20px;background:rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.5);display:flex;align-items:center;justify-content:center;font-size:17px;">👤</div>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:#fff;">สมชาย ใจดี</div>
+              <div style="font-size:8px;color:rgba(255,255,255,0.5);font-family:'IBM Plex Mono',monospace;">shareledger1...tspvee3s93</div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-scroll" style="padding:10px 13px;">
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <div class="card-row">
+              <div class="card-row-icon" style="background:#EEF0FF;">👤</div>
+              <div style="flex:1;">
+                <div class="card-row-title" style="color:var(--pp-navy);">ข้อมูลส่วนตัว</div>
+                <div class="card-row-desc">โทรศัพท์ อีเมล สังคม</div>
+              </div>
+              <div class="card-row-action">เปิด</div>
+            </div>
+            <div class="card-row">
+              <div class="card-row-icon" style="background:#FFF5F3;">📄</div>
+              <div style="flex:1;">
+                <div class="card-row-title">เอกสารของฉัน</div>
+                <div class="card-row-desc">บัตรประชาชน หนังสือเดินทาง</div>
+              </div>
+              <div class="card-row-action">เปิด</div>
+            </div>
+
+            <!-- NEW CATEGORY: TU ASSOCIATE CLUB CARD -->
+            <div style="background:#FFFBEB;border:2px solid var(--tu-gold);border-radius:12px;padding:10px 12px;position:relative;">
+              <div style="position:absolute;top:7px;right:9px;"><span class="badge-gold">ใหม่</span></div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div style="width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,#1A1A1A,#2C2C2C);border:1.5px solid var(--tu-gold);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">🎓</div>
+                <div style="flex:1;">
+                  <div style="font-size:12px;font-weight:700;color:var(--text-primary);">TU Associate Club Card</div>
+                  <div style="font-size:10px;color:var(--text-muted);margin-top:1px;">มหาวิทยาลัยธรรมศาสตร์ • ACTIVE</div>
+                </div>
+              </div>
+              <!-- Mini card preview -->
+              <div style="margin-top:10px;">
+                <div class="tu-card" style="padding:10px;">
+                  <div class="tu-card-bg-pattern"></div>
+                  <div style="font-size:7px;color:var(--tu-gold);letter-spacing:1px;position:relative;z-index:1;">THAMMASAT UNIVERSITY</div>
+                  <div style="font-size:12px;font-weight:700;color:#fff;position:relative;z-index:1;margin-top:4px;">สมชาย ใจดี</div>
+                  <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:8px;position:relative;z-index:1;">
+                    <div style="font-size:8px;color:rgba(255,255,255,0.5);font-family:'IBM Plex Mono',monospace;">TU-XXXX-XXXX</div>
+                    <div style="background:var(--pp-red);padding:2px 6px;border-radius:5px;font-size:6px;font-weight:700;color:#fff;">● ACTIVE</div>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;gap:6px;margin-top:9px;">
+                <div class="btn-primary" style="flex:1;font-size:10px;padding:7px;">แชร์ (VP)</div>
+                <div class="btn-ghost" style="flex:1;font-size:10px;padding:7px;">ดูรายละเอียด</div>
+              </div>
+            </div>
+
+            <div class="card-row">
+              <div class="card-row-icon" style="background:#F5F5F7;">🔧</div>
+              <div style="flex:1;">
+                <div class="card-row-title">ข้อมูลอื่นๆ</div>
+                <div class="card-row-desc">ข้อมูลเพิ่มเติม</div>
+              </div>
+              <div class="card-row-action">เปิด</div>
+            </div>
+          </div>
+          <div style="text-align:center;font-size:9px;color:var(--text-muted);padding:10px 0 4px;">เฉพาะ Metadata — ดึงเนื้อหาจาก Vault เมื่อต้องการ</div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item active"><div class="nav-item-icon">🏠</div><div class="nav-item-label" style="color:var(--pp-red);">Vault</div></div>
+          <div class="nav-item"><div class="nav-item-icon">⊞</div><div class="nav-item-label">Me Modules</div></div>
+          <div class="nav-item"><div class="nav-item-icon">⚙️</div><div class="nav-item-label">Settings</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations">
+    <div class="ann-title">TU-06 · Vault View</div>
+    <div class="ann-item"><div class="ann-num">1</div><div>
+      <div class="ann-label">Category ใหม่ใน Vault</div>
+      <div class="ann-desc">"TU Associate Club Card" ปรากฏใน Vault เป็น Category แยกใหม่ — Gold border แยกออกจาก Card ทั่วไปที่ใช้ Navy/White</div>
+      <span class="ann-tag tu">TU CI ACCENT</span>
+    </div></div>
+    <div class="ann-item"><div class="ann-num">2</div><div>
+      <div class="ann-label">Mini Card Preview ใน Vault</div>
+      <div class="ann-desc">แสดง card thumbnail ใน Vault card เลย ไม่ต้องกดเข้าไปก่อน — ช่วยให้ user เห็นสถานะ ACTIVE ทันที</div>
+      <span class="ann-tag ok">UX PATTERN</span>
+    </div></div>
+    <div class="ann-item"><div class="ann-num">3</div><div>
+      <div class="ann-label">PP Red ACTIVE Badge บนบัตร</div>
+      <div class="ann-desc">PP Red badge "● ACTIVE" บน TU card สื่อว่า Prompt Post platform confirm สถานะ — ไม่ใช่ TU ยืนยันเอง</div>
+      <span class="ann-tag ok">PP CI ALIGNED</span>
+    </div></div>
+    <div class="ann-item"><div class="ann-num">4</div><div>
+      <div class="ann-label">Card Render = ShareRing SDK</div>
+      <div class="ann-desc">SDK render card template จาก JSON — Template design โดย TF + TU ก่อน implement ใน SDK</div>
+      <span class="ann-tag dep">SHARERING-DEP OQ07</span>
+    </div></div>
+  </div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.main').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
