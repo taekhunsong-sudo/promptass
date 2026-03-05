@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Pass — Card Usage Flow (TU-07 to TU-11)</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --pp-red: #FE3B1F;  --pp-red-dk: #C02010;
+  --pp-navy: #2E3CBA; --pp-navy-lt: #3D4ED4; --pp-navy-dk: #1E2880;
+  --pp-grey: #9EACAA; --pp-grey-mid: #C2C7C9; --pp-grey-lt: #EAEAEB;
+  --bg: #F4F4F8; --white: #FFFFFF;
+  --text: #1A1A2E; --text-2: #5A5A72; --text-3: #9090A8;
+  --border: #E0E0EC; --sf2: #F0F0F8;
+  --green: #22C55E; --yellow: #F59E0B;
+  --tu-gold: #C9A84C; --tu-gold-lt: #E8C97A; --tu-dark: #1A1A1A;
+  --pw: 308px; --ph: 632px;
+}
+body { font-family:'IBM Plex Sans Thai',sans-serif; background:var(--bg); color:var(--text); }
+
+/* HEADER */
+.hdr { background:var(--white); border-bottom:1px solid var(--border); height:58px; padding:0 40px; display:flex; align-items:center; justify-content:space-between; }
+.hdr-brand { display:flex; align-items:center; gap:10px; }
+.hdr-title { font-size:13px; font-weight:600; border-left:1px solid var(--border); padding-left:10px; }
+.hdr-badge { background:var(--pp-navy); color:#fff; font-size:10px; padding:3px 9px; border-radius:20px; font-family:'IBM Plex Mono',monospace; }
+
+/* NAV */
+.nav { background:var(--white); border-bottom:2px solid var(--border); padding:0 40px; display:flex; overflow-x:auto; scrollbar-width:none; }
+.nav::-webkit-scrollbar{display:none}
+.nb { padding:12px 14px; border:none; border-bottom:3px solid transparent; background:transparent; color:var(--text-3); font-size:12px; font-family:'IBM Plex Sans Thai',sans-serif; font-weight:500; cursor:pointer; white-space:nowrap; margin-bottom:-2px; transition:all .15s; }
+.nb:hover{color:var(--pp-navy)}
+.nb.on{color:var(--pp-red);border-bottom-color:var(--pp-red)}
+.nav-sep { width:1px; background:var(--border); margin:8px 4px; flex-shrink:0; }
+
+/* MAIN */
+.pg { padding:32px 40px; display:none; gap:28px; flex-wrap:wrap; align-items:flex-start; }
+.pg.on { display:flex; }
+
+/* PHONE */
+.pw { display:flex; flex-direction:column; align-items:center; gap:9px; }
+.plb { font-size:10px; color:var(--text-3); font-family:'IBM Plex Mono',monospace; letter-spacing:.4px; }
+.ph { width:var(--pw); height:var(--ph); background:var(--white); border-radius:36px; border:2px solid #D0D0DC; overflow:hidden; position:relative; flex-shrink:0; box-shadow:0 0 0 6px #E8E8F0,0 18px 48px rgba(46,60,186,.13); }
+.ph::before { content:''; position:absolute; top:12px; left:50%; transform:translateX(-50%); width:60px; height:4px; background:#D0D0DC; border-radius:2px; z-index:10; }
+.phi { width:100%; height:100%; display:flex; flex-direction:column; padding-top:26px; }
+.sb { display:flex; justify-content:space-between; align-items:center; padding:3px 15px 5px; flex-shrink:0; }
+.sb span { font-size:10px; font-weight:600; font-family:'IBM Plex Mono',monospace; }
+.si { font-size:9px; }
+.pscr { overflow-y:auto; flex:1; scrollbar-width:none; }
+.pscr::-webkit-scrollbar{display:none}
+
+/* BOTTOM NAV */
+.bnav { display:flex; border-top:1px solid var(--border); background:var(--white); flex-shrink:0; }
+.ni { flex:1; display:flex; flex-direction:column; align-items:center; padding:7px 0 5px; gap:2px; }
+.ni-ic { font-size:16px; }
+.ni-lb { font-size:8px; font-weight:500; color:var(--text-3); }
+.ni.on .ni-lb { color:var(--pp-red); }
+
+/* BUTTONS */
+.btn  { background:var(--pp-red); color:#fff; border-radius:9px; padding:11px 14px; text-align:center; font-size:12px; font-weight:600; cursor:pointer; }
+.btn2 { background:transparent; color:var(--pp-navy); border:1.5px solid var(--pp-navy); border-radius:9px; padding:10px 14px; text-align:center; font-size:11px; font-weight:500; cursor:pointer; }
+.btn3 { background:transparent; color:var(--text-3); border:1.5px solid var(--border); border-radius:9px; padding:10px 14px; text-align:center; font-size:11px; cursor:pointer; }
+
+/* CARD ROWS */
+.cr { display:flex; align-items:center; gap:9px; background:var(--white); border:1px solid var(--border); border-radius:10px; padding:9px 11px; box-shadow:0 1px 3px rgba(0,0,0,.04); }
+.cri { width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+.crt { font-size:11px; font-weight:600; }
+.crd { font-size:9px; color:var(--text-3); margin-top:1px; }
+.cra { font-size:9px; color:var(--pp-navy); font-weight:600; padding:3px 8px; background:#EEF0FF; border-radius:16px; cursor:pointer; flex-shrink:0; }
+
+/* SETTING ROWS */
+.sr { display:flex; align-items:center; justify-content:space-between; background:var(--white); border:1px solid var(--border); border-radius:9px; padding:9px 11px; }
+
+/* SECTION HEADER */
+.shdr { font-size:9px; font-weight:600; color:var(--text-3); letter-spacing:1.1px; text-transform:uppercase; padding:9px 0 5px; }
+
+/* BADGES */
+.br  { background:var(--pp-red);      color:#fff; font-size:8px; padding:2px 6px; border-radius:16px; font-weight:600; }
+.bn  { background:var(--pp-navy);     color:#fff; font-size:8px; padding:2px 6px; border-radius:16px; font-weight:600; }
+.bg  { background:var(--green);       color:#fff; font-size:8px; padding:2px 6px; border-radius:16px; font-weight:600; }
+.by  { background:var(--yellow);      color:#fff; font-size:8px; padding:2px 6px; border-radius:16px; font-weight:600; }
+.bgr { background:var(--pp-grey-mid); color:#fff; font-size:8px; padding:2px 6px; border-radius:16px; font-weight:600; }
+.bgo { background:var(--tu-gold);     color:#fff; font-size:8px; padding:2px 6px; border-radius:16px; font-weight:600; }
+
+/* TU CARD */
+.tuc { background:linear-gradient(145deg,#1A1A1A,#2C2C2C 50%,#1A1A1A); border-radius:13px; padding:14px; position:relative; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.4); }
+.tuc::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--tu-gold),var(--tu-gold-lt),var(--tu-gold)); }
+.tuc-bg1 { position:absolute; right:-18px; top:-18px; width:100px; height:100px; border-radius:50%; border:16px solid rgba(201,168,76,.1); }
+.tuc-bg2 { position:absolute; right:28px; top:8px; width:55px; height:55px; border-radius:50%; border:10px solid rgba(201,168,76,.06); }
+
+/* PROGRESS STEPS */
+.ps { display:flex; align-items:center; gap:9px; background:var(--white); border:1px solid var(--border); border-radius:9px; padding:9px 11px; }
+.ps.done { border-color:#BBF7D0; background:#F0FFF4; }
+.ps.curr { border-color:var(--pp-navy); background:#EEF0FF; }
+.ps.todo { opacity:.4; }
+.psi { width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; flex-shrink:0; }
+.psi.done { background:var(--green); }
+.psi.curr { background:var(--pp-navy); }
+.psi.todo { background:var(--sf2); border:1px solid var(--border); }
+.ps-lb { font-size:11px; font-weight:600; }
+.ps-lb.done { color:#166534; }
+.ps-lb.curr { color:var(--pp-navy); }
+.ps-lb.todo { color:var(--text-3); }
+.ps-sub { font-size:9px; color:var(--text-3); margin-top:1px; }
+
+/* ANNOTATIONS */
+.ann { flex:1; min-width:258px; max-width:370px; }
+.at  { font-size:13px; font-weight:700; margin-bottom:13px; padding-bottom:8px; border-bottom:2px solid var(--pp-red); display:inline-block; }
+.ai2 { display:flex; gap:9px; margin-bottom:12px; align-items:flex-start; }
+.an  { width:19px; height:19px; background:var(--pp-navy); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; flex-shrink:0; color:#fff; }
+.al  { font-size:11px; font-weight:600; margin-bottom:2px; }
+.ad  { font-size:10px; color:var(--text-2); line-height:1.5; }
+.atg { display:inline-block; background:var(--sf2); border:1px solid var(--border); color:var(--text-3); font-size:8px; padding:2px 5px; border-radius:3px; font-family:'IBM Plex Mono',monospace; margin-top:3px; }
+.atg.dep  { border-color:var(--yellow); color:#92400E; background:#FFFBEB; }
+.atg.crit { border-color:var(--pp-red); color:var(--pp-red); background:#FFF5F3; }
+.atg.ok   { border-color:var(--green);  color:#166534; background:#F0FFF4; }
+.atg.tu   { border-color:var(--tu-gold);color:#7A5C00; background:#FFFBEB; }
+.atg.log  { border-color:#7C3AED; color:#7C3AED; background:#F5F3FF; }
+
+/* QR CODE (SVG-based simple grid) */
+.qr-wrap { display:flex; flex-direction:column; align-items:center; gap:6px; }
+.qr-box { background:#fff; border:2px solid #1A1A1A; border-radius:8px; padding:8px; }
+.qr-grid { display:grid; grid-template-columns:repeat(11,8px); grid-template-rows:repeat(11,8px); gap:1px; }
+.qr-cell { width:8px; height:8px; border-radius:1px; }
+.qr-cell.b { background:#1A1A1A; }
+.qr-cell.w { background:#fff; }
+
+/* NFC PULSE ANIMATION */
+@keyframes nfc-pulse {
+  0%   { transform:scale(1);   opacity:.8; }
+  50%  { transform:scale(1.18);opacity:.3; }
+  100% { transform:scale(1);   opacity:.8; }
+}
+@keyframes qr-scan {
+  0%   { top:12px; }
+  100% { top:calc(100% - 12px); }
+}
+.nfc-ring { border-radius:50%; border:2px solid var(--tu-gold); animation:nfc-pulse 1.6s ease-in-out infinite; }
+
+/* LOG TABLE */
+.log-table { width:100%; border-collapse:collapse; font-size:9px; }
+.log-table th { background:var(--pp-navy-dk); color:rgba(255,255,255,.7); padding:4px 6px; text-align:left; font-weight:500; letter-spacing:.5px; }
+.log-table td { padding:4px 6px; border-bottom:1px solid rgba(255,255,255,.06); color:#B0B8D4; font-family:'IBM Plex Mono',monospace; font-size:8px; }
+.log-table tr:last-child td { border-bottom:none; }
+.log-table tr.hi td { background:rgba(201,168,76,.08); color:rgba(255,255,255,.85); }
+
+/* SPACERS */
+.s4{height:4px;flex-shrink:0}.s8{height:8px;flex-shrink:0}.s12{height:12px;flex-shrink:0}.s16{height:16px;flex-shrink:0}
+
+/* APP CHROME HEADER */
+.ah { background:var(--pp-navy); padding:10px 14px 13px; flex-shrink:0; position:relative; overflow:hidden; }
+.ah::after { content:''; position:absolute; right:-24px; bottom:-24px; width:80px; height:80px; background:var(--pp-red); border-radius:20px; opacity:.2; transform:rotate(15deg); }
+.ah-row { display:flex; justify-content:space-between; align-items:center; }
+.ai-btn { width:25px; height:25px; background:rgba(255,255,255,.14); border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:12px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-brand">
+    <svg viewBox="0 0 110 44" fill="none" style="height:28px">
+      <rect x="0" y="3" width="30" height="30" rx="6" fill="#FE3B1F"/>
+      <rect x="3" y="6" width="24" height="24" rx="5" fill="#2E3CBA"/>
+      <text x="8" y="26" font-family="sans-serif" font-weight="700" font-size="17" fill="white">P</text>
+      <text x="38" y="18" font-family="sans-serif" font-weight="700" font-size="12" fill="#2E3CBA">Prompt</text>
+      <text x="38" y="33" font-family="sans-serif" font-weight="700" font-size="12" fill="#FE3B1F">Post</text>
+    </svg>
+    <span class="hdr-title">Prompt Pass — Card Usage Flow · TU-07 to TU-11</span>
+  </div>
+  <span class="hdr-badge">WF-USAGE-v1.0 · 5 Screens · Virtual Card + QR + Event Log</span>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button class="nb on" onclick="show('tu07')">TU-07 · Open Card</button>
+  <button class="nb" onclick="show('tu08')">TU-08 · Virtual Card + QR</button>
+  <button class="nb" onclick="show('tu09')">TU-09 · Partner Scan</button>
+  <button class="nb" onclick="show('tu10')">TU-10 · Benefit Granted</button>
+  <div class="nav-sep"></div>
+  <button class="nb" onclick="show('tu11')" style="color:#7C3AED">TU-11 · Event Log</button>
+</div>
+
+
+<!-- ══════════════════════════════════ TU-07 OPEN CARD ══════════════════════════════════ -->
+<div id="tu07" class="pg on">
+
+  <!-- Vault view — TU card entry -->
+  <div class="pw">
+    <div class="plb">TU-07-A · Vault — Tap TU Card</div>
+    <div class="ph"><div class="phi">
+      <div class="sb" style="background:var(--pp-navy)"><span style="color:rgba(255,255,255,.8)">10:58</span><div class="si" style="color:rgba(255,255,255,.8)">●●●● 🔋</div></div>
+      <div class="ah">
+        <div class="ah-row" style="margin-bottom:9px">
+          <svg viewBox="0 0 110 44" fill="none" style="height:18px">
+            <rect x="0" y="3" width="30" height="30" rx="6" fill="rgba(255,255,255,.9)"/>
+            <text x="8" y="26" font-family="sans-serif" font-weight="700" font-size="17" fill="#2E3CBA">P</text>
+            <text x="38" y="18" font-family="sans-serif" font-weight="700" font-size="12" fill="white">Prompt</text>
+            <text x="38" y="33" font-family="sans-serif" font-weight="700" font-size="12" fill="rgba(255,255,255,.7)">Post</text>
+          </svg>
+          <div class="ai-btn">🔔</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:#fff">My Vault</div>
+      </div>
+      <div class="pscr" style="padding:10px 13px">
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div class="cr"><div class="cri" style="background:#EEF0FF">👤</div><div style="flex:1"><div class="crt" style="color:var(--pp-navy)">Personal Info</div><div class="crd">Phone, Email</div></div><div class="cra">Open</div></div>
+          <div class="cr"><div class="cri" style="background:#FFF5F3">📄</div><div style="flex:1"><div class="crt">My Documents</div><div class="crd">National ID, Passport</div></div><div class="cra">Open</div></div>
+
+          <!-- TU CARD — tap target highlighted -->
+          <div style="background:#FFFBEB;border:2.5px solid var(--tu-gold);border-radius:11px;padding:10px;position:relative;cursor:pointer;box-shadow:0 4px 14px rgba(201,168,76,.25)">
+            <div style="position:absolute;top:7px;right:9px"><span class="bgo">Active</span></div>
+            <!-- tap ripple indicator -->
+            <div style="position:absolute;inset:0;border-radius:10px;border:2px solid rgba(201,168,76,.4);animation:nfc-pulse 1.8s ease-in-out infinite;pointer-events:none"></div>
+            <div style="display:flex;align-items:center;gap:9px">
+              <div style="width:40px;height:40px;border-radius:9px;background:linear-gradient(135deg,#1A1A1A,#2C2C2C);border:1.5px solid var(--tu-gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🎓</div>
+              <div style="flex:1">
+                <div style="font-size:12px;font-weight:700">TU Associate Club Card</div>
+                <div style="font-size:9px;color:var(--text-3);margin-top:1px">Thammasat University</div>
+              </div>
+            </div>
+            <div class="tuc" style="padding:9px;margin-top:9px">
+              <div class="tuc-bg1"></div>
+              <div style="font-size:6px;color:var(--tu-gold);letter-spacing:1px;position:relative;z-index:1">THAMMASAT UNIVERSITY</div>
+              <div style="font-size:11px;font-weight:700;color:#fff;position:relative;z-index:1;margin-top:3px">Somchai Jaidee</div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:7px;position:relative;z-index:1">
+                <div style="font-size:7px;color:rgba(255,255,255,.5);font-family:'IBM Plex Mono',monospace">TU-XXXX-XXXX</div>
+                <div style="background:var(--pp-red);padding:2px 5px;border-radius:4px;font-size:6px;font-weight:700;color:#fff">● ACTIVE</div>
+              </div>
+            </div>
+            <div style="margin-top:9px"><div class="btn" style="font-size:11px;padding:8px">Open Card ›</div></div>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:8px;color:var(--text-3);padding:9px 0 4px">Metadata only — content fetched on demand</div>
+      </div>
+      <div class="bnav">
+        <div class="ni on"><div class="ni-ic">🏠</div><div class="ni-lb" style="color:var(--pp-red)">Vault</div></div>
+        <div class="ni"><div class="ni-ic">⊞</div><div class="ni-lb">Me Modules</div></div>
+        <div class="ni"><div class="ni-ic">⚙️</div><div class="ni-lb">Settings</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Biometric confirm before opening -->
+  <div class="pw">
+    <div class="plb">TU-07-B · Biometric Confirm to Open</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:var(--pp-navy);padding:9px 13px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <span style="color:rgba(255,255,255,.7);font-size:15px">←</span>
+        <span style="color:#fff;font-size:12px;font-weight:700">Open TU Card</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:22px 18px 24px">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:11px;text-align:center">
+          <!-- TU Card mini preview -->
+          <div class="tuc" style="width:220px;padding:12px">
+            <div class="tuc-bg1"></div><div class="tuc-bg2"></div>
+            <div style="font-size:7px;color:var(--tu-gold);letter-spacing:1.5px;position:relative;z-index:1;font-weight:600">THAMMASAT UNIVERSITY</div>
+            <div style="font-size:6px;color:rgba(255,255,255,.5);letter-spacing:1px;position:relative;z-index:1">TU ASSOCIATE CLUB CARD</div>
+            <div style="font-size:14px;font-weight:700;color:#fff;position:relative;z-index:1;margin-top:6px">Somchai Jaidee</div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:7px;position:relative;z-index:1">
+              <div style="font-size:7px;color:rgba(255,255,255,.5);font-family:'IBM Plex Mono',monospace">TU-XXXX-XXXX</div>
+              <div style="background:var(--pp-red);padding:2px 5px;border-radius:4px;font-size:6px;font-weight:700;color:#fff">● ACTIVE</div>
+            </div>
+          </div>
+          <div style="font-size:12px;font-weight:700;margin-top:4px">Confirm Identity to Open</div>
+          <div style="font-size:10px;color:var(--text-3)">Use Face ID or PIN to display<br>your virtual card &amp; QR code</div>
+          <div style="width:60px;height:60px;border-radius:50%;border:2.5px solid var(--pp-navy);background:#EEF0FF;display:flex;align-items:center;justify-content:center;font-size:26px;margin-top:4px">👤</div>
+        </div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:8px">
+          <div class="btn">Unlock with Face ID</div>
+          <div class="btn3">Use PIN instead</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="ann">
+    <div class="at">TU-07 · Open Card</div>
+    <div class="ai2"><div class="an">1</div><div>
+      <div class="al">TU Card Entry = Gold Pulse Animation</div>
+      <div class="ad">Subtle gold ring animation on the card row in Vault signals it's interactive — draws attention without disrupting the overall UI. CSS-only, no JS dependency.</div>
+      <span class="atg tu">TU CI ACCENT</span>
+    </div></div>
+    <div class="ai2"><div class="an">2</div><div>
+      <div class="al">Biometric Gate — Mandatory Before Display</div>
+      <div class="ad">Virtual card and QR code must NOT be displayed without biometric or PIN confirmation. This prevents shoulder surfing and unauthorized QR capture.</div>
+      <span class="atg crit">SECURITY REQ</span>
+    </div></div>
+    <div class="ai2"><div class="an">3</div><div>
+      <div class="al">Card Preview = Blurred Until Confirmed</div>
+      <div class="ad">The card thumbnail in Vault is shown in low-res/blurred state — full detail (including QR) only revealed after biometric auth succeeds on TU-08.</div>
+      <span class="atg crit">SECURITY REQ</span>
+    </div></div>
+    <div class="ai2"><div class="an">4</div><div>
+      <div class="al">Event Logged on Open</div>
+      <div class="ad">card_opened event logged to Event Log (TU-11) at this step with timestamp, user DID, and device fingerprint — even before QR is scanned.</div>
+      <span class="atg log">EVENT-LOG</span>
+    </div></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════ TU-08 VIRTUAL CARD + QR ══════════════════════════════════ -->
+<div id="tu08" class="pg">
+
+  <!-- Full virtual card view -->
+  <div class="pw">
+    <div class="plb">TU-08-A · Virtual Card View</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:var(--pp-navy);padding:9px 13px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <span style="color:rgba(255,255,255,.7);font-size:15px">←</span>
+        <span style="color:#fff;font-size:12px;font-weight:700">TU Associate Club Card</span>
+        <span style="margin-left:auto;font-size:9px;color:rgba(255,255,255,.5)">Auto-closes in 02:00</span>
+      </div>
+      <div class="pscr" style="padding:12px 13px">
+        <!-- Full TU Card -->
+        <div class="tuc" style="margin-bottom:12px">
+          <div class="tuc-bg1"></div><div class="tuc-bg2"></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;position:relative;z-index:1">
+            <div>
+              <div style="font-size:8px;color:var(--tu-gold);letter-spacing:1.5px;font-weight:600">THAMMASAT UNIVERSITY</div>
+              <div style="font-size:6px;color:rgba(255,255,255,.5);letter-spacing:1px">TU ASSOCIATE CLUB CARD</div>
+            </div>
+            <div style="width:32px;height:32px;border-radius:50%;background:radial-gradient(circle,var(--tu-gold),#8B6914);display:flex;align-items:center;justify-content:center;font-size:14px">🎓</div>
+          </div>
+          <div style="height:1px;background:linear-gradient(90deg,var(--tu-gold),transparent);margin-bottom:9px;position:relative;z-index:1"></div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;position:relative;z-index:1">
+            <div>
+              <div style="font-size:16px;font-weight:700;color:#fff;letter-spacing:.4px">Somchai Jaidee</div>
+              <div style="font-size:8px;color:var(--tu-gold-lt)">SOMCHAI JAIDEE</div>
+              <div style="font-size:7px;color:rgba(255,255,255,.4);margin-top:1px">ASSOCIATE MEMBER</div>
+            </div>
+            <div style="text-align:right">
+              <div style="background:var(--pp-red);padding:3px 7px;border-radius:5px;font-size:7px;font-weight:700;color:#fff">● ACTIVE</div>
+              <div style="font-size:6px;color:rgba(255,255,255,.3);margin-top:3px">Powered by Prompt Post</div>
+            </div>
+          </div>
+          <div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;position:relative;z-index:1">
+            <div><div style="font-size:7px;color:rgba(255,255,255,.4)">MEMBER ID</div><div style="font-size:9px;color:rgba(255,255,255,.65);font-family:'IBM Plex Mono',monospace">TU-XXXX-XXXX</div></div>
+            <div style="text-align:right"><div style="font-size:7px;color:rgba(255,255,255,.4)">VALID UNTIL</div><div style="font-size:9px;color:rgba(255,255,255,.65)">XX/XXXX</div></div>
+          </div>
+        </div>
+        <!-- QR code section -->
+        <div style="background:var(--sf2);border:1.5px solid var(--tu-gold);border-radius:11px;padding:12px;text-align:center;margin-bottom:11px">
+          <div style="font-size:9px;color:var(--tu-gold);font-weight:700;letter-spacing:.8px;margin-bottom:8px">SCAN TO VERIFY MEMBERSHIP</div>
+          <!-- QR Grid (representative pattern) -->
+          <div style="display:flex;justify-content:center;margin-bottom:8px">
+            <div style="background:#fff;border:2px solid #1A1A1A;border-radius:6px;padding:7px;display:inline-block">
+              <svg width="88" height="88" viewBox="0 0 88 88" fill="none">
+                <!-- Finder patterns -->
+                <rect x="2" y="2" width="24" height="24" rx="2" fill="#1A1A1A"/>
+                <rect x="5" y="5" width="18" height="18" rx="1" fill="white"/>
+                <rect x="8" y="8" width="12" height="12" rx="1" fill="#1A1A1A"/>
+                <rect x="62" y="2" width="24" height="24" rx="2" fill="#1A1A1A"/>
+                <rect x="65" y="5" width="18" height="18" rx="1" fill="white"/>
+                <rect x="68" y="8" width="12" height="12" rx="1" fill="#1A1A1A"/>
+                <rect x="2" y="62" width="24" height="24" rx="2" fill="#1A1A1A"/>
+                <rect x="5" y="65" width="18" height="18" rx="1" fill="white"/>
+                <rect x="8" y="68" width="12" height="12" rx="1" fill="#1A1A1A"/>
+                <!-- Data modules -->
+                <rect x="30" y="2" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="40" y="2" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="50" y="2" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="30" y="10" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="50" y="10" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="2" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="10" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="2" y="40" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="10" y="40" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="2" y="50" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="30" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="40" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="50" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="30" y="40" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="50" y="40" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="30" y="50" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="40" y="50" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="62" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="72" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="80" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="62" y="40" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="80" y="40" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="72" y="50" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="40" y="62" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="50" y="62" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="30" y="72" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="50" y="72" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="40" y="80" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="62" y="62" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="80" y="62" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="62" y="80" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="72" y="72" width="6" height="6" rx="1" fill="#1A1A1A"/>
+                <rect x="80" y="80" width="6" height="6" rx="1" fill="#1A1A1A"/>
+              </svg>
+            </div>
+          </div>
+          <!-- Countdown timer -->
+          <div style="font-size:10px;color:var(--text-3)">QR valid for <span style="color:var(--tu-gold);font-weight:700;font-family:'IBM Plex Mono',monospace">01:47</span></div>
+          <div style="font-size:8px;color:var(--text-3);margin-top:2px">Refresh token auto-rotates every 2 minutes</div>
+        </div>
+        <div class="btn2" style="font-size:10px;padding:8px;text-align:center">🔄  Refresh QR Now</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Expanded QR only mode -->
+  <div class="pw">
+    <div class="plb">TU-08-B · Full-Screen QR Mode</div>
+    <div class="ph"><div class="phi">
+      <div class="sb" style="background:#0A0A14"><span style="color:rgba(255,255,255,.6)">10:58</span><div class="si" style="color:rgba(255,255,255,.5)">●●●● 🔋</div></div>
+      <div style="background:#0A0A14;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:14px 18px 18px">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;width:100%">
+          <div style="font-size:8px;color:rgba(201,168,76,.6);letter-spacing:2px;font-weight:600">THAMMASAT UNIVERSITY</div>
+          <div style="font-size:11px;font-weight:700;color:#fff">TU Associate Club Card</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.4)">Somchai Jaidee · TU-XXXX-XXXX</div>
+        </div>
+        <!-- Large QR -->
+        <div style="background:#fff;border-radius:12px;padding:12px;box-shadow:0 0 40px rgba(201,168,76,.2)">
+          <svg width="148" height="148" viewBox="0 0 88 88" fill="none">
+            <rect x="2" y="2" width="24" height="24" rx="2" fill="#1A1A1A"/>
+            <rect x="5" y="5" width="18" height="18" rx="1" fill="white"/>
+            <rect x="8" y="8" width="12" height="12" rx="1" fill="#1A1A1A"/>
+            <rect x="62" y="2" width="24" height="24" rx="2" fill="#1A1A1A"/>
+            <rect x="65" y="5" width="18" height="18" rx="1" fill="white"/>
+            <rect x="68" y="8" width="12" height="12" rx="1" fill="#1A1A1A"/>
+            <rect x="2" y="62" width="24" height="24" rx="2" fill="#1A1A1A"/>
+            <rect x="5" y="65" width="18" height="18" rx="1" fill="white"/>
+            <rect x="8" y="68" width="12" height="12" rx="1" fill="#1A1A1A"/>
+            <rect x="30" y="2" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="40" y="2" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="50" y="2" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="30" y="10" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="50" y="10" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="2" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="10" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="2" y="40" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="10" y="40" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="2" y="50" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="30" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="40" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="50" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="30" y="40" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="50" y="40" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="30" y="50" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="40" y="50" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="62" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="72" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="80" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="62" y="40" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="80" y="40" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="72" y="50" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="40" y="62" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="50" y="62" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="30" y="72" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="50" y="72" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="40" y="80" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="62" y="62" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="80" y="62" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="62" y="80" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="72" y="72" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="80" y="80" width="6" height="6" rx="1" fill="#1A1A1A"/>
+          </svg>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:5px;width:100%">
+          <div style="display:flex;align-items:center;gap:5px">
+            <div style="width:6px;height:6px;border-radius:50%;background:var(--green)"></div>
+            <div style="font-size:9px;color:rgba(255,255,255,.6)">Token valid · <span style="color:var(--tu-gold);font-family:'IBM Plex Mono',monospace">01:47</span></div>
+          </div>
+          <div style="border:1.5px solid rgba(255,255,255,.12);border-radius:8px;padding:7px 18px;font-size:10px;color:rgba(255,255,255,.4);cursor:pointer;text-align:center;width:100%">Collapse  ↓</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="ann">
+    <div class="at">TU-08 · Virtual Card + QR</div>
+    <div class="ai2"><div class="an">1</div><div>
+      <div class="al">QR Token = Time-Limited (2 min rotation)</div>
+      <div class="ad">QR payload encodes a short-lived signed JWT (iss: TU, sub: user DID, exp: 2 min). Backend validates token freshness on scan. Prevents QR screenshot reuse attacks.</div>
+      <span class="atg crit">SECURITY REQ</span><span class="atg dep" style="margin-left:3px">TU-DEP OQ-QR-01</span>
+    </div></div>
+    <div class="ai2"><div class="an">2</div><div>
+      <div class="al">Full-Screen Mode = Dark + Gold Glow</div>
+      <div class="ad">Full-screen QR uses black bg (#0A0A14) with gold box-shadow glow — maximizes scanner contrast while maintaining TU brand aesthetics in point-of-sale contexts.</div>
+      <span class="atg tu">TU CI ACCENT</span>
+    </div></div>
+    <div class="ai2"><div class="an">3</div><div>
+      <div class="al">Auto-Close Timer in App Bar</div>
+      <div class="ad">Virtual card auto-closes after 2 minutes of no activity, re-requiring biometric to reopen. Timer shown in app bar: "Auto-closes in MM:SS".</div>
+      <span class="atg crit">SECURITY REQ</span>
+    </div></div>
+    <div class="ai2"><div class="an">4</div><div>
+      <div class="al">QR Payload = Signed VP (not raw user data)</div>
+      <div class="ad">QR encodes a Verifiable Presentation signed by user DID — not raw PII. Partner scans and verifies VP signature against user's DID Document on ShareRing/registry.</div>
+      <span class="atg dep">SHARERING-DEP OQ10</span>
+    </div></div>
+    <div class="ai2"><div class="an">5</div><div>
+      <div class="al">qr_displayed Event Logged</div>
+      <div class="ad">qr_displayed event logged on screen load with: user_did, token_id, timestamp, device_os. Enables audit trail even if QR is never scanned.</div>
+      <span class="atg log">EVENT-LOG</span>
+    </div></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════ TU-09 PARTNER SCAN ══════════════════════════════════ -->
+<div id="tu09" class="pg">
+
+  <!-- Scanning state (user holds phone to scanner) -->
+  <div class="pw">
+    <div class="plb">TU-09-A · QR Being Scanned</div>
+    <div class="ph"><div class="phi">
+      <div class="sb" style="background:#0A0A14"><span style="color:rgba(255,255,255,.6)">10:58</span><div class="si" style="color:rgba(255,255,255,.5)">●●●● 🔋</div></div>
+      <div style="background:#0A0A14;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:14px 18px 18px">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+          <div style="font-size:8px;color:rgba(201,168,76,.6);letter-spacing:2px;font-weight:600">THAMMASAT UNIVERSITY</div>
+          <div style="font-size:10px;font-weight:700;color:#fff">TU Associate Club Card</div>
+        </div>
+        <!-- QR with scan line animation -->
+        <div style="position:relative;background:#fff;border-radius:12px;padding:12px;box-shadow:0 0 40px rgba(201,168,76,.35);overflow:hidden">
+          <svg width="148" height="148" viewBox="0 0 88 88" fill="none">
+            <rect x="2" y="2" width="24" height="24" rx="2" fill="#1A1A1A"/>
+            <rect x="5" y="5" width="18" height="18" rx="1" fill="white"/>
+            <rect x="8" y="8" width="12" height="12" rx="1" fill="#1A1A1A"/>
+            <rect x="62" y="2" width="24" height="24" rx="2" fill="#1A1A1A"/>
+            <rect x="65" y="5" width="18" height="18" rx="1" fill="white"/>
+            <rect x="68" y="8" width="12" height="12" rx="1" fill="#1A1A1A"/>
+            <rect x="2" y="62" width="24" height="24" rx="2" fill="#1A1A1A"/>
+            <rect x="5" y="65" width="18" height="18" rx="1" fill="white"/>
+            <rect x="8" y="68" width="12" height="12" rx="1" fill="#1A1A1A"/>
+            <rect x="30" y="2" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="40" y="2" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="50" y="2" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="30" y="10" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="50" y="10" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="2" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="10" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="2" y="40" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="10" y="40" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="2" y="50" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="30" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="40" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="50" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="30" y="40" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="50" y="40" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="30" y="50" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="40" y="50" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="62" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="72" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="80" y="30" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="62" y="40" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="80" y="40" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="72" y="50" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="40" y="62" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="50" y="62" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="30" y="72" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="50" y="72" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="40" y="80" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="62" y="62" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="80" y="62" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="62" y="80" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="72" y="72" width="6" height="6" rx="1" fill="#1A1A1A"/>
+            <rect x="80" y="80" width="6" height="6" rx="1" fill="#1A1A1A"/>
+          </svg>
+          <!-- Scan line overlay -->
+          <div style="position:absolute;left:12px;right:12px;height:2px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.8),transparent);top:40%;pointer-events:none"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:5px">
+          <div style="display:flex;align-items:center;gap:6px">
+            <div style="width:6px;height:6px;border-radius:50%;background:var(--tu-gold);animation:nfc-pulse 1s infinite"></div>
+            <div style="font-size:10px;color:rgba(255,255,255,.7);font-weight:500">Waiting for scanner...</div>
+          </div>
+          <div style="font-size:8px;color:rgba(255,255,255,.3)">Hold screen facing partner's QR scanner</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Verifying state (after scan, awaiting backend response) -->
+  <div class="pw">
+    <div class="plb">TU-09-B · Verifying with TU Backend</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:var(--pp-navy);padding:9px 13px;flex-shrink:0">
+        <span style="color:#fff;font-size:12px;font-weight:700">Verifying Membership...</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px 18px;gap:16px">
+        <!-- Spinner -->
+        <div style="width:68px;height:68px;border-radius:50%;border:3px solid var(--pp-navy);border-top-color:var(--tu-gold);display:flex;align-items:center;justify-content:center;font-size:26px">🏛</div>
+        <div style="text-align:center">
+          <div style="font-size:14px;font-weight:700">Verifying with TU</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:4px">Checking membership status...</div>
+        </div>
+        <!-- Step breakdown -->
+        <div style="width:100%;display:flex;flex-direction:column;gap:7px">
+          <div class="ps done"><div class="psi done"><span style="color:#fff;font-size:10px">✓</span></div><div><div class="ps-lb done">QR Scanned</div><div class="ps-sub">Token received by partner device</div></div></div>
+          <div class="ps done"><div class="psi done"><span style="color:#fff;font-size:10px">✓</span></div><div><div class="ps-lb done">VP Signature Verified</div><div class="ps-sub">User DID signature valid</div></div></div>
+          <div class="ps curr"><div class="psi curr"><span style="color:#fff;font-size:10px">●</span></div><div><div class="ps-lb curr">Checking TU Member Status</div><div class="ps-sub">Querying TU membership API...</div></div></div>
+          <div class="ps todo"><div class="psi todo"><span style="font-size:10px;color:var(--text-3)">○</span></div><div><div class="ps-lb todo">Grant Benefit</div></div></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="ann">
+    <div class="at">TU-09 · Partner QR Scan</div>
+    <div class="ai2"><div class="an">1</div><div>
+      <div class="al">App is Passive — Partner Device Scans</div>
+      <div class="ad">The user simply holds their phone screen to the partner's QR reader. The app does not actively push data — it only displays the QR. No Bluetooth, no NFC required for basic flow.</div>
+      <span class="atg ok">UX PATTERN</span>
+    </div></div>
+    <div class="ai2"><div class="an">2</div><div>
+      <div class="al">Verification Flow: Partner → TU Backend → Response</div>
+      <div class="ad">Partner's device decodes QR → extracts VP → verifies user DID signature locally → calls TU membership API to confirm active status → grants benefit. PP backend receives webhook callback.</div>
+      <span class="atg dep">TU-DEP OQ-VERIFY-01</span>
+    </div></div>
+    <div class="ai2"><div class="an">3</div><div>
+      <div class="al">VP Signature Step (Step 2) = Client-Side Only</div>
+      <div class="ad">VP signature can be verified by any party with the user's public DID document — no server roundtrip needed. Enables offline-capable verification in venues with poor connectivity.</div>
+      <span class="atg ok">OFFLINE CAPABLE</span>
+    </div></div>
+    <div class="ai2"><div class="an">4</div><div>
+      <div class="al">qr_scanned Event Logged on Backend</div>
+      <div class="ad">qr_scanned event fired by partner device callback: user_did, partner_id, location_id, token_id, scan_timestamp. Cross-referenced with qr_displayed event for audit trail integrity.</div>
+      <span class="atg log">EVENT-LOG</span>
+    </div></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════ TU-10 BENEFIT GRANTED ══════════════════════════════════ -->
+<div id="tu10" class="pg">
+
+  <!-- Benefit granted success -->
+  <div class="pw">
+    <div class="plb">TU-10-A · Benefit Granted</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:var(--pp-navy);padding:9px 13px;flex-shrink:0">
+        <span style="color:#fff;font-size:12px;font-weight:700">Benefit Granted ✓</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:20px 18px 22px">
+
+        <!-- Success state -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:11px;text-align:center">
+          <!-- Gold ring success icon -->
+          <div style="position:relative;width:86px;height:86px;display:flex;align-items:center;justify-content:center">
+            <div style="position:absolute;inset:0;border-radius:50%;border:3px solid var(--tu-gold);opacity:.3"></div>
+            <div style="position:absolute;inset:6px;border-radius:50%;border:3px solid var(--tu-gold);opacity:.5"></div>
+            <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--tu-dark),#2C2C2C);border:2px solid var(--tu-gold);display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 0 20px rgba(201,168,76,.3)">✓</div>
+          </div>
+          <div style="font-size:17px;font-weight:700">Benefit Granted!</div>
+          <div style="font-size:11px;color:var(--text-3)">TU Associate discount applied</div>
+
+          <!-- Benefit detail card -->
+          <div style="background:var(--sf2);border:1.5px solid var(--tu-gold);border-radius:10px;padding:11px;width:100%;text-align:left">
+            <div style="font-size:8px;color:var(--tu-gold);font-weight:700;letter-spacing:.8px;margin-bottom:7px">BENEFIT APPLIED</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+              <div style="font-size:10px;color:var(--text-2)">Partner</div>
+              <div style="font-size:10px;font-weight:600">TU Bookstore</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+              <div style="font-size:10px;color:var(--text-2)">Benefit</div>
+              <div style="font-size:10px;font-weight:600;color:var(--green)">10% Discount</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+              <div style="font-size:10px;color:var(--text-2)">Used at</div>
+              <div style="font-size:10px;font-weight:500;font-family:'IBM Plex Mono',monospace">10:58 · 23 May 2026</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-size:10px;color:var(--text-2)">Event ID</div>
+              <div style="font-size:9px;font-weight:500;font-family:'IBM Plex Mono',monospace;color:var(--text-3)">EVT-20260523-4821</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="width:100%;display:flex;flex-direction:column;gap:8px">
+          <div class="btn2" style="font-size:10px;padding:9px">View Usage History</div>
+          <div class="btn3" style="font-size:10px;padding:8px">Back to Vault</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Benefit denied / error state -->
+  <div class="pw">
+    <div class="plb">TU-10-B · Verification Failed (Error State)</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:#8B1A0A;padding:9px 13px;flex-shrink:0">
+        <span style="color:#fff;font-size:12px;font-weight:700">Verification Failed</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:20px 18px 22px">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:11px;text-align:center">
+          <div style="width:64px;height:64px;border-radius:50%;background:#FFF5F3;border:2px solid var(--pp-red);display:flex;align-items:center;justify-content:center;font-size:26px">✕</div>
+          <div style="font-size:15px;font-weight:700;color:var(--pp-red)">Unable to Verify</div>
+          <div style="font-size:10px;color:var(--text-3);line-height:1.5">Your TU membership could not be<br>confirmed at this time</div>
+          <!-- Error reasons -->
+          <div style="width:100%;background:#FFF5F3;border:1.5px solid var(--pp-red);border-radius:9px;padding:10px">
+            <div style="font-size:9px;font-weight:700;color:var(--pp-red);margin-bottom:6px">Possible Reasons</div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <div style="font-size:9px;color:var(--text-2)">• QR token expired (> 2 min)</div>
+              <div style="font-size:9px;color:var(--text-2)">• Membership status inactive</div>
+              <div style="font-size:9px;color:var(--text-2)">• Network error — retry</div>
+            </div>
+          </div>
+          <div style="background:var(--sf2);border:1px solid var(--border);border-radius:7px;padding:7px;font-size:8px;color:var(--text-3);width:100%">Error logged · Ref: EVT-ERR-20260523-119</div>
+        </div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:8px">
+          <div class="btn">Refresh QR &amp; Try Again</div>
+          <div class="btn3" style="font-size:10px;padding:8px">Contact Support</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="ann">
+    <div class="at">TU-10 · Benefit Granted</div>
+    <div class="ai2"><div class="an">1</div><div>
+      <div class="al">Success Icon = Gold Ring (TU CI)</div>
+      <div class="ad">Double gold ring + dark center circle = TU identity on the success state, while PP Navy app bar confirms the PP platform framing. Dual-brand success moment.</div>
+      <span class="atg tu">TU CI + PP CI</span>
+    </div></div>
+    <div class="ai2"><div class="an">2</div><div>
+      <div class="al">Benefit Receipt = Inline Event Card</div>
+      <div class="ad">Benefit detail (partner, benefit type, time, Event ID) displayed immediately after grant — user has a receipt-equivalent without leaving the app. Event ID cross-references Event Log (TU-11).</div>
+      <span class="atg ok">UX PATTERN</span>
+    </div></div>
+    <div class="ai2"><div class="an">3</div><div>
+      <div class="al">Error State = Red App Bar + Clear Reasons</div>
+      <div class="ad">Failure uses red app bar (#8B1A0A) to clearly signal error state. Three common failure reasons listed inline — reduces support calls. Error also logged to Event Log.</div>
+      <span class="atg crit">ERROR HANDLING</span>
+    </div></div>
+    <div class="ai2"><div class="an">4</div><div>
+      <div class="al">benefit_granted / benefit_denied Events Logged</div>
+      <div class="ad">benefit_granted logs: user_did, partner_id, benefit_type, location_id, event_id, timestamp. benefit_denied additionally logs: failure_reason, error_code. Both written to Event Log (TU-11).</div>
+      <span class="atg log">EVENT-LOG</span>
+    </div></div>
+    <div class="ai2"><div class="an">5</div><div>
+      <div class="al">Open Question — Benefit Definition Owner</div>
+      <div class="ad">Who defines benefit_type and discount_value per partner? Is this configured in TU's system, ShareRing Partner config, or PP backend? Must be clarified before implementation.</div>
+      <span class="atg dep">TU-DEP OQ-BENEFIT-01</span>
+    </div></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════ TU-11 EVENT LOG ══════════════════════════════════ -->
+<div id="tu11" class="pg">
+
+  <!-- User-facing usage history -->
+  <div class="pw">
+    <div class="plb">TU-11-A · Usage History (User View)</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:var(--pp-navy);padding:9px 13px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <span style="color:rgba(255,255,255,.7);font-size:15px">←</span>
+        <span style="color:#fff;font-size:12px;font-weight:700">Usage History</span>
+        <span style="margin-left:auto;font-size:9px;color:rgba(255,255,255,.5);font-family:'IBM Plex Mono',monospace">4 events</span>
+      </div>
+      <div class="pscr" style="padding:10px 13px">
+        <!-- Filter tabs -->
+        <div style="display:flex;gap:5px;margin-bottom:10px">
+          <div style="background:var(--pp-navy);color:#fff;font-size:9px;padding:4px 10px;border-radius:20px;font-weight:600">All</div>
+          <div style="background:var(--sf2);color:var(--text-3);font-size:9px;padding:4px 10px;border-radius:20px">Benefits</div>
+          <div style="background:var(--sf2);color:var(--text-3);font-size:9px;padding:4px 10px;border-radius:20px">Opens</div>
+          <div style="background:var(--sf2);color:var(--text-3);font-size:9px;padding:4px 10px;border-radius:20px">Errors</div>
+        </div>
+
+        <!-- Log entries -->
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <!-- benefit_granted -->
+          <div style="background:#F0FFF4;border:1px solid #BBF7D0;border-radius:9px;padding:9px 11px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+              <div style="display:flex;align-items:center;gap:5px"><div style="width:7px;height:7px;border-radius:50%;background:var(--green)"></div><div style="font-size:10px;font-weight:600;color:#166534">Benefit Granted</div></div>
+              <span class="bg" style="font-size:7px">SUCCESS</span>
+            </div>
+            <div style="font-size:9px;color:var(--text-2)">TU Bookstore · 10% Discount</div>
+            <div style="font-size:8px;color:var(--text-3);margin-top:2px;font-family:'IBM Plex Mono',monospace">10:58 · 23 May 2026 · EVT-20260523-4821</div>
+          </div>
+
+          <!-- qr_scanned -->
+          <div style="background:var(--sf2);border:1px solid var(--border);border-radius:9px;padding:9px 11px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+              <div style="display:flex;align-items:center;gap:5px"><div style="width:7px;height:7px;border-radius:50%;background:var(--pp-navy)"></div><div style="font-size:10px;font-weight:600">QR Scanned</div></div>
+              <span class="bn" style="font-size:7px">SYSTEM</span>
+            </div>
+            <div style="font-size:9px;color:var(--text-2)">Partner: TU Bookstore · Token: tok_4821</div>
+            <div style="font-size:8px;color:var(--text-3);margin-top:2px;font-family:'IBM Plex Mono',monospace">10:58 · 23 May 2026 · EVT-20260523-4820</div>
+          </div>
+
+          <!-- qr_displayed -->
+          <div style="background:var(--sf2);border:1px solid var(--border);border-radius:9px;padding:9px 11px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+              <div style="display:flex;align-items:center;gap:5px"><div style="width:7px;height:7px;border-radius:50%;background:var(--tu-gold)"></div><div style="font-size:10px;font-weight:600">QR Displayed</div></div>
+              <span class="bgo" style="font-size:7px">CARD</span>
+            </div>
+            <div style="font-size:9px;color:var(--text-2)">TU Associate Club Card opened</div>
+            <div style="font-size:8px;color:var(--text-3);margin-top:2px;font-family:'IBM Plex Mono',monospace">10:57 · 23 May 2026 · EVT-20260523-4819</div>
+          </div>
+
+          <!-- benefit_denied (older) -->
+          <div style="background:#FFF5F3;border:1px solid #FCA5A5;border-radius:9px;padding:9px 11px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+              <div style="display:flex;align-items:center;gap:5px"><div style="width:7px;height:7px;border-radius:50%;background:var(--pp-red)"></div><div style="font-size:10px;font-weight:600;color:var(--pp-red)">Verification Failed</div></div>
+              <span class="br" style="font-size:7px">ERROR</span>
+            </div>
+            <div style="font-size:9px;color:var(--text-2)">Reason: QR token expired</div>
+            <div style="font-size:8px;color:var(--text-3);margin-top:2px;font-family:'IBM Plex Mono',monospace">09:32 · 20 May 2026 · EVT-ERR-20260520-119</div>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:8px;color:var(--text-3);padding:10px 0 3px">All events stored on Prompt Post · PDPA compliant</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Admin / Partner portal event log (detailed view) -->
+  <div class="pw" style="min-width:308px">
+    <div class="plb">TU-11-B · Admin / Partner Event Log (Portal)</div>
+    <div class="ph"><div class="phi">
+      <div class="sb" style="background:#0D0D1A"><span style="color:rgba(255,255,255,.7)">10:58</span><div class="si" style="color:rgba(255,255,255,.5)">●●●● 🔋</div></div>
+      <div style="background:#0D0D1A;flex:1;padding:12px;overflow-y:auto">
+        <!-- Header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div>
+            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.85)">Event Log — TU Card</div>
+            <div style="font-size:8px;color:rgba(255,255,255,.3);font-family:'IBM Plex Mono',monospace">Card: TU-Associate · User: s.jaidee</div>
+          </div>
+          <div style="display:flex;gap:4px">
+            <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:5px;padding:3px 7px;font-size:8px;color:rgba(255,255,255,.4)">↓ Export</div>
+            <div style="background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);border-radius:5px;padding:3px 7px;font-size:8px;color:var(--tu-gold)">Filter ▾</div>
+          </div>
+        </div>
+        <!-- Stats row -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:10px">
+          <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:7px;padding:7px;text-align:center">
+            <div style="font-size:14px;font-weight:700;color:var(--green)">3</div>
+            <div style="font-size:7px;color:rgba(255,255,255,.4)">Granted</div>
+          </div>
+          <div style="background:rgba(254,59,31,.08);border:1px solid rgba(254,59,31,.2);border-radius:7px;padding:7px;text-align:center">
+            <div style="font-size:14px;font-weight:700;color:var(--pp-red)">1</div>
+            <div style="font-size:7px;color:rgba(255,255,255,.4)">Failed</div>
+          </div>
+          <div style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:7px;padding:7px;text-align:center">
+            <div style="font-size:14px;font-weight:700;color:var(--tu-gold)">5</div>
+            <div style="font-size:7px;color:rgba(255,255,255,.4)">Total Opens</div>
+          </div>
+        </div>
+        <!-- Table -->
+        <div style="border-radius:7px;overflow:hidden;border:1px solid rgba(255,255,255,.08)">
+          <table class="log-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Partner</th>
+                <th>Time</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="hi">
+                <td>benefit_granted</td>
+                <td>TU Bookstore</td>
+                <td>10:58 23/05</td>
+                <td style="color:var(--green)">✓ OK</td>
+              </tr>
+              <tr>
+                <td>qr_scanned</td>
+                <td>TU Bookstore</td>
+                <td>10:58 23/05</td>
+                <td style="color:rgba(255,255,255,.5)">—</td>
+              </tr>
+              <tr>
+                <td>qr_displayed</td>
+                <td>—</td>
+                <td>10:57 23/05</td>
+                <td style="color:rgba(255,255,255,.5)">—</td>
+              </tr>
+              <tr>
+                <td>card_opened</td>
+                <td>—</td>
+                <td>10:57 23/05</td>
+                <td style="color:rgba(255,255,255,.5)">—</td>
+              </tr>
+              <tr>
+                <td style="color:var(--pp-red)">benefit_denied</td>
+                <td>TU Café</td>
+                <td>09:32 20/05</td>
+                <td style="color:var(--pp-red)">✕ EXP</td>
+              </tr>
+              <tr>
+                <td>benefit_granted</td>
+                <td>TU Café</td>
+                <td>14:21 18/05</td>
+                <td style="color:var(--green)">✓ OK</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="margin-top:8px;font-size:8px;color:rgba(255,255,255,.2);text-align:center;font-family:'IBM Plex Mono',monospace">Retained 90 days · PDPA compliant · Exportable CSV</div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="ann">
+    <div class="at">TU-11 · Event Log</div>
+    <div class="ai2"><div class="an">1</div><div>
+      <div class="al">Event Types — Full Coverage</div>
+      <div class="ad">Four event types captured across the card usage flow: <strong>card_opened</strong> (TU-07), <strong>qr_displayed</strong> (TU-08), <strong>qr_scanned</strong> (TU-09), <strong>benefit_granted / benefit_denied</strong> (TU-10). All events have a unique EVT-ID for cross-referencing.</div>
+      <span class="atg log">EVENT-LOG</span>
+    </div></div>
+    <div class="ai2"><div class="an">2</div><div>
+      <div class="al">User View = Human-Readable Receipt Log</div>
+      <div class="ad">User sees plain-language entries grouped by event type (Benefits / Opens / Errors), color-coded Green/Navy/Gold/Red. Enough detail to understand what happened, without raw technical data.</div>
+      <span class="atg ok">UX PATTERN</span>
+    </div></div>
+    <div class="ai2"><div class="an">3</div><div>
+      <div class="al">Admin View = Dark Terminal + Stats</div>
+      <div class="ad">Admin/Partner portal uses dark (#0D0D1A) with monospace log table. Top stats row shows granted/denied/total-opens at a glance. Export to CSV for offline reporting.</div>
+      <span class="atg ok">ADMIN UX</span>
+    </div></div>
+    <div class="ai2"><div class="an">4</div><div>
+      <div class="al">Event Payload Fields</div>
+      <div class="ad">All events carry: event_type, event_id, user_did, partner_id, timestamp_utc, device_os, token_id (where applicable), failure_reason (denied only). Stored on PP backend — not in ShareRing Vault.</div>
+      <span class="atg log">DATA SCHEMA</span>
+    </div></div>
+    <div class="ai2"><div class="an">5</div><div>
+      <div class="al">Retention Policy = 90 Days (PDPA)</div>
+      <div class="ad">Event logs retained 90 days per PDPA data minimization principle. User can request deletion of their event history. Admins cannot delete individual event records — only bulk expiry applies.</div>
+      <span class="atg crit">PDPA REQ</span>
+    </div></div>
+    <div class="ai2"><div class="an">6</div><div>
+      <div class="al">Open Question — Event Log Storage Owner</div>
+      <div class="ad">Event logs stored on PP backend or ShareRing backend or TU system? Recommended: PP backend owns the log (authoritative source), with optional webhook push to TU for their own analytics. Needs decision.</div>
+      <span class="atg dep">OQ-LOG-01 DECISION NEEDED</span>
+    </div></div>
+  </div>
+</div>
+
+
+<script>
+function show(id) {
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  event.target.classList.add('on');
+}
+</script>
+</body>
+</html>
