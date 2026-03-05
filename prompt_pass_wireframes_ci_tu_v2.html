@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Pass — Full CI Wireframes v2</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  /* Prompt Post Brand */
+  --pp-red: #FE3B1F;
+  --pp-red-dk: #C02010;
+  --pp-navy: #2E3CBA;
+  --pp-navy-lt: #3D4ED4;
+  --pp-navy-dk: #1E2880;
+  /* Extended */
+  --pp-grey: #9EACAA;
+  --pp-grey-mid: #C2C7C9;
+  --pp-grey-lt: #EAEAEB;
+  /* UI */
+  --bg: #F4F4F8;
+  --white: #FFFFFF;
+  --text: #1A1A2E;
+  --text-2: #5A5A72;
+  --text-3: #9090A8;
+  --border: #E0E0EC;
+  --sf2: #F0F0F8;
+  /* Status */
+  --green: #22C55E;
+  --yellow: #F59E0B;
+  /* TU */
+  --tu-gold: #C9A84C;
+  --tu-gold-lt: #E8C97A;
+  --tu-dark: #1A1A1A;
+  /* Phone */
+  --pw: 308px; --ph: 632px;
+}
+body { font-family:'IBM Plex Sans Thai',sans-serif; background:var(--bg); color:var(--text); }
+
+/* HEADER */
+.hdr { background:var(--white); border-bottom:1px solid var(--border); height:58px; padding:0 40px; display:flex; align-items:center; justify-content:space-between; }
+.hdr-brand { display:flex; align-items:center; gap:10px; }
+.hdr-title { font-size:13px; font-weight:600; border-left:1px solid var(--border); padding-left:10px; color:var(--text); }
+.hdr-badge { background:var(--pp-navy); color:#fff; font-size:10px; padding:3px 9px; border-radius:20px; font-family:'IBM Plex Mono',monospace; }
+
+/* NAV */
+.nav { background:var(--white); border-bottom:2px solid var(--border); padding:0 40px; display:flex; overflow-x:auto; scrollbar-width:none; }
+.nav::-webkit-scrollbar{display:none}
+.nb { padding:12px 14px; border:none; border-bottom:3px solid transparent; background:transparent; color:var(--text-3); font-size:12px; font-family:'IBM Plex Sans Thai',sans-serif; font-weight:500; cursor:pointer; white-space:nowrap; margin-bottom:-2px; transition:all .15s; }
+.nb:hover{color:var(--pp-navy)}
+.nb.on{color:var(--pp-red);border-bottom-color:var(--pp-red)}
+
+/* SECTION DIVIDER inside nav */
+.nav-sep { width:1px; background:var(--border); margin:8px 4px; flex-shrink:0; }
+
+/* MAIN */
+.pg { padding:32px 40px; display:none; gap:28px; flex-wrap:wrap; align-items:flex-start; }
+.pg.on { display:flex; }
+
+/* PHONE */
+.pw { display:flex; flex-direction:column; align-items:center; gap:9px; }
+.plb { font-size:10px; color:var(--text-3); font-family:'IBM Plex Mono',monospace; letter-spacing:.4px; }
+.ph { width:var(--pw); height:var(--ph); background:var(--white); border-radius:36px; border:2px solid #D0D0DC; overflow:hidden; position:relative; flex-shrink:0; box-shadow:0 0 0 6px #E8E8F0,0 18px 48px rgba(46,60,186,.13); }
+.ph::before { content:''; position:absolute; top:12px; left:50%; transform:translateX(-50%); width:60px; height:4px; background:#D0D0DC; border-radius:2px; z-index:10; }
+.phi { width:100%; height:100%; display:flex; flex-direction:column; padding-top:26px; }
+.sb { display:flex; justify-content:space-between; align-items:center; padding:3px 15px 5px; flex-shrink:0; }
+.sb span { font-size:10px; font-weight:600; font-family:'IBM Plex Mono',monospace; }
+.si { font-size:9px; }
+.pscr { overflow-y:auto; flex:1; scrollbar-width:none; }
+.pscr::-webkit-scrollbar{display:none}
+
+/* APP CHROME */
+.ah { background:var(--pp-navy); padding:10px 14px 13px; flex-shrink:0; position:relative; overflow:hidden; }
+.ah::after { content:''; position:absolute; right:-24px; bottom:-24px; width:80px; height:80px; background:var(--pp-red); border-radius:20px; opacity:.2; transform:rotate(15deg); }
+.ah-row { display:flex; justify-content:space-between; align-items:center; }
+.ai { width:25px; height:25px; background:rgba(255,255,255,.14); border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:12px; }
+.bnav { display:flex; border-top:1px solid var(--border); background:var(--white); flex-shrink:0; }
+.ni { flex:1; display:flex; flex-direction:column; align-items:center; padding:7px 0 5px; gap:2px; cursor:pointer; }
+.ni-ic { font-size:16px; }
+.ni-lb { font-size:8px; font-weight:500; color:var(--text-3); }
+.ni.on .ni-lb { color:var(--pp-red); }
+
+/* BUTTONS */
+.btn { background:var(--pp-red); color:#fff; border-radius:9px; padding:11px 14px; text-align:center; font-size:12px; font-weight:600; cursor:pointer; }
+.btn2 { background:transparent; color:var(--pp-navy); border:1.5px solid var(--pp-navy); border-radius:9px; padding:10px 14px; text-align:center; font-size:11px; font-weight:500; cursor:pointer; }
+.btn3 { background:transparent; color:var(--text-3); border:1.5px solid var(--border); border-radius:9px; padding:10px 14px; text-align:center; font-size:11px; cursor:pointer; }
+
+/* INPUTS */
+.inp { background:var(--sf2); border:1.5px solid var(--border); border-radius:9px; padding:9px 12px; color:var(--text-2); font-size:11px; font-family:'IBM Plex Sans Thai',sans-serif; }
+.inp.act { border-color:var(--pp-navy); background:#fff; }
+.inp.warn { border-color:var(--yellow); background:#FFFBEB; color:#92400E; }
+
+/* CARD ROW */
+.cr { display:flex; align-items:center; gap:9px; background:var(--white); border:1px solid var(--border); border-radius:10px; padding:9px 11px; box-shadow:0 1px 3px rgba(0,0,0,.04); }
+.cri { width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+.crt { font-size:11px; font-weight:600; }
+.crd { font-size:9px; color:var(--text-3); margin-top:1px; }
+.cra { font-size:9px; color:var(--pp-navy); font-weight:600; padding:3px 8px; background:#EEF0FF; border-radius:16px; cursor:pointer; flex-shrink:0; }
+
+/* SETTING ROW */
+.sr { display:flex; align-items:center; justify-content:space-between; background:var(--white); border:1px solid var(--border); border-radius:9px; padding:9px 11px; }
+.sr-lb { font-size:11px; font-weight:500; }
+.chevron { color:var(--text-3); font-size:13px; }
+.tog-on { width:30px; height:16px; background:var(--green); border-radius:8px; position:relative; }
+.tog-on::after { content:''; position:absolute; right:2px; top:2px; width:12px; height:12px; background:#fff; border-radius:50%; }
+.tog-off { width:30px; height:16px; background:var(--pp-grey-mid); border-radius:8px; position:relative; }
+.tog-off::after { content:''; position:absolute; left:2px; top:2px; width:12px; height:12px; background:#fff; border-radius:50%; }
+
+/* BADGES */
+.br { background:var(--pp-red); color:#fff; font-size:8px; padding:2px 6px; border-radius:16px; font-weight:600; }
+.bn { background:var(--pp-navy); color:#fff; font-size:8px; padding:2px 6px; border-radius:16px; font-weight:600; }
+.by { background:var(--yellow); color:#fff; font-size:8px; padding:2px 6px; border-radius:16px; font-weight:600; }
+.bg { background:var(--green); color:#fff; font-size:8px; padding:2px 6px; border-radius:16px; font-weight:600; }
+.bgr { background:var(--pp-grey-mid); color:#fff; font-size:8px; padding:2px 6px; border-radius:16px; font-weight:600; }
+.bgo { background:var(--tu-gold); color:#fff; font-size:8px; padding:2px 6px; border-radius:16px; font-weight:600; }
+
+/* SECTION HEADER */
+.shdr { font-size:9px; font-weight:600; color:var(--text-3); letter-spacing:1.1px; text-transform:uppercase; padding:9px 0 5px; }
+
+/* CRED ROW */
+.cv { display:flex; align-items:center; gap:7px; background:#F0FFF4; border:1px solid #BBF7D0; border-radius:7px; padding:7px 10px; }
+.cv-d { width:7px; height:7px; background:var(--green); border-radius:50%; flex-shrink:0; }
+.cv-t { font-size:10px; font-weight:500; }
+.cv-n { display:flex; align-items:center; gap:7px; background:#EEF0FF; border:1px solid #C7D0FF; border-radius:7px; padding:7px 10px; }
+.cv-nd { width:7px; height:7px; background:var(--pp-navy); border-radius:50%; flex-shrink:0; }
+
+/* PIN DOTS */
+.pdots { display:flex; gap:12px; justify-content:center; }
+.pd { width:15px; height:15px; border-radius:50%; border:1.5px solid var(--border); }
+.pd.f { background:var(--pp-navy); border-color:var(--pp-navy); }
+
+/* KEYPAD */
+.kp { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+.key { background:var(--sf2); border:1px solid var(--border); border-radius:10px; padding:10px 4px; text-align:center; font-size:17px; font-weight:600; }
+.ks { font-size:7px; color:var(--text-3); letter-spacing:.8px; display:block; }
+
+/* STEP INDICATOR */
+.steps { display:flex; align-items:center; padding:10px 13px 8px; flex-shrink:0; }
+.st { display:flex; flex-direction:column; align-items:center; gap:2px; }
+.st-d { width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; }
+.st-d.done { background:var(--pp-navy); color:#fff; }
+.st-d.curr { background:var(--pp-red); color:#fff; }
+.st-d.todo { background:var(--sf2); color:var(--text-3); border:1px solid var(--border); }
+.st-lb { font-size:7px; color:var(--text-3); text-align:center; width:34px; line-height:1.2; }
+.st-lb.c { color:var(--pp-red); font-weight:600; }
+.sl { flex:1; height:1px; background:var(--border); margin:0 2px 9px; }
+.sl.done { background:var(--pp-navy); }
+
+/* OCR VIEWFINDER */
+.vf { background:#080816; border-radius:11px; display:flex; align-items:center; justify-content:center; border:2px solid var(--pp-navy); position:relative; overflow:hidden; }
+.vfc { position:absolute; width:16px; height:16px; }
+.tl { top:6px; left:6px; border-top:2.5px solid var(--pp-red); border-left:2.5px solid var(--pp-red); border-radius:2px; }
+.tr { top:6px; right:6px; border-top:2.5px solid var(--pp-red); border-right:2.5px solid var(--pp-red); border-radius:2px; }
+.bl { bottom:6px; left:6px; border-bottom:2.5px solid var(--pp-red); border-left:2.5px solid var(--pp-red); border-radius:2px; }
+.br2 { bottom:6px; right:6px; border-bottom:2.5px solid var(--pp-red); border-right:2.5px solid var(--pp-red); border-radius:2px; }
+.scanline { position:absolute; width:88%; height:1.5px; background:linear-gradient(90deg,transparent,var(--pp-red),transparent); opacity:.7; }
+
+/* PROGRESS STEP */
+.ps { display:flex; align-items:center; gap:9px; background:var(--white); border:1px solid var(--border); border-radius:9px; padding:9px 11px; }
+.ps.done { border-color:#BBF7D0; background:#F0FFF4; }
+.ps.curr { border-color:var(--pp-navy); background:#EEF0FF; }
+.ps.todo { opacity:.4; }
+.psi { width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; flex-shrink:0; }
+.psi.done { background:var(--green); }
+.psi.curr { background:var(--pp-navy); }
+.psi.todo { background:var(--sf2); border:1px solid var(--border); }
+.ps-lb { font-size:11px; font-weight:600; }
+.ps-lb.done { color:#166534; }
+.ps-lb.curr { color:var(--pp-navy); }
+.ps-lb.todo { color:var(--text-3); }
+.ps-sub { font-size:9px; color:var(--text-3); margin-top:1px; }
+
+/* TU CARD */
+.tuc { background:linear-gradient(145deg,#1A1A1A,#2C2C2C 50%,#1A1A1A); border-radius:13px; padding:14px; position:relative; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.4); }
+.tuc::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--tu-gold),var(--tu-gold-lt),var(--tu-gold)); }
+.tuc-bg1 { position:absolute; right:-18px; top:-18px; width:100px; height:100px; border-radius:50%; border:16px solid rgba(201,168,76,.1); }
+.tuc-bg2 { position:absolute; right:28px; top:8px; width:55px; height:55px; border-radius:50%; border:10px solid rgba(201,168,76,.06); }
+
+/* ID CARD (Thai) */
+.thid { background:linear-gradient(135deg,#1E2880,var(--pp-navy) 50%,var(--pp-navy-lt)); border-radius:13px; padding:14px; position:relative; overflow:hidden; box-shadow:0 8px 24px rgba(46,60,186,.3); }
+.thid-bg { position:absolute; right:-22px; top:-22px; width:80px; height:80px; background:var(--pp-red); border-radius:20px; opacity:.3; transform:rotate(25deg); }
+.thid-bg2 { position:absolute; right:18px; bottom:-28px; width:55px; height:55px; background:rgba(254,59,31,.15); border-radius:13px; transform:rotate(10deg); }
+
+/* ANNOTATIONS */
+.ann { flex:1; min-width:258px; max-width:370px; }
+.at { font-size:13px; font-weight:700; margin-bottom:13px; padding-bottom:8px; border-bottom:2px solid var(--pp-red); display:inline-block; }
+.ai2 { display:flex; gap:9px; margin-bottom:12px; align-items:flex-start; }
+.an { width:19px; height:19px; background:var(--pp-navy); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; flex-shrink:0; color:#fff; }
+.al { font-size:11px; font-weight:600; margin-bottom:2px; }
+.ad { font-size:10px; color:var(--text-2); line-height:1.5; }
+.atg { display:inline-block; background:var(--sf2); border:1px solid var(--border); color:var(--text-3); font-size:8px; padding:2px 5px; border-radius:3px; font-family:'IBM Plex Mono',monospace; margin-top:3px; }
+.atg.dep { border-color:var(--yellow); color:#92400E; background:#FFFBEB; }
+.atg.crit { border-color:var(--pp-red); color:var(--pp-red); background:#FFF5F3; }
+.atg.ok { border-color:var(--green); color:#166534; background:#F0FFF4; }
+.atg.tu { border-color:var(--tu-gold); color:#7A5C00; background:#FFFBEB; }
+
+/* SPACERS */
+.s4{height:4px;flex-shrink:0} .s8{height:8px;flex-shrink:0} .s12{height:12px;flex-shrink:0} .s16{height:16px;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-brand">
+    <svg viewBox="0 0 110 44" fill="none" style="height:28px">
+      <rect x="0" y="3" width="30" height="30" rx="6" fill="#FE3B1F"/>
+      <rect x="3" y="6" width="24" height="24" rx="5" fill="#2E3CBA"/>
+      <rect x="3" y="30" width="24" height="3" rx="1.5" fill="#2E3CBA"/>
+      <text x="8" y="26" font-family="sans-serif" font-weight="700" font-size="17" fill="white">P</text>
+      <text x="38" y="18" font-family="sans-serif" font-weight="700" font-size="12" fill="#2E3CBA">Prompt</text>
+      <text x="38" y="33" font-family="sans-serif" font-weight="700" font-size="12" fill="#FE3B1F">Post</text>
+    </svg>
+    <span class="hdr-title">Prompt Pass — Full CI Wireframes v2</span>
+  </div>
+  <span class="hdr-badge">WF-CI-v2.0 · 7 Screens + TU Partner</span>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button class="nb on" onclick="show('s01')">01 · PIN Unlock</button>
+  <button class="nb" onclick="show('s02')">02 · eKYC Flow</button>
+  <button class="nb" onclick="show('s03')">03 · Home / Vault</button>
+  <button class="nb" onclick="show('s04')">04 · Me Modules</button>
+  <button class="nb" onclick="show('s05')">05 · VP Flow</button>
+  <button class="nb" onclick="show('s06')">06 · Settings</button>
+  <button class="nb" onclick="show('s07')">07 · Card Render</button>
+  <div class="nav-sep"></div>
+  <button class="nb" onclick="show('tu01')" style="color:var(--tu-gold)">TU-01 · Entry</button>
+  <button class="nb" onclick="show('tu02')" style="color:var(--tu-gold)">TU-02 · Consent</button>
+  <button class="nb" onclick="show('tu03')" style="color:var(--tu-gold)">TU-03 · OCR</button>
+  <button class="nb" onclick="show('tu04')" style="color:var(--tu-gold)">TU-04 · Processing</button>
+  <button class="nb" onclick="show('tu05')" style="color:var(--tu-gold)">TU-05 · บัตร TU</button>
+  <button class="nb" onclick="show('tu06')" style="color:var(--tu-gold)">TU-06 · Vault View</button>
+</div>
+
+<!-- ══════════════════════════════════ 01 PIN UNLOCK ══════════════════════════════════ -->
+<div id="s01" class="pg on">
+
+  <!-- Biometric -->
+  <div class="pw">
+    <div class="plb">01-A · Biometric Auth</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:18px 20px 26px">
+        <svg viewBox="0 0 110 44" fill="none" style="height:28px">
+          <rect x="0" y="3" width="30" height="30" rx="6" fill="#FE3B1F"/>
+          <rect x="3" y="6" width="24" height="24" rx="5" fill="#2E3CBA"/>
+          <text x="8" y="26" font-family="sans-serif" font-weight="700" font-size="17" fill="white">P</text>
+          <text x="38" y="18" font-family="sans-serif" font-weight="700" font-size="12" fill="#2E3CBA">Prompt</text>
+          <text x="38" y="33" font-family="sans-serif" font-weight="700" font-size="12" fill="#FE3B1F">Post</text>
+        </svg>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+          <div style="width:76px;height:76px;border-radius:50%;border:2.5px solid var(--pp-navy);background:#EEF0FF;display:flex;align-items:center;justify-content:center;font-size:34px">👤</div>
+          <div style="font-size:14px;font-weight:700;text-align:center">ปลดล็อกด้วย Face ID</div>
+          <div style="font-size:11px;color:var(--text-3)">Prompt Pass</div>
+        </div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:9px">
+          <div class="btn">ปลดล็อกด้วย Face ID</div>
+          <div class="btn3">ใช้รหัส PIN แทน</div>
+          <div style="text-align:center;font-size:10px;color:var(--pp-navy);font-weight:500;cursor:pointer">ลืม PIN? รีเซ็ตด้วย Recovery Phrase</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- PIN Entry -->
+  <div class="pw">
+    <div class="plb">01-B · PIN Entry</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:18px 18px 22px">
+        <svg viewBox="0 0 110 44" fill="none" style="height:24px">
+          <rect x="0" y="3" width="30" height="30" rx="6" fill="#FE3B1F"/>
+          <rect x="3" y="6" width="24" height="24" rx="5" fill="#2E3CBA"/>
+          <text x="8" y="26" font-family="sans-serif" font-weight="700" font-size="17" fill="white">P</text>
+          <text x="38" y="18" font-family="sans-serif" font-weight="700" font-size="12" fill="#2E3CBA">Prompt</text>
+          <text x="38" y="33" font-family="sans-serif" font-weight="700" font-size="12" fill="#FE3B1F">Post</text>
+        </svg>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:14px;width:100%">
+          <div style="font-size:14px;font-weight:700">กรอกรหัส PIN</div>
+          <div class="pdots">
+            <div class="pd f"></div><div class="pd f"></div><div class="pd f"></div>
+            <div class="pd"></div><div class="pd"></div><div class="pd"></div>
+          </div>
+          <div style="font-size:10px;color:var(--pp-navy);font-weight:500;cursor:pointer">ลืม PIN? รีเซ็ตด้วย Recovery Phrase</div>
+        </div>
+        <div style="width:100%">
+          <div class="kp">
+            <div class="key">1</div>
+            <div class="key">2<span class="ks">ABC</span></div>
+            <div class="key">3<span class="ks">DEF</span></div>
+            <div class="key">4<span class="ks">GHI</span></div>
+            <div class="key">5<span class="ks">JKL</span></div>
+            <div class="key">6<span class="ks">MNO</span></div>
+            <div class="key">7<span class="ks">PQRS</span></div>
+            <div class="key">8<span class="ks">TUV</span></div>
+            <div class="key">9<span class="ks">WXYZ</span></div>
+            <div class="key" style="background:transparent;border-color:transparent"></div>
+            <div class="key">0</div>
+            <div class="key" style="font-size:13px">⌫</div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="ann">
+    <div class="at">Screen 01 · Authentication</div>
+    <div class="ai2"><div class="an">1</div><div>
+      <div class="al">Prompt Post Logo — CI Aligned</div>
+      <div class="ad">ใช้ Logo มาตรฐาน PP บน White bg — Navy (#2E3CBA) + Red (#FE3B1F) ตาม CI doc หน้า 26 แทน ShareRing logo เดิม</div>
+      <span class="atg ok">CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">2</div><div>
+      <div class="al">Biometric Auth (Face ID / Fingerprint)</div>
+      <div class="ad">ShopStack triggers ShareRing SDK biometric. Callback: success / failure / fallback-to-pin. Navy circle container สื่อ PP brand</div>
+      <span class="atg dep">SHARERING-DEP OQ05</span>
+    </div></div>
+    <div class="ai2"><div class="an">3</div><div>
+      <div class="al">6-Digit PIN — PP Grey Keypad</div>
+      <div class="ad">Keypad bg ใช้ --sf2 (#F0F0F8) ตาม PP grey tone. Filled dot = PP Navy, Active hover = PP Navy</div>
+      <span class="atg ok">CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">4</div><div>
+      <div class="al">Link = PP Navy</div>
+      <div class="ad">"ลืม PIN" link ใช้ Navy (#2E3CBA) ตาม brand primary link color</div>
+      <span class="atg dep">SHARERING-DEP OQ (recovery flow)</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ 02 eKYC ══════════════════════════════════ -->
+<div id="s02" class="pg">
+
+  <!-- 02-A Profile Review -->
+  <div class="pw">
+    <div class="plb">02-A · ยืนยันโปรไฟล์</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:var(--pp-navy);padding:9px 13px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <span style="color:rgba(255,255,255,.7);font-size:15px">←</span>
+        <span style="color:#fff;font-size:12px;font-weight:700">ยืนยันข้อมูลก่อน eKYC</span>
+      </div>
+      <div class="pscr" style="padding:12px 13px">
+        <div style="background:#FFF5F3;border:1.5px solid var(--pp-red);border-radius:9px;padding:9px 11px;display:flex;gap:7px;margin-bottom:12px">
+          <span style="color:var(--pp-red);font-size:13px;flex-shrink:0">⚠</span>
+          <span style="font-size:10px;color:var(--pp-red);font-weight:500">eKYC บังคับ — ไม่สามารถข้ามได้</span>
+        </div>
+        <div style="font-size:10px;color:var(--text-3);margin-bottom:9px">กรุณาตรวจสอบข้อมูลก่อนเริ่ม</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div class="inp act">ชื่อ: [จาก PromptPost API]</div>
+          <div class="inp act">นามสกุล: [จาก PromptPost API]</div>
+          <div class="inp act">PromptPost User ID: [auto-filled]</div>
+          <div class="inp warn">เลขบัตรประชาชน: [จาก OCR — ขั้นถัดไป]</div>
+        </div>
+        <div class="s12"></div>
+        <div style="background:var(--sf2);border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:9px;color:var(--text-3)">User Type = eKYC User (ระบบกำหนด)</div>
+        <div class="s12"></div>
+        <div class="btn">ยืนยันและเริ่ม eKYC</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 02-B OCR Scan -->
+  <div class="pw">
+    <div class="plb">02-B · OCR สแกนบัตร</div>
+    <div class="ph"><div class="phi">
+      <div class="sb" style="background:#080816"><span style="color:rgba(255,255,255,.7)">10:58</span><div class="si" style="color:rgba(255,255,255,.7)">●●●● 🔋</div></div>
+      <div style="background:#080816;flex:1;display:flex;flex-direction:column;padding:14px">
+        <div style="color:rgba(255,255,255,.8);font-size:12px;font-weight:600;text-align:center;margin-bottom:4px">สแกนบัตรประชาชนไทย</div>
+        <div style="color:rgba(255,255,255,.4);font-size:10px;text-align:center;margin-bottom:12px">วางให้อยู่ในกรอบ</div>
+        <div class="vf" style="height:155px;margin-bottom:12px">
+          <div class="vfc tl"></div><div class="vfc tr"></div>
+          <div class="vfc bl"></div><div class="vfc br2"></div>
+          <div class="scanline"></div>
+          <div style="text-align:center;color:rgba(255,255,255,.12);font-size:9px">SDK OCR ENGINE</div>
+        </div>
+        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:7px;font-size:9px;color:rgba(255,255,255,.5);text-align:center;margin-bottom:auto">📌 วางให้ตรง • ถือนิ่ง • แสงพอ</div>
+        <div style="margin-top:12px;border:1.5px solid rgba(255,255,255,.15);border-radius:9px;padding:9px;text-align:center;font-size:10px;color:rgba(255,255,255,.4)">ยกเลิก</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 02-C Face -->
+  <div class="pw">
+    <div class="plb">02-C · Face Recognition</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:var(--pp-navy);padding:9px 13px;flex-shrink:0">
+        <span style="color:#fff;font-size:12px;font-weight:700">ยืนยันใบหน้า</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:16px 14px">
+        <div style="font-size:11px;color:var(--text-3);text-align:center">มองกล้องและทำตามคำแนะนำ</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:11px">
+          <div style="width:144px;height:144px;border-radius:50%;border:3px solid var(--green);background:#0A1A0A;display:flex;align-items:center;justify-content:center;position:relative">
+            <span style="font-size:38px">😐</span>
+            <div style="position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;font-size:8px;padding:2px 9px;border-radius:9px;font-weight:600;white-space:nowrap">● กำลังตรวจจับ...</div>
+          </div>
+          <div style="background:#F0FFF4;border:1px solid #BBF7D0;border-radius:7px;padding:7px 12px;font-size:10px;color:#166534;text-align:center;width:100%">Liveness Detection ผ่าน SDK</div>
+        </div>
+        <div class="btn3">ยกเลิก</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 02-D Biometric Setup -->
+  <div class="pw">
+    <div class="plb">02-D · ตั้งค่า Biometric</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:22px 18px 24px">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center">
+          <div style="width:60px;height:60px;border-radius:50%;background:#F0FFF4;border:2.5px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:26px">✓</div>
+          <div style="font-size:15px;font-weight:700">ยืนยันตัวตนสำเร็จ!</div>
+          <div style="font-size:11px;color:var(--text-3)">ตั้งค่า Biometric เพื่อความปลอดภัย</div>
+          <div style="font-size:38px;margin-top:6px">👤</div>
+          <div style="font-size:11px;color:var(--text-2)">เปิดใช้งาน Face ID / ลายนิ้วมือ</div>
+        </div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:9px">
+          <div class="btn">เปิดใช้งาน Biometrics</div>
+          <div class="btn3">ใช้ PIN เท่านั้น</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="ann">
+    <div class="at">Screen 02 · eKYC Flow</div>
+    <div class="ai2"><div class="an">1</div><div>
+      <div class="al">Header Bar = PP Navy</div>
+      <div class="ad">App bar ทุก sub-screen ใช้ Navy (#2E3CBA) — Back button สีขาว 70% opacity</div>
+      <span class="atg ok">CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">2</div><div>
+      <div class="al">Alert = PP Red — Mandatory eKYC</div>
+      <div class="ad">Warning bar ใช้ PP Red border + text — ผู้ใช้ครั้งแรกต้องผ่าน eKYC ไม่สามารถ skip ได้</div>
+      <span class="atg crit">MANDATORY</span>
+    </div></div>
+    <div class="ai2"><div class="an">3</div><div>
+      <div class="al">Camera Corners = PP Red</div>
+      <div class="ad">Viewfinder corners ใช้ Red (#FE3B1F) เป็น brand mark ใน camera state — ตรงกับ eKYC + TU OCR</div>
+      <span class="atg ok">CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">4</div><div>
+      <div class="al">Profile Pre-fill = PromptPost API 01-0203</div>
+      <div class="ad">ชื่อ-นามสกุลดึงจาก API Bearer token (Host App). ID Card Number จาก OCR ขั้นถัดไป</div>
+      <span class="atg">API 01-0203</span>
+    </div></div>
+    <div class="ai2"><div class="an">5</div><div>
+      <div class="al">OCR + Face = ShareRing SDK ทั้งหมด</div>
+      <div class="ad">ShopStack trigger SDK เท่านั้น — รับ callback success/failure/retry/cancelled</div>
+      <span class="atg dep">SHARERING-DEP OQ04</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ 03 HOME/VAULT ══════════════════════════════════ -->
+<div id="s03" class="pg">
+
+  <!-- 03-A Home -->
+  <div class="pw">
+    <div class="plb">03-A · Home / Vault</div>
+    <div class="ph"><div class="phi">
+      <div class="sb" style="background:var(--pp-navy)"><span style="color:rgba(255,255,255,.8)">10:58</span><div class="si" style="color:rgba(255,255,255,.8)">●●●● 🔋</div></div>
+      <div class="ah">
+        <div class="ah-row" style="margin-bottom:9px">
+          <svg viewBox="0 0 110 44" fill="none" style="height:19px">
+            <rect x="0" y="3" width="30" height="30" rx="6" fill="rgba(255,255,255,.9)"/>
+            <text x="8" y="26" font-family="sans-serif" font-weight="700" font-size="17" fill="#2E3CBA">P</text>
+            <text x="38" y="18" font-family="sans-serif" font-weight="700" font-size="12" fill="white">Prompt</text>
+            <text x="38" y="33" font-family="sans-serif" font-weight="700" font-size="12" fill="rgba(255,255,255,.7)">Post</text>
+          </svg>
+          <div style="display:flex;gap:5px"><div class="ai">🔔</div><div class="ai">⬛</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:9px">
+          <div style="width:40px;height:40px;border-radius:20px;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;font-size:17px">👤</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#fff">สมชาย ใจดี</div>
+            <div style="font-size:8px;color:rgba(255,255,255,.5);font-family:'IBM Plex Mono',monospace">shareledger1...tspvee3s93 ⎘</div>
+          </div>
+        </div>
+      </div>
+      <div class="pscr" style="padding:11px 13px">
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div class="cr"><div class="cri" style="background:#EEF0FF">👤</div><div style="flex:1"><div class="crt" style="color:var(--pp-navy)">ข้อมูลส่วนตัว</div><div class="crd">โทรศัพท์ อีเมล สังคม</div></div><div class="cra">เปิด</div></div>
+          <div class="cr"><div class="cri" style="background:#FFF5F3">📄</div><div style="flex:1"><div class="crt">เอกสารของฉัน</div><div class="crd">บัตรประชาชน หนังสือเดินทาง</div></div><div class="cra">เปิด</div></div>
+          <div class="cr"><div class="cri" style="background:#FFFBEB">🔧</div><div style="flex:1"><div class="crt">ข้อมูลอื่นๆ</div><div class="crd">ข้อมูลเพิ่มเติมที่แชร์ได้</div></div><div class="cra">เปิด</div></div>
+          <div class="cr"><div class="cri" style="background:#F0FFF4">🔑</div><div style="flex:1"><div class="crt" style="color:#166534">จัดการรหัสผ่าน</div><div class="crd">Password Vault</div></div><div class="cra">เปิด</div></div>
+        </div>
+        <div style="background:var(--sf2);border:1px solid var(--border);border-radius:7px;padding:7px;text-align:center;font-size:9px;color:var(--text-3);margin-top:9px">Metadata only — ไม่แคชเนื้อหาในเครื่อง</div>
+      </div>
+      <div class="bnav">
+        <div class="ni on"><div class="ni-ic">🏠</div><div class="ni-lb" style="color:var(--pp-red)">Vault</div></div>
+        <div class="ni"><div class="ni-ic">⊞</div><div class="ni-lb">Me Modules</div></div>
+        <div class="ni"><div class="ni-ic">⚙️</div><div class="ni-lb">Settings</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 03-B My Documents -->
+  <div class="pw">
+    <div class="plb">03-B · เอกสารของฉัน</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:var(--pp-navy);padding:9px 13px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <span style="color:rgba(255,255,255,.7);font-size:15px">←</span>
+        <span style="color:#fff;font-size:12px;font-weight:700">เอกสารของฉัน</span>
+      </div>
+      <div class="pscr" style="padding:11px 13px">
+        <!-- Thai ID card mini -->
+        <div class="thid" style="margin-bottom:10px">
+          <div class="thid-bg"></div><div class="thid-bg2"></div>
+          <div style="font-size:9px;opacity:.6;letter-spacing:1px;margin-bottom:7px;position:relative;z-index:1;color:#fff">THAI NATIONAL ID CARD</div>
+          <div style="font-size:14px;font-weight:700;color:#fff;position:relative;z-index:1">สมชาย ใจดี</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.6);position:relative;z-index:1;margin-top:2px">x-xxxx-xxxxx-xx-x</div>
+          <div style="position:absolute;bottom:11px;right:11px;background:rgba(255,255,255,.15);padding:2px 7px;border-radius:9px;font-size:8px;font-weight:600;color:#fff">✓ ยืนยันแล้ว</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div class="cr"><div class="cri" style="background:#FFF5F3">📎</div><div style="flex:1"><div class="crt" style="font-size:11px">Passport.pdf</div><div class="crd">อัปโหลด • 2.1MB</div></div><div class="cra">ดู</div></div>
+          <div class="cr"><div class="cri" style="background:#FFFBEB">📎</div><div style="flex:1"><div class="crt" style="font-size:11px">DrivingLicense.jpg</div><div class="crd">อัปโหลด • 0.8MB</div></div><div class="cra">ดู</div></div>
+        </div>
+        <div class="s12"></div>
+        <div class="btn2" style="margin-bottom:7px">+ อัปโหลดเอกสาร</div>
+        <div class="btn3">+ สแกนบัตร OCR</div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="ann">
+    <div class="at">Screen 03 · Home / Vault</div>
+    <div class="ai2"><div class="an">1</div><div>
+      <div class="al">Header = PP Navy + Graphic Device</div>
+      <div class="ad">App header ใช้ Navy (#2E3CBA) พร้อม Red oval shape overlay (CI graphic device) opacity 20% ที่มุม</div>
+      <span class="atg ok">CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">2</div><div>
+      <div class="al">Thai ID Card = Navy Gradient + Red Shape</div>
+      <div class="ad">Card ใช้ Navy gradient พร้อม Red rounded rect overlay ตาม PP graphic device จาก CI doc — TF ออกแบบ template จริง</div>
+      <span class="atg dep">TF CI DESIGN</span>
+    </div></div>
+    <div class="ai2"><div class="an">3</div><div>
+      <div class="al">Bottom Nav Active = PP Red</div>
+      <div class="ad">Selected tab label ใช้ Red (#FE3B1F) เป็น accent ตาม brand</div>
+      <span class="atg ok">CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">4</div><div>
+      <div class="al">Metadata Only</div>
+      <div class="ad">Vault แสดงเฉพาะ metadata — เนื้อหาเต็มดึงจาก ShareRing Vault on-demand เท่านั้น</div>
+      <span class="atg crit">SECURITY REQ</span>
+    </div></div>
+    <div class="ai2"><div class="an">5</div><div>
+      <div class="al">Vault Metadata Method</div>
+      <div class="ad">API สำหรับดึง vault item list + metadata ต้องยืนยันกับ ShareRing</div>
+      <span class="atg dep">SHARERING-DEP OQ06</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ 04 ME MODULES ══════════════════════════════════ -->
+<div id="s04" class="pg">
+
+  <!-- List view -->
+  <div class="pw">
+    <div class="plb">04-A · Me Modules (List)</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:var(--pp-navy);padding:9px 13px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+        <span style="color:#fff;font-size:13px;font-weight:700">Me Modules</span>
+        <div style="display:flex;gap:5px"><div class="ai">≡</div><div class="ai">⊞</div></div>
+      </div>
+      <div class="pscr" style="padding:11px 13px">
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div class="cr"><div class="cri" style="background:#EEF0FF;border:1.5px solid var(--pp-navy)">🏛</div><div style="flex:1"><div style="display:flex;align-items:center;gap:5px;margin-bottom:2px"><div class="crt">Partner A</div><span class="br">ใหม่</span></div><div class="crd">บริการ eDocument ภาครัฐ</div></div><div class="cra">เปิด</div></div>
+          <div class="cr"><div class="cri" style="background:#F5F5F7">🏦</div><div style="flex:1"><div class="crt">Partner B</div><div class="crd">บริการทางการเงิน</div></div><div class="cra">เปิด</div></div>
+          <div class="cr"><div class="cri" style="background:#FFF5F3;border:1.5px solid var(--pp-red)">🏥</div><div style="flex:1"><div style="display:flex;align-items:center;gap:5px;margin-bottom:2px"><div class="crt">Partner C</div><span class="by">แนะนำ</span></div><div class="crd">บริการสุขภาพ</div></div><div class="cra">เปิด</div></div>
+          <div class="cr" style="opacity:.5"><div class="cri" style="background:#F5F5F7">🏢</div><div style="flex:1"><div class="crt">Partner D</div><div class="crd">เร็วๆ นี้</div></div><span class="bgr">เร็วๆ นี้</span></div>
+        </div>
+        <div style="text-align:center;font-size:9px;color:var(--text-3);padding:10px 0 4px">Partner list จาก ShareRing Engine</div>
+      </div>
+      <div class="bnav">
+        <div class="ni"><div class="ni-ic">🏠</div><div class="ni-lb">Vault</div></div>
+        <div class="ni on"><div class="ni-ic">⊞</div><div class="ni-lb" style="color:var(--pp-red)">Me Modules</div></div>
+        <div class="ni"><div class="ni-ic">⚙️</div><div class="ni-lb">Settings</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Grid view -->
+  <div class="pw">
+    <div class="plb">04-B · Me Modules (Grid)</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:var(--pp-navy);padding:9px 13px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+        <span style="color:#fff;font-size:13px;font-weight:700">Me Modules</span>
+        <div style="display:flex;gap:5px">
+          <div class="ai">≡</div>
+          <div style="background:var(--pp-red);border-radius:6px;width:25px;height:25px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff">⊞</div>
+        </div>
+      </div>
+      <div class="pscr" style="padding:11px 13px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+          <div style="background:#EEF0FF;border:1.5px solid var(--pp-navy);border-radius:11px;padding:12px 10px;text-align:center">
+            <div style="font-size:22px;margin-bottom:5px">🏛</div>
+            <div style="font-size:11px;font-weight:600;color:var(--pp-navy)">Partner A</div>
+            <div style="font-size:9px;color:var(--text-3);margin-top:2px">eDocument</div>
+            <div style="margin-top:7px"><span class="br">ใหม่</span></div>
+          </div>
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:11px;padding:12px 10px;text-align:center">
+            <div style="font-size:22px;margin-bottom:5px">🏦</div>
+            <div style="font-size:11px;font-weight:600">Partner B</div>
+            <div style="font-size:9px;color:var(--text-3);margin-top:2px">การเงิน</div>
+          </div>
+          <div style="background:#FFF5F3;border:1.5px solid var(--pp-red);border-radius:11px;padding:12px 10px;text-align:center">
+            <div style="font-size:22px;margin-bottom:5px">🏥</div>
+            <div style="font-size:11px;font-weight:600;color:var(--pp-red)">Partner C</div>
+            <div style="margin-top:7px"><span class="by">แนะนำ</span></div>
+          </div>
+          <div style="background:var(--white);border:1px dashed var(--border);border-radius:11px;padding:12px 10px;text-align:center;opacity:.5">
+            <div style="font-size:22px;margin-bottom:5px">🏢</div>
+            <div style="font-size:11px;font-weight:600;color:var(--text-3)">Partner D</div>
+            <div style="font-size:9px;color:var(--text-3);margin-top:2px">เร็วๆ นี้</div>
+          </div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="ni"><div class="ni-ic">🏠</div><div class="ni-lb">Vault</div></div>
+        <div class="ni on"><div class="ni-ic">⊞</div><div class="ni-lb" style="color:var(--pp-red)">Me Modules</div></div>
+        <div class="ni"><div class="ni-ic">⚙️</div><div class="ni-lb">Settings</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="ann">
+    <div class="at">Screen 04 · Me Modules</div>
+    <div class="ai2"><div class="an">1</div><div>
+      <div class="al">Active Partner = Navy Border, Featured = Red</div>
+      <div class="ad">ตาม CI: Partner ทั่วไป = Navy border 1.5px, Featured partner = Red border เพื่อดึงดูดความสนใจ</div>
+      <span class="atg ok">CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">2</div><div>
+      <div class="al">Badge Colors = PP Palette</div>
+      <div class="ad">"ใหม่" = Red, "แนะนำ" = Yellow (brand secondary), "เร็วๆ นี้" = Grey — Grid active icon = PP Red</div>
+      <span class="atg ok">CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">3</div><div>
+      <div class="al">Dynamic Partner List</div>
+      <div class="ad">Partner cards โหลดจาก ShareRing Engine backend — เพิ่ม Partner ใหม่โดยไม่ต้อง update SDK</div>
+      <span class="atg dep">SHARERING-DEP OQ13</span>
+    </div></div>
+    <div class="ai2"><div class="an">4</div><div>
+      <div class="al">List ↔ Grid Toggle</div>
+      <div class="ad">State toggle persist ใน session. ปุ่ม active = PP Red background</div>
+      <span class="atg ok">CI ALIGNED</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ 05 VP FLOW ══════════════════════════════════ -->
+<div id="s05" class="pg">
+
+  <!-- Consent -->
+  <div class="pw">
+    <div class="plb">05-A · Consent Screen</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:var(--pp-navy);padding:9px 13px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <span style="color:rgba(255,255,255,.7);font-size:15px">←</span>
+        <span style="color:#fff;font-size:12px;font-weight:700">แชร์ Credentials</span>
+      </div>
+      <div class="pscr" style="padding:12px 13px">
+        <div style="display:flex;align-items:center;gap:9px;background:var(--sf2);border:1px solid var(--border);border-radius:10px;padding:9px;margin-bottom:11px">
+          <div style="width:38px;height:38px;border-radius:8px;background:var(--pp-navy);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🏛</div>
+          <div><div style="font-size:11px;font-weight:700">Partner A</div><div style="font-size:9px;color:var(--text-3)">ขอข้อมูล Credentials</div></div>
+        </div>
+        <div style="font-size:9px;font-weight:600;color:var(--text-2);margin-bottom:6px">ข้อมูลที่จะแชร์:</div>
+        <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:11px">
+          <div class="cv"><div class="cv-d"></div><div class="cv-t">ชื่อ-นามสกุล (Identity VC)</div></div>
+          <div class="cv"><div class="cv-d"></div><div class="cv-t">ยืนยันอายุ 18+ (Age VC)</div></div>
+          <div class="cv"><div class="cv-d"></div><div class="cv-t">PromptPost User ID</div></div>
+        </div>
+        <div style="background:var(--sf2);border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:9px;color:var(--text-3);margin-bottom:13px">วัตถุประสงค์: [Partner กำหนด purpose statement]</div>
+        <div class="btn" style="margin-bottom:7px">ยืนยันด้วย Biometrics</div>
+        <div class="btn3">ยกเลิก</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Processing -->
+  <div class="pw">
+    <div class="plb">05-B · VP Processing</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px">
+        <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px">
+          <div style="width:68px;height:68px;border-radius:50%;border:3px solid var(--pp-navy);border-top-color:var(--pp-red);display:flex;align-items:center;justify-content:center;font-size:28px">🔐</div>
+          <div style="font-size:14px;font-weight:700">กำลังยืนยันตัวตน</div>
+          <div style="font-size:11px;color:var(--text-3)">สร้าง Verifiable Presentation</div>
+          <div style="width:100%;display:flex;flex-direction:column;gap:7px;margin-top:6px">
+            <div class="ps done"><div class="psi done"><span style="color:#fff;font-size:10px">✓</span></div><div><div class="ps-lb done">Biometrics ยืนยันแล้ว</div><div class="ps-sub">สำเร็จ</div></div></div>
+            <div class="ps curr"><div class="psi curr"><span style="color:#fff;font-size:10px">●</span></div><div><div class="ps-lb curr">กำลัง Sign VP ด้วย DID key</div><div class="ps-sub">ใน secure enclave...</div></div></div>
+            <div class="ps todo"><div class="psi todo"><span style="font-size:10px;color:var(--text-3)">○</span></div><div><div class="ps-lb todo">ส่งข้อมูลไปยัง Partner</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Success -->
+  <div class="pw">
+    <div class="plb">05-C · VP สำเร็จ</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:26px 18px">
+        <div></div>
+        <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px">
+          <div style="width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,var(--pp-navy-dk),var(--pp-navy));display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(46,60,186,.3)">
+            <span style="font-size:34px;color:#fff">✓</span>
+          </div>
+          <div style="font-size:17px;font-weight:700">ยืนยันสำเร็จ!</div>
+          <div style="font-size:12px;color:var(--text-3);text-align:center">Credentials แชร์ไปยัง Partner A แล้ว</div>
+          <div style="background:var(--sf2);border:1px solid var(--border);border-radius:7px;padding:7px 13px;font-size:9px;color:var(--text-3)">บันทึก Consent แล้ว • PDPA compliant</div>
+        </div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:8px">
+          <div class="btn">เปิดบริการ Partner A</div>
+          <div class="btn3">กลับ Me Modules</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="ann">
+    <div class="at">Screen 05 · VP / VC Flow</div>
+    <div class="ai2"><div class="an">1</div><div>
+      <div class="al">Consent = Green Credential Rows</div>
+      <div class="ad">ข้อมูลที่จะแชร์ = Green row (#F0FFF4) เพื่อสื่อว่า "ผ่าน vault" — ไม่แชร์โดยไม่ได้รับอนุญาต</div>
+      <span class="atg crit">PRIVACY REQ</span>
+    </div></div>
+    <div class="ai2"><div class="an">2</div><div>
+      <div class="al">Processing Spinner = Navy + Red</div>
+      <div class="ad">Spinner border: Navy base, Red top = PP dual-color brand element ใน active loading state</div>
+      <span class="atg ok">CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">3</div><div>
+      <div class="al">Success Icon = Navy Gradient</div>
+      <div class="ad">Success circle ใช้ Navy gradient (PP primary) — ไม่ใช่ Green เพื่อสื่อว่า PP platform action, ไม่ใช่แค่ status</div>
+      <span class="atg ok">CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">4</div><div>
+      <div class="al">W3C VC + DID Signing</div>
+      <div class="ad">VP signing via DID private key ใน secure enclave — ทั้งหมดผ่าน ShareRing SDK. Consent log auditable ตาม PDPA</div>
+      <span class="atg dep">SHARERING-DEP OQ10</span>
+    </div></div>
+    <div class="ai2"><div class="an">5</div><div>
+      <div class="al">No Credentials Shared Without Confirm</div>
+      <div class="ad">Biometric confirm บังคับทุกครั้งก่อน VP signing — ป้องกัน accidental share</div>
+      <span class="atg crit">SECURITY REQ</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ 06 SETTINGS ══════════════════════════════════ -->
+<div id="s06" class="pg">
+
+  <div class="pw">
+    <div class="plb">06-A · Settings</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:var(--pp-navy);padding:9px 13px;flex-shrink:0">
+        <span style="color:#fff;font-size:13px;font-weight:700">การตั้งค่า</span>
+      </div>
+      <div class="pscr" style="padding:10px 13px">
+        <div class="shdr">ความปลอดภัยและความเป็นส่วนตัว</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div class="sr"><span class="sr-lb">สำรอง Vault</span><span class="chevron">›</span></div>
+          <div class="sr"><span class="sr-lb">นำเข้า Vault Backup</span><span class="chevron">›</span></div>
+          <div class="sr"><span class="sr-lb">ซิงก์ Cloud Vault ☁</span><div class="tog-on"></div></div>
+          <div class="sr"><span class="sr-lb">เปลี่ยนรหัส PIN</span><span class="chevron">›</span></div>
+          <div class="sr"><span class="sr-lb">ดู Recovery Phrase</span><span class="chevron" style="color:var(--pp-red)">🔒</span></div>
+          <div class="sr"><span class="sr-lb">ShareRing Link Security Code</span><span class="chevron">🔒</span></div>
+          <div class="sr"><span class="sr-lb">Security Settings</span><span class="chevron">›</span></div>
+        </div>
+        <div class="shdr">การตั้งค่าแอป</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div class="sr"><span class="sr-lb">ภาษา (TH / EN)</span><span style="font-size:10px;color:var(--pp-navy);font-weight:600">ไทย ›</span></div>
+          <div class="sr"><span class="sr-lb">การแจ้งเตือน</span><div class="tog-on"></div></div>
+        </div>
+        <div class="shdr">ช่วยเหลือและข้อกฎหมาย</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div class="sr"><span class="sr-lb">ติดต่อบริการลูกค้า</span><span class="chevron">›</span></div>
+          <div class="sr"><span class="sr-lb">เงื่อนไขการใช้บริการ</span><span class="chevron">›</span></div>
+          <div class="sr"><span class="sr-lb">นโยบายความเป็นส่วนตัว</span><span class="chevron">›</span></div>
+        </div>
+        <div style="text-align:center;font-size:9px;color:var(--text-3);padding:12px 0 4px">Prompt Pass v1.0.0 • Powered by Prompt Post</div>
+      </div>
+      <div class="bnav">
+        <div class="ni"><div class="ni-ic">🏠</div><div class="ni-lb">Vault</div></div>
+        <div class="ni"><div class="ni-ic">⊞</div><div class="ni-lb">Me Modules</div></div>
+        <div class="ni on"><div class="ni-ic">⚙️</div><div class="ni-lb" style="color:var(--pp-red)">Settings</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="ann">
+    <div class="at">Screen 06 · Settings</div>
+    <div class="ai2"><div class="an">1</div><div>
+      <div class="al">Structure = ShareRing Me Reference</div>
+      <div class="ad">Layout ตาม ShareRing Me: Security & Privacy / App Preferences / Help & Legal — ครบทุก setting จาก PRD</div>
+      <span class="atg">REF: ShareRing Me UI</span>
+    </div></div>
+    <div class="ai2"><div class="an">2</div><div>
+      <div class="al">Section Headers = PP Grey Uppercase</div>
+      <div class="ad">Section label ใช้ Uppercase + Grey (#9090A8) ตาม IBM Plex Sans Thai hierarchy</div>
+      <span class="atg ok">CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">3</div><div>
+      <div class="al">Toggle ON = Green, Language = PP Navy</div>
+      <div class="ad">Toggle active = Green (#22C55E), ค่าที่เลือก (Language) = Navy ตาม brand interactive color</div>
+      <span class="atg ok">CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">4</div><div>
+      <div class="al">Thai Language Support</div>
+      <div class="ad">TH / EN toggle — default ตาม PromptPost Host App language. ShareRing SDK Thai support ต้องยืนยัน</div>
+      <span class="atg dep">SHARERING-DEP OQ09</span>
+    </div></div>
+    <div class="ai2"><div class="an">5</div><div>
+      <div class="al">Cloud Vault Sync</div>
+      <div class="ad">Toggle สำหรับ ShareRing cloud backup — SDK ต้องยืนยัน sync method และ data scope</div>
+      <span class="atg dep">SHARERING-DEP</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ 07 CARD RENDER ══════════════════════════════════ -->
+<div id="s07" class="pg">
+
+  <!-- Thai ID Card -->
+  <div class="pw">
+    <div class="plb">07-A · Thai ID Card Render</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:var(--pp-navy);padding:9px 13px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <span style="color:rgba(255,255,255,.7);font-size:15px">←</span>
+        <span style="color:#fff;font-size:12px;font-weight:700">บัตรประชาชนไทย</span>
+      </div>
+      <div class="pscr" style="padding:13px 13px">
+        <!-- PP CI Thai ID Card -->
+        <div class="thid" style="margin-bottom:13px">
+          <div class="thid-bg"></div><div class="thid-bg2"></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;position:relative;z-index:1">
+            <div style="font-size:8px;color:rgba(255,255,255,.6);letter-spacing:1.5px;font-weight:600">THAI NATIONAL ID CARD</div>
+            <div style="background:rgba(254,59,31,.8);color:#fff;font-size:7px;padding:2px 7px;border-radius:9px;font-weight:700">✓ VERIFIED</div>
+          </div>
+          <div style="height:1px;background:linear-gradient(90deg,rgba(255,255,255,.3),transparent);margin-bottom:10px;position:relative;z-index:1"></div>
+          <div style="position:relative;z-index:1">
+            <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:3px">สมชาย ใจดี</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.6)">Somchai Jaidee</div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:11px;position:relative;z-index:1">
+            <div><div style="font-size:7px;color:rgba(255,255,255,.4);margin-bottom:2px">ID NUMBER</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.75);font-family:'IBM Plex Mono',monospace;letter-spacing:.8px">x-xxxx-xxxxx-xx-x</div></div>
+            <div style="text-align:right"><div style="font-size:7px;color:rgba(255,255,255,.4);margin-bottom:2px">DOB</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.75)">xx/xx/xxxx</div></div>
+          </div>
+        </div>
+        <!-- Actions -->
+        <div style="display:flex;gap:7px;margin-bottom:13px">
+          <div class="btn" style="flex:1;padding:9px;font-size:11px">แชร์ (VP)</div>
+          <div class="btn2" style="flex:1;padding:9px;font-size:11px">สแกนใหม่</div>
+        </div>
+        <!-- JSON -->
+        <div style="background:#1A1A2E;border-radius:9px;padding:11px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:#7EB8F7;line-height:1.8">
+          <div style="color:var(--pp-red)">{"card_type": "thai_id",</div>
+          <div>&nbsp;"name": "สมชาย ใจดี",</div>
+          <div>&nbsp;"id_number": "xxx-xxxx-xxxx",</div>
+          <div>&nbsp;"dob": "xx/xx/xxxx",</div>
+          <div>&nbsp;"status": <span style="color:var(--green)">"verified"</span>}</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Uploaded Doc -->
+  <div class="pw">
+    <div class="plb">07-B · Uploaded Document</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:var(--pp-navy);padding:9px 13px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <span style="color:rgba(255,255,255,.7);font-size:15px">←</span>
+        <span style="color:#fff;font-size:12px;font-weight:700">Passport.pdf</span>
+      </div>
+      <div class="pscr" style="padding:13px 13px">
+        <div style="background:var(--sf2);border:1.5px dashed var(--border);border-radius:11px;height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;margin-bottom:13px">
+          <span style="font-size:38px">📄</span>
+          <div style="font-size:11px;color:var(--text-3);font-weight:500">PDF PREVIEW</div>
+          <div style="font-size:9px;color:var(--text-3);text-align:center">โหลดจาก Vault on-demand<br>ไม่แคชในเครื่อง</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:13px">
+          <div class="sr"><span style="font-size:10px;color:var(--text-3)">ชื่อไฟล์</span><span style="font-size:10px;color:var(--text-2)">Passport.pdf</span></div>
+          <div class="sr"><span style="font-size:10px;color:var(--text-3)">ขนาด</span><span style="font-size:10px;color:var(--text-2)">2.1 MB</span></div>
+          <div class="sr"><span style="font-size:10px;color:var(--text-3)">สถานะ</span><span style="font-size:10px;color:var(--green);font-weight:600">✓ ยืนยันแล้ว</span></div>
+        </div>
+        <div class="btn">แชร์เป็น Document VC</div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="ann">
+    <div class="at">Screen 07 · Card Render</div>
+    <div class="ai2"><div class="an">1</div><div>
+      <div class="al">Thai ID = Navy Gradient + Red Shape</div>
+      <div class="ad">Card ใช้ Navy gradient + Red rounded rect overlay (PP Graphic Device จาก CI doc) + "VERIFIED" Red badge</div>
+      <span class="atg ok">CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">2</div><div>
+      <div class="al">JSON Code = Dark + PP Red Key Color</div>
+      <div class="ad">Code block dark (#1A1A2E) พร้อม Red keys / Green values / Blue monospace text — ตาม PP dark accent</div>
+      <span class="atg ok">CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">3</div><div>
+      <div class="al">JSON-Based Card Templates via SDK</div>
+      <div class="ad">Card data เก็บเป็น JSON ใน Vault — SDK render engine แสดง template ที่ TF ออกแบบตาม PP CI</div>
+      <span class="atg dep">SHARERING-DEP OQ07</span>
+    </div></div>
+    <div class="ai2"><div class="an">4</div><div>
+      <div class="al">No Local Cache</div>
+      <div class="ad">Document content ดึงจาก ShareRing Vault on-demand — ไม่เก็บในเครื่องเป็น security requirement</div>
+      <span class="atg crit">SECURITY REQ</span>
+    </div></div>
+    <div class="ai2"><div class="an">5</div><div>
+      <div class="al">Share via VP Flow</div>
+      <div class="ad">ปุ่ม "แชร์ (VP)" trigger Consent Screen (Screen 05) เสมอก่อน share</div>
+      <span class="atg ok">FLOW LINK → S05</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ TU-01 ENTRY ══════════════════════════════════ -->
+<div id="tu01" class="pg">
+  <div class="pw">
+    <div class="plb">TU-01 · Me Modules — เลือก TU</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div class="ah">
+        <div class="ah-row" style="margin-bottom:9px">
+          <svg viewBox="0 0 110 44" fill="none" style="height:18px">
+            <rect x="0" y="3" width="30" height="30" rx="6" fill="rgba(255,255,255,.9)"/>
+            <text x="8" y="26" font-family="sans-serif" font-weight="700" font-size="17" fill="#2E3CBA">P</text>
+            <text x="38" y="18" font-family="sans-serif" font-weight="700" font-size="12" fill="white">Prompt</text>
+            <text x="38" y="33" font-family="sans-serif" font-weight="700" font-size="12" fill="rgba(255,255,255,.7)">Post</text>
+          </svg>
+          <div style="display:flex;gap:5px"><div class="ai">≡</div><div class="ai">⊞</div></div>
+        </div>
+        <div style="color:#fff;font-size:13px;font-weight:700">Me Modules</div>
+      </div>
+      <div class="pscr" style="padding:11px 13px">
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div class="cr" style="opacity:.3"><div class="cri" style="background:#F5F5F7">🏦</div><div><div class="crt">Partner B</div><div class="crd">บริการการเงิน</div></div><div class="cra" style="margin-left:auto">เปิด</div></div>
+          <!-- TU HIGHLIGHTED -->
+          <div style="background:#FFFBEB;border:2px solid var(--tu-gold);border-radius:11px;padding:10px;position:relative;cursor:pointer">
+            <div style="position:absolute;top:7px;right:9px"><span class="bgo">แนะนำ</span></div>
+            <div style="display:flex;align-items:center;gap:9px">
+              <div style="width:40px;height:40px;border-radius:9px;background:linear-gradient(135deg,#8B0000,#CC0000);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🏛</div>
+              <div style="flex:1"><div style="font-size:12px;font-weight:700">Thammasat University</div><div style="font-size:9px;color:var(--text-3);margin-top:1px">รับบัตร TU Associate Club Card</div></div>
+            </div>
+            <div style="margin-top:9px"><div class="btn" style="font-size:11px;padding:8px">เปิดใช้งาน ›</div></div>
+          </div>
+          <div class="cr" style="opacity:.3"><div class="cri" style="background:#F5F5F7">🏥</div><div><div class="crt">Partner D</div><div class="crd">บริการสุขภาพ</div></div><div class="cra" style="margin-left:auto">เปิด</div></div>
+        </div>
+        <div style="text-align:center;font-size:9px;color:var(--text-3);padding:10px 0 4px">Partner list จาก ShareRing Engine</div>
+      </div>
+      <div class="bnav">
+        <div class="ni"><div class="ni-ic">🏠</div><div class="ni-lb">Vault</div></div>
+        <div class="ni on"><div class="ni-ic">⊞</div><div class="ni-lb" style="color:var(--pp-red)">Me Modules</div></div>
+        <div class="ni"><div class="ni-ic">⚙️</div><div class="ni-lb">Settings</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="ann">
+    <div class="at">TU-01 · Entry Point</div>
+    <div class="ai2"><div class="an">1</div><div>
+      <div class="al">TU Card = Gold Border (ต่างจาก Partner ทั่วไป)</div>
+      <div class="ad">TU Partner card ใช้ Gold border (#C9A84C) + Yellow bg เพื่อแยกจาก Partner อื่น ที่ใช้ Navy/Red border</div>
+      <span class="atg tu">TU CI ACCENT</span>
+    </div></div>
+    <div class="ai2"><div class="an">2</div><div>
+      <div class="al">CTA = PP Red — Brand Consistency</div>
+      <div class="ad">ปุ่ม "เปิดใช้งาน" ยังคงเป็น PP Red แม้อยู่ใน TU context — Action button เป็น PP brand เสมอ</div>
+      <span class="atg ok">PP CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">3</div><div>
+      <div class="al">TU Logo = Pending Asset</div>
+      <div class="ad">ต้องใช้ Logo มธ. อย่างเป็นทางการจาก TU — placeholder icon ชั่วคราว</div>
+      <span class="atg dep">PENDING TU ASSET</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ TU-02 CONSENT ══════════════════════════════════ -->
+<div id="tu02" class="pg">
+  <div class="pw">
+    <div class="plb">TU-02 · Consent</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:var(--pp-navy);padding:9px 13px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <span style="color:rgba(255,255,255,.7);font-size:15px">←</span>
+        <span style="color:#fff;font-size:12px;font-weight:700">ยินยอมแชร์ข้อมูล</span>
+      </div>
+      <div class="steps">
+        <div class="st"><div class="st-d curr">1</div><div class="st-lb c">ยินยอม</div></div>
+        <div class="sl"></div>
+        <div class="st"><div class="st-d todo">2</div><div class="st-lb">สแกนบัตร</div></div>
+        <div class="sl"></div>
+        <div class="st"><div class="st-d todo">3</div><div class="st-lb">ประมวลผล</div></div>
+        <div class="sl"></div>
+        <div class="st"><div class="st-d todo">4</div><div class="st-lb">รับบัตร</div></div>
+      </div>
+      <div class="pscr" style="padding:0 13px 13px">
+        <div style="display:flex;align-items:center;gap:9px;background:#FFFBEB;border:1.5px solid var(--tu-gold);border-radius:10px;padding:9px;margin-bottom:11px">
+          <div style="width:38px;height:38px;border-radius:8px;background:linear-gradient(135deg,#8B0000,#CC0000);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">🏛</div>
+          <div><div style="font-size:11px;font-weight:700">Thammasat University</div><div style="font-size:9px;color:var(--text-3)">ขอออกบัตร TU Associate Club Card</div></div>
+        </div>
+        <div style="font-size:9px;font-weight:600;color:var(--text-2);margin-bottom:6px">ข้อมูลจาก Vault (มีอยู่แล้ว):</div>
+        <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:9px">
+          <div class="cv"><div class="cv-d"></div><div class="cv-t">ชื่อ-นามสกุล (Identity VC)</div></div>
+          <div class="cv"><div class="cv-d"></div><div class="cv-t">PromptPost User ID</div></div>
+        </div>
+        <div style="font-size:9px;font-weight:600;color:var(--text-2);margin-bottom:6px">ข้อมูลใหม่จาก OCR:</div>
+        <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:11px">
+          <div class="cv-n"><div class="cv-nd"></div><div style="font-size:10px;color:var(--pp-navy);font-weight:500">บัตรนักศึกษา TU (สแกนขั้นถัดไป)</div></div>
+        </div>
+        <div style="background:var(--sf2);border:1px solid var(--border);border-radius:7px;padding:7px;font-size:9px;color:var(--text-3);margin-bottom:12px">วัตถุประสงค์: ยืนยันสถานะนักศึกษา มธ. เพื่อออกบัตร Associate</div>
+        <div class="btn" style="margin-bottom:7px">ยืนยันด้วย Biometrics</div>
+        <div class="btn3">ยกเลิก</div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="ann">
+    <div class="at">TU-02 · Consent</div>
+    <div class="ai2"><div class="an">1</div><div>
+      <div class="al">2 กลุ่ม Credential ต่างสี</div>
+      <div class="ad">Green row = ข้อมูลจาก Vault ที่มีแล้ว, Navy row = ข้อมูลใหม่จาก OCR ขั้นถัดไป — แยกชัดเจน</div>
+      <span class="atg ok">UX PATTERN</span>
+    </div></div>
+    <div class="ai2"><div class="an">2</div><div>
+      <div class="al">TU Banner = Gold Border</div>
+      <div class="ad">Partner identity box ใช้ Gold border แทน Navy — user รู้ทันทีว่ากำลัง consent กับ TU</div>
+      <span class="atg tu">TU CI ACCENT</span>
+    </div></div>
+    <div class="ai2"><div class="an">3</div><div>
+      <div class="al">4-Step Indicator — PP CI Color</div>
+      <div class="ad">Active = PP Red, Done = PP Navy, Todo = Grey — ใช้ PP palette ตลอด</div>
+      <span class="atg ok">PP CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">4</div><div>
+      <div class="al">Biometric Required</div>
+      <div class="ad">Biometrics บังคับก่อน share ทุกครั้ง</div>
+      <span class="atg crit">SECURITY REQ</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ TU-03 OCR ══════════════════════════════════ -->
+<div id="tu03" class="pg">
+
+  <!-- Camera -->
+  <div class="pw">
+    <div class="plb">TU-03-A · สแกนบัตรนักศึกษา</div>
+    <div class="ph"><div class="phi">
+      <div class="sb" style="background:#080816"><span style="color:rgba(255,255,255,.7)">10:58</span><div class="si" style="color:rgba(255,255,255,.7)">●●●● 🔋</div></div>
+      <div style="background:#080816;flex:1;display:flex;flex-direction:column;padding:13px">
+        <div class="steps" style="padding:0 0 11px">
+          <div class="st"><div class="st-d done">1</div><div class="st-lb">ยินยอม</div></div>
+          <div class="sl done"></div>
+          <div class="st"><div class="st-d curr">2</div><div class="st-lb c">สแกนบัตร</div></div>
+          <div class="sl"></div>
+          <div class="st"><div class="st-d todo">3</div><div class="st-lb">ประมวลผล</div></div>
+          <div class="sl"></div>
+          <div class="st"><div class="st-d todo">4</div><div class="st-lb">รับบัตร</div></div>
+        </div>
+        <div style="color:rgba(255,255,255,.8);font-size:11px;font-weight:600;text-align:center;margin-bottom:4px">สแกนบัตรนักศึกษา TU</div>
+        <div style="color:rgba(255,255,255,.4);font-size:9px;text-align:center;margin-bottom:11px">ด้านหน้า (1/2) • วางในกรอบ</div>
+        <div class="vf" style="height:150px;margin-bottom:11px">
+          <div class="vfc tl"></div><div class="vfc tr"></div>
+          <div class="vfc bl"></div><div class="vfc br2"></div>
+          <div class="scanline"></div>
+          <div style="text-align:center;color:rgba(201,168,76,.3);font-size:8px;letter-spacing:1.5px">THAMMASAT UNIV.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:7px;font-size:9px;color:rgba(255,255,255,.5);text-align:center;margin-bottom:auto">📌 วางตรงกรอบ • ถือนิ่ง • แสงพอ</div>
+        <div style="margin-top:10px;border:1.5px solid rgba(255,255,255,.15);border-radius:8px;padding:8px;text-align:center;font-size:9px;color:rgba(255,255,255,.35)">POWERED BY SHARERING SDK</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- OCR Confirm -->
+  <div class="pw">
+    <div class="plb">TU-03-B · ยืนยัน OCR Data</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:var(--pp-navy);padding:9px 13px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <span style="color:rgba(255,255,255,.7);font-size:15px">←</span>
+        <span style="color:#fff;font-size:12px;font-weight:700">ยืนยันข้อมูลจากบัตร</span>
+      </div>
+      <div class="pscr" style="padding:11px 13px">
+        <div style="background:#F5F0E8;border:1.5px solid var(--tu-gold);border-radius:9px;padding:9px;margin-bottom:11px;text-align:center">
+          <div style="font-size:8px;color:var(--tu-gold);font-weight:700;letter-spacing:1px;margin-bottom:5px">OCR สำเร็จ ✓</div>
+          <div style="background:#1A1A1A;border-radius:6px;padding:6px;color:rgba(255,255,255,.6);font-size:8px;letter-spacing:.5px">THAMMASAT UNIVERSITY STUDENT ID</div>
+        </div>
+        <div style="font-size:9px;color:var(--text-3);margin-bottom:7px">ตรวจสอบข้อมูลที่สแกนได้:</div>
+        <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:12px">
+          <div style="background:var(--sf2);border:1px solid var(--border);border-radius:7px;padding:7px 10px"><div style="font-size:8px;color:var(--text-3);margin-bottom:2px">ชื่อ-นามสกุล</div><div style="font-size:11px;font-weight:600">สมชาย ใจดี</div></div>
+          <div style="background:var(--sf2);border:1px solid var(--border);border-radius:7px;padding:7px 10px"><div style="font-size:8px;color:var(--text-3);margin-bottom:2px">รหัสนักศึกษา</div><div style="font-size:11px;font-weight:600">6XXXXXXXXXXX</div></div>
+          <div style="background:var(--sf2);border:1px solid var(--border);border-radius:7px;padding:7px 10px"><div style="font-size:8px;color:var(--text-3);margin-bottom:2px">คณะ</div><div style="font-size:11px;font-weight:600">[จาก OCR]</div></div>
+          <div style="background:var(--sf2);border:1px solid var(--border);border-radius:7px;padding:7px 10px"><div style="font-size:8px;color:var(--text-3);margin-bottom:2px">ปีการศึกษา</div><div style="font-size:11px;font-weight:600">[จาก OCR]</div></div>
+        </div>
+        <div style="background:#FFFBEB;border:1px solid var(--yellow);border-radius:7px;padding:7px;font-size:9px;color:#92400E;margin-bottom:11px">⚠ ตรวจสอบก่อนยืนยัน — OCR อาจผิดพลาดหากบัตรไม่ชัด</div>
+        <div class="btn" style="margin-bottom:7px">ข้อมูลถูกต้อง — ดำเนินการต่อ</div>
+        <div class="btn3">สแกนใหม่</div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="ann">
+    <div class="at">TU-03 · OCR สแกนบัตรนักศึกษา</div>
+    <div class="ai2"><div class="an">1</div><div>
+      <div class="al">Camera = Dark + PP Red Corners</div>
+      <div class="ad">Dark camera UI (#080816) เหมือน eKYC screen — PP Red corners คง CI brand ทั้ง eKYC และ TU OCR</div>
+      <span class="atg ok">CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">2</div><div>
+      <div class="al">TU Hint ใน Viewfinder = Gold จาง</div>
+      <div class="ad">แสดง "THAMMASAT UNIV." text Gold 30% opacity เป็น guide — ไม่รบกวน OCR engine</div>
+      <span class="atg tu">TU UX HINT</span>
+    </div></div>
+    <div class="ai2"><div class="an">3</div><div>
+      <div class="al">OCR Fields = ShareRing SDK</div>
+      <div class="ad">ชื่อ, รหัสนักศึกษา, คณะ, ปีการศึกษา — extract ด้วย SDK, App รับ JSON callback</div>
+      <span class="atg dep">SHARERING-DEP OQ04</span>
+    </div></div>
+    <div class="ai2"><div class="an">4</div><div>
+      <div class="al">User Confirm ก่อน Submit</div>
+      <div class="ad">แสดง OCR result ให้ user ยืนยันก่อนเสมอ — ป้องกัน data error จากบัตรสกปรก/เบลอ</div>
+      <span class="atg crit">DATA ACCURACY</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ TU-04 PROCESSING ══════════════════════════════════ -->
+<div id="tu04" class="pg">
+  <div class="pw">
+    <div class="plb">TU-04 · Processing</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:var(--pp-navy);padding:9px 13px;flex-shrink:0">
+        <span style="color:#fff;font-size:12px;font-weight:700">กำลังออกบัตร...</span>
+      </div>
+      <div class="steps">
+        <div class="st"><div class="st-d done">1</div><div class="st-lb">ยินยอม</div></div>
+        <div class="sl done"></div>
+        <div class="st"><div class="st-d done">2</div><div class="st-lb">สแกนบัตร</div></div>
+        <div class="sl done"></div>
+        <div class="st"><div class="st-d curr">3</div><div class="st-lb c">ประมวลผล</div></div>
+        <div class="sl"></div>
+        <div class="st"><div class="st-d todo">4</div><div class="st-lb">รับบัตร</div></div>
+      </div>
+      <div class="pscr" style="padding:10px 13px">
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div class="ps done"><div class="psi done"><span style="color:#fff;font-size:10px">✓</span></div><div><div class="ps-lb done">Biometrics ยืนยันแล้ว</div><div class="ps-sub">สำเร็จ</div></div></div>
+          <div class="ps done"><div class="psi done"><span style="color:#fff;font-size:10px">✓</span></div><div><div class="ps-lb done">OCR Data ยืนยันแล้ว</div><div class="ps-sub">ข้อมูล TU พร้อม</div></div></div>
+          <div class="ps curr"><div class="psi curr"><span style="color:#fff;font-size:10px">●</span></div><div><div class="ps-lb curr">Requesting TU to sign &amp; issue VC</div><div class="ps-sub">TU กำลังออก TU Associate Club Card VC...</div></div></div>
+          <div class="ps todo"><div class="psi todo"><span style="font-size:10px;color:var(--text-3)">○</span></div><div><div class="ps-lb todo">บันทึกใน Vault</div></div></div>
+          <div class="ps todo"><div class="psi todo"><span style="font-size:10px;color:var(--text-3)">○</span></div><div><div class="ps-lb todo">แจ้ง TU ออกสิทธิ์</div></div></div>
+        </div>
+        <!-- Blurred card preview -->
+        <div style="margin-top:14px;background:var(--sf2);border:1px solid var(--border);border-radius:10px;padding:11px;text-align:center">
+          <div style="font-size:10px;color:var(--text-3);margin-bottom:7px">กำลังสร้างบัตรของคุณ...</div>
+          <div style="filter:blur(4px);opacity:.35;pointer-events:none">
+            <div class="tuc" style="padding:11px">
+              <div class="tuc-bg1"></div>
+              <div style="font-size:7px;color:var(--tu-gold);letter-spacing:1.5px;position:relative;z-index:1">THAMMASAT UNIVERSITY</div>
+              <div style="font-size:8px;color:rgba(255,255,255,.5);position:relative;z-index:1">TU ASSOCIATE CLUB CARD</div>
+            </div>
+          </div>
+          <div style="font-size:9px;color:var(--text-3);margin-top:7px">รอสักครู่...</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="ann">
+    <div class="at">TU-04 · Processing</div>
+    <div class="ai2"><div class="an">1</div><div>
+      <div class="al">Progress Colors = PP CI</div>
+      <div class="ad">✓ Done = Green, ● Active = Navy, ○ Todo = Grey — ใช้ PP palette ตลอด, Gold เป็นเพียง TU accent บนบัตร</div>
+      <span class="atg ok">PP CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">2</div><div>
+      <div class="al">Card Preview Blur ระหว่าง Process</div>
+      <div class="ad">แสดง card blur preview ระหว่าง processing — set expectation และ delight moment ก่อนรับบัตร</div>
+      <span class="atg ok">UX PATTERN</span>
+    </div></div>
+    <div class="ai2"><div class="an">3</div><div>
+      <div class="al">VC Signing — Issuer Side Only (SSI Architecture)</div>
+      <div class="ad">VC signing ทำโดย Partner issuer (TU) ด้วย issuer private key บน TU's secure backend (HSM / Cloud KMS) เท่านั้น — Prompt Pass และ ShareRing SDK ไม่ sign VC. User DID key ถูกใช้ใน secure enclave สำหรับ VP generation, proofs และ consent เท่านั้น — app ไม่มีทางเข้าถึง key นี้</div>
+      <span class="atg crit">SECURITY REQ</span>&nbsp;<span class="atg dep">SHARERING-DEP OQ10</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ TU-05 CARD ══════════════════════════════════ -->
+<div id="tu05" class="pg">
+
+  <!-- Success + Card -->
+  <div class="pw">
+    <div class="plb">TU-05-A · รับบัตรสำเร็จ</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:var(--pp-navy);padding:9px 13px;flex-shrink:0">
+        <span style="color:#fff;font-size:12px;font-weight:700">ออกบัตรสำเร็จ!</span>
+      </div>
+      <div class="pscr" style="padding:12px 13px">
+        <div style="display:flex;align-items:center;gap:7px;background:#F0FFF4;border:1px solid #BBF7D0;border-radius:7px;padding:8px 10px;margin-bottom:12px">
+          <span style="color:var(--green);font-size:13px">✓</span>
+          <span style="font-size:10px;color:#166534;font-weight:600">TU Associate Club Card ออกสำเร็จ!</span>
+        </div>
+        <!-- TU CARD -->
+        <div class="tuc" style="margin-bottom:12px">
+          <div class="tuc-bg1"></div><div class="tuc-bg2"></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;position:relative;z-index:1">
+            <div>
+              <div style="font-size:7px;color:var(--tu-gold);letter-spacing:1.5px;font-weight:600">THAMMASAT UNIVERSITY</div>
+              <div style="font-size:6px;color:rgba(255,255,255,.5);letter-spacing:1px">TU ASSOCIATE CLUB CARD</div>
+            </div>
+            <div style="width:30px;height:30px;border-radius:50%;background:radial-gradient(circle,var(--tu-gold),#8B6914);display:flex;align-items:center;justify-content:center;font-size:13px">🎓</div>
+          </div>
+          <div style="height:1px;background:linear-gradient(90deg,var(--tu-gold),transparent);margin-bottom:9px;position:relative;z-index:1"></div>
+          <div style="position:relative;z-index:1">
+            <div style="font-size:13px;font-weight:700;color:#fff;letter-spacing:.4px;margin-bottom:2px">สมชาย ใจดี</div>
+            <div style="font-size:8px;color:var(--tu-gold-lt)">SOMCHAI JAIDEE</div>
+            <div style="font-size:7px;color:rgba(255,255,255,.45);margin-top:1px">ASSOCIATE MEMBER</div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:11px;position:relative;z-index:1">
+            <div>
+              <div style="font-size:7px;color:rgba(255,255,255,.4);margin-bottom:2px">MEMBER ID</div>
+              <div style="font-size:9px;color:rgba(255,255,255,.65);font-family:'IBM Plex Mono',monospace;letter-spacing:.4px">TU-XXXX-XXXX</div>
+            </div>
+            <div style="text-align:right">
+              <div style="background:var(--pp-red);padding:2px 6px;border-radius:5px;font-size:6px;font-weight:700;color:#fff">● ACTIVE</div>
+              <div style="font-size:6px;color:rgba(255,255,255,.3);margin-top:2px">Powered by Prompt Post</div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:7px;margin-bottom:7px">
+          <div class="btn" style="flex:1;padding:8px;font-size:10px">แชร์บัตร (VP)</div>
+          <div class="btn2" style="flex:1;padding:8px;font-size:10px">รายละเอียด</div>
+        </div>
+        <div class="btn3" style="font-size:10px;padding:8px">กลับ Me Modules</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Card detail -->
+  <div class="pw">
+    <div class="plb">TU-05-B · รายละเอียดบัตร</div>
+    <div class="ph"><div class="phi">
+      <div class="sb"><span>10:58</span><div class="si">●●●● 🔋</div></div>
+      <div style="background:var(--pp-navy);padding:9px 13px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <span style="color:rgba(255,255,255,.7);font-size:15px">←</span>
+        <span style="color:#fff;font-size:12px;font-weight:700">TU Associate Club Card</span>
+      </div>
+      <div class="pscr" style="padding:11px 13px">
+        <!-- mini card -->
+        <div class="tuc" style="padding:11px;margin-bottom:12px">
+          <div class="tuc-bg1"></div>
+          <div style="font-size:7px;color:var(--tu-gold);letter-spacing:1.5px;position:relative;z-index:1">THAMMASAT UNIVERSITY · TU ASSOCIATE CLUB</div>
+          <div style="font-size:13px;font-weight:700;color:#fff;position:relative;z-index:1;margin-top:5px">สมชาย ใจดี</div>
+          <div style="font-size:8px;color:rgba(255,255,255,.5);position:relative;z-index:1;margin-top:2px">TU-XXXX-XXXX · ASSOCIATE MEMBER</div>
+        </div>
+        <div class="shdr">ข้อมูลจากบัตรนักศึกษา (OCR)</div>
+        <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:11px">
+          <div class="sr"><span style="font-size:9px;color:var(--text-3)">ชื่อ-นามสกุล</span><span style="font-size:10px;font-weight:500">สมชาย ใจดี</span></div>
+          <div class="sr"><span style="font-size:9px;color:var(--text-3)">รหัสนักศึกษา</span><span style="font-size:10px;font-weight:500">6XXXXXXXXXXX</span></div>
+          <div class="sr"><span style="font-size:9px;color:var(--text-3)">คณะ</span><span style="font-size:10px;font-weight:500">[จาก OCR]</span></div>
+          <div class="sr"><span style="font-size:9px;color:var(--text-3)">ปีการศึกษา</span><span style="font-size:10px;font-weight:500">[จาก OCR]</span></div>
+        </div>
+        <div class="shdr">VC Data</div>
+        <div style="background:#1A1A2E;border-radius:8px;padding:10px;font-family:'IBM Plex Mono',monospace;font-size:8px;color:#7EB8F7;line-height:1.8;margin-bottom:11px">
+          <div style="color:var(--pp-red)">{"type": "TUAssociateClubCard",</div>
+          <div>&nbsp;"category": <span style="color:var(--tu-gold)">"TU Associate Club Card"</span>,</div>
+          <div>&nbsp;"issuer": "Thammasat Univ.",</div>
+          <div>&nbsp;"status": <span style="color:var(--green)">"active"</span>}</div>
+        </div>
+        <div class="btn" style="font-size:11px">แชร์เป็น VP</div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="ann">
+    <div class="at">TU-05 · TU Associate Club Card</div>
+    <div class="ai2"><div class="an">1</div><div>
+      <div class="al">Card = Dark + Gold + PP Red Badge</div>
+      <div class="ad">Dark card (#1A1A1A) + Gold accent (#C9A84C) สื่อ TU identity — PP Red "● ACTIVE" badge + "Powered by Prompt Post" ยืนยัน PP platform</div>
+      <span class="atg tu">TU CI + PP CI</span>
+    </div></div>
+    <div class="ai2"><div class="an">2</div><div>
+      <div class="al">Category = "TU Associate Club Card"</div>
+      <div class="ad">ชื่อ Category ใน Vault และ VC type field ใช้ "TU Associate Club Card" ตรงตามที่กำหนด</div>
+      <span class="atg ok">CONFIRMED</span>
+    </div></div>
+    <div class="ai2"><div class="an">3</div><div>
+      <div class="al">VC JSON = PP Red Key Color</div>
+      <div class="ad">JSON block ใน card detail ใช้ Red keys, Green values, Gold category value — consistent กับ screen 07</div>
+      <span class="atg ok">CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">4</div><div>
+      <div class="al">Template Design = TF + TU</div>
+      <div class="ad">Visual นี้เป็น direction — TF ออกแบบ template จริงร่วมกับ TU ก่อน ShareRing SDK render</div>
+      <span class="atg dep">PENDING TF + TU ASSET</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ TU-06 VAULT VIEW ══════════════════════════════════ -->
+<div id="tu06" class="pg">
+  <div class="pw">
+    <div class="plb">TU-06 · Vault — หมวด TU</div>
+    <div class="ph"><div class="phi">
+      <div class="sb" style="background:var(--pp-navy)"><span style="color:rgba(255,255,255,.8)">10:58</span><div class="si" style="color:rgba(255,255,255,.8)">●●●● 🔋</div></div>
+      <div class="ah">
+        <div class="ah-row" style="margin-bottom:9px">
+          <svg viewBox="0 0 110 44" fill="none" style="height:18px">
+            <rect x="0" y="3" width="30" height="30" rx="6" fill="rgba(255,255,255,.9)"/>
+            <text x="8" y="26" font-family="sans-serif" font-weight="700" font-size="17" fill="#2E3CBA">P</text>
+            <text x="38" y="18" font-family="sans-serif" font-weight="700" font-size="12" fill="white">Prompt</text>
+            <text x="38" y="33" font-family="sans-serif" font-weight="700" font-size="12" fill="rgba(255,255,255,.7)">Post</text>
+          </svg>
+          <div class="ai">🔔</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:9px">
+          <div style="width:38px;height:38px;border-radius:19px;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;font-size:16px">👤</div>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:#fff">สมชาย ใจดี</div>
+            <div style="font-size:7px;color:rgba(255,255,255,.5);font-family:'IBM Plex Mono',monospace">shareledger1...tspvee3s93</div>
+          </div>
+        </div>
+      </div>
+      <div class="pscr" style="padding:10px 13px">
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div class="cr"><div class="cri" style="background:#EEF0FF">👤</div><div style="flex:1"><div class="crt" style="color:var(--pp-navy)">ข้อมูลส่วนตัว</div><div class="crd">โทรศัพท์ อีเมล</div></div><div class="cra">เปิด</div></div>
+          <div class="cr"><div class="cri" style="background:#FFF5F3">📄</div><div style="flex:1"><div class="crt">เอกสารของฉัน</div><div class="crd">บัตรประชาชน หนังสือเดินทาง</div></div><div class="cra">เปิด</div></div>
+
+          <!-- TU CATEGORY — HIGHLIGHTED -->
+          <div style="background:#FFFBEB;border:2px solid var(--tu-gold);border-radius:11px;padding:10px;position:relative">
+            <div style="position:absolute;top:7px;right:9px"><span class="bgo">ใหม่</span></div>
+            <div style="display:flex;align-items:center;gap:9px">
+              <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#1A1A1A,#2C2C2C);border:1.5px solid var(--tu-gold);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🎓</div>
+              <div style="flex:1">
+                <div style="font-size:11px;font-weight:700">TU Associate Club Card</div>
+                <div style="font-size:9px;color:var(--text-3);margin-top:1px">มหาวิทยาลัยธรรมศาสตร์ • ACTIVE</div>
+              </div>
+            </div>
+            <!-- mini card -->
+            <div style="margin-top:9px">
+              <div class="tuc" style="padding:9px">
+                <div class="tuc-bg1"></div>
+                <div style="font-size:6px;color:var(--tu-gold);letter-spacing:1px;position:relative;z-index:1">THAMMASAT UNIVERSITY</div>
+                <div style="font-size:11px;font-weight:700;color:#fff;position:relative;z-index:1;margin-top:3px">สมชาย ใจดี</div>
+                <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:7px;position:relative;z-index:1">
+                  <div style="font-size:7px;color:rgba(255,255,255,.5);font-family:'IBM Plex Mono',monospace">TU-XXXX-XXXX</div>
+                  <div style="background:var(--pp-red);padding:2px 5px;border-radius:4px;font-size:6px;font-weight:700;color:#fff">● ACTIVE</div>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:6px;margin-top:8px">
+              <div class="btn" style="flex:1;font-size:9px;padding:7px">แชร์ (VP)</div>
+              <div class="btn3" style="flex:1;font-size:9px;padding:7px">รายละเอียด</div>
+            </div>
+          </div>
+
+          <div class="cr"><div class="cri" style="background:#F5F5F7">🔧</div><div style="flex:1"><div class="crt">ข้อมูลอื่นๆ</div><div class="crd">ข้อมูลเพิ่มเติม</div></div><div class="cra">เปิด</div></div>
+        </div>
+        <div style="text-align:center;font-size:8px;color:var(--text-3);padding:9px 0 4px">Metadata only — ดึงเนื้อหาเมื่อต้องการ</div>
+      </div>
+      <div class="bnav">
+        <div class="ni on"><div class="ni-ic">🏠</div><div class="ni-lb" style="color:var(--pp-red)">Vault</div></div>
+        <div class="ni"><div class="ni-ic">⊞</div><div class="ni-lb">Me Modules</div></div>
+        <div class="ni"><div class="ni-ic">⚙️</div><div class="ni-lb">Settings</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="ann">
+    <div class="at">TU-06 · Vault View</div>
+    <div class="ai2"><div class="an">1</div><div>
+      <div class="al">TU = Category ใหม่ใน Vault</div>
+      <div class="ad">"TU Associate Club Card" ปรากฏเป็น Category แยกด้วย Gold border — ต่างจาก category ทั่วไปที่ใช้ White border</div>
+      <span class="atg tu">TU CI ACCENT</span>
+    </div></div>
+    <div class="ai2"><div class="an">2</div><div>
+      <div class="al">Mini Card Preview ใน Vault Entry</div>
+      <div class="ad">แสดง card thumbnail ทันทีใน Vault row — user เห็น ACTIVE status โดยไม่ต้องเข้าไป</div>
+      <span class="atg ok">UX PATTERN</span>
+    </div></div>
+    <div class="ai2"><div class="an">3</div><div>
+      <div class="al">PP Red ACTIVE Badge บนบัตร</div>
+      <div class="ad">"● ACTIVE" badge = PP Red (#FE3B1F) บน TU dark card — PP platform confirm สถานะ ไม่ใช่ TU เอง</div>
+      <span class="atg ok">PP CI ALIGNED</span>
+    </div></div>
+    <div class="ai2"><div class="an">4</div><div>
+      <div class="al">Card Render = ShareRing SDK</div>
+      <div class="ad">SDK render template จาก JSON — TF + TU ออกแบบ template ก่อน implement ใน SDK</div>
+      <span class="atg dep">SHARERING-DEP OQ07</span>
+    </div></div>
+  </div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  event.target.classList.add('on');
+}
+</script>
+</body>
+</html>
